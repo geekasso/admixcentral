@@ -1,0 +1,31 @@
+GET Response Schema:
+{
+  "allOf": [
+    {
+      "$ref": "#/components/schemas/Success"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/components/schemas/DHCPRelay"
+        }
+      }
+    }
+  ]
+}
+
+PATCH Body Schema:
+{
+  "allOf": [
+    {
+      "$ref": "#/components/schemas/DHCPRelay"
+    },
+    {
+      "type": "object",
+      "required": [
+        "server"
+      ]
+    }
+  ]
+}

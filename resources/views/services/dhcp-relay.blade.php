@@ -56,10 +56,11 @@
 
                         <!-- Destination Server -->
                         <div class="mb-4">
-                            <x-input-label for="server" :value="__('Destination Server')" />
+                            <x-input-label for="server" :value="__('Destination Server(s)')" />
                             <x-text-input id="server" class="block mt-1 w-full" type="text" name="server"
-                                :value="$config['server'] ?? ''" />
-                            <p class="mt-1 text-sm text-gray-500">IP address of the DHCP server.</p>
+                                :value="is_array($config['server'] ?? '') ? implode(',', $config['server']) : ($config['server'] ?? '')" />
+                            <p class="mt-1 text-sm text-gray-500">IP address(es) of the DHCP server. Separate multiple
+                                servers with commas.</p>
                         </div>
 
                         <!-- Append Circuit ID -->

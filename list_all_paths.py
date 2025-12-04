@@ -1,7 +1,7 @@
 import json
 
 try:
-    with open('/home/baga/Code/admixcenter/openapi.json', 'r') as f:
+    with open('/home/baga/Code/admixcentral/openapi.json', 'r') as f:
         data = json.load(f)
         paths = data.get('paths', {}).keys()
         for path in sorted(paths):

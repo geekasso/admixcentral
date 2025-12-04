@@ -5,5 +5,5 @@ Found 0 servers.
 
 Fetching CAs and Certs...
 No CA found. Uploading local CA...
-Error: syntax error, unexpected '=' in /home/baga/Code/admixcenter/certs.env on line 2
+Error: syntax error, unexpected '=' in /home/baga/Code/admixcentral/certs.env on line 2
 

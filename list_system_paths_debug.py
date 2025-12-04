@@ -1,7 +1,7 @@
 import json
 
 try:
-    with open('/home/baga/Code/admixcenter/openapi.json', 'r') as f:
+    with open('/home/baga/Code/admixcentral/openapi.json', 'r') as f:
         data = json.load(f)
         paths = data.get('paths', {})
         system_paths = [p for p in paths.keys() if p.startswith('/system')]

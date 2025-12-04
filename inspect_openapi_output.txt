@@ -1,0 +1,5 @@
+Total paths: 226
+DHCP Relay paths: ['/api/v2/services/dhcp_relay']
+
+Methods for /api/v2/services/dhcp_relay:
+['get', 'patch']

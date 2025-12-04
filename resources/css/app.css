@@ -1,5 +1,6 @@
+@import './pfsense-responsive.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import './pfsense-responsive.css';
+/* Force rebuild */

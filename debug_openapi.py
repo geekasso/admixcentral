@@ -1,7 +1,7 @@
 import json
 
 try:
-    with open('/home/baga/Code/admixcenter/openapi.json', 'r') as f:
+    with open('/home/baga/Code/admixcentral/openapi.json', 'r') as f:
         data = json.load(f)
         print("Root keys:", data.keys())
         if 'paths' in data:

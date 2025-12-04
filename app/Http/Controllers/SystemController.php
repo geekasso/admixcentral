@@ -225,20 +225,7 @@ class SystemController extends Controller
 
     public function packageManager(Firewall $firewall)
     {
-        $api = new \App\Services\PfSenseApiService($firewall);
-        $installed_packages = [];
-        $available_packages = [];
-
-        try {
-            $installed_packages = $api->getPackages()['data'] ?? [];
-            // Fetching available packages might be slow, so we might want to load it via AJAX or just wait.
-            // For now, let's fetch it.
-            $available_packages = $api->getAvailablePackages()['data'] ?? [];
-        } catch (\Exception $e) {
-            // Log error
-        }
-
-        return view('system.package-manager', compact('firewall', 'installed_packages', 'available_packages'));
+        return view('system.package-manager', compact('firewall'));
     }
 
     public function routing(Firewall $firewall)

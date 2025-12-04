@@ -1,0 +1,3 @@
+APP_URL: http://localhost
+ASSET_URL: 
+Vite Asset: <link rel="preload" as="style" href="http://localhost/build/assets/app-BfBeCuVb.css" /><link rel="stylesheet" href="http://localhost/build/assets/app-BfBeCuVb.css" />

@@ -30,8 +30,24 @@ class ServicesController extends Controller
     {
         $api = new \App\Services\PfSenseApiService($firewall);
 
+        $data = $request->all();
+
+        // Transform booleans
+        $data['enable'] = $request->has('enable');
+        $data['agentoption'] = $request->has('agentoption');
+
+        // Transform server string to array
+        if (isset($data['server']) && is_string($data['server'])) {
+            $data['server'] = array_map('trim', explode(',', $data['server']));
+        }
+
+        // Ensure interface is array
+        if (!isset($data['interface'])) {
+            $data['interface'] = [];
+        }
+
         try {
-            $api->updateDhcpRelay($request->all());
+            $api->updateDhcpRelay($data);
             return redirect()->back()->with('status', 'DHCP Relay settings updated.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

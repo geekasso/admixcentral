@@ -1,0 +1,19 @@
+
+> build
+> vite build
+
+vite v7.2.4 building client environment for production...
+transforming...
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+3  |  @tailwind utilities;
+4  |  
+5  |  @import './pfsense-responsive.css';
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6  |  /* Force rebuild */
+✓ 54 modules transformed.
+rendering chunks...
+computing gzip size...
+public/build/manifest.json             0.33 kB │ gzip:  0.17 kB
+public/build/assets/app-CsbTVqGk.css  52.38 kB │ gzip:  8.71 kB
+public/build/assets/app-CJy8ASEk.js   80.95 kB │ gzip: 30.35 kB
+✓ built in 554ms

@@ -1,5 +1,5 @@
 <?php
-$json = file_get_contents('/home/baga/Code/admixcenter/openapi.json');
+$json = file_get_contents('/home/baga/Code/admixcentral/openapi.json');
 $data = json_decode($json, true);
 
 if (isset($data['paths'])) {

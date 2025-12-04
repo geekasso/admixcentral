@@ -856,7 +856,7 @@ class PfSenseApiService
      */
     public function updateDhcpRelay(array $data)
     {
-        return $this->post('/services/dhcp_relay', $data);
+        return $this->patch('/services/dhcp_relay', $data);
     }
 
 
