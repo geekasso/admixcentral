@@ -1,0 +1,5 @@
+HTTP/2 405 
+server: nginx
+date: Tue, 25 Nov 2025 17:18:03 GMT
+content-type: application/json
+

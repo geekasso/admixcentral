@@ -1,0 +1,217 @@
+
+--- Status Dashboard ---
+Testing System Version (GET /system/version)...
+SUCCESS: {"code":200,"status":"ok","response_id":"SUCCESS","message":"","data":{"version":"2.8.1-RELEASE","base":"2.8.1","patch":"0","buildtime":"20251024-1553"}}
+Testing Interfaces (Singular) (GET /interface)...
+FAILED: API request failed: {"code":400,"status":"bad request","response_id":"MODEL_REQUIRES_ID","message":"Field `id` is required.","data":[]}
+
+Testing Interfaces (Plural) (GET /interfaces)...
+SUCCESS: {"code":200,"status":"ok","response_id":"SUCCESS","message":"","data":[{"id":"wan","if":"hn0","enable":true,"descr":"WAN","spoofmac":"","mtu":null,"mss":null,"media":null,"mediaopt":null,"blockpriv":false,"blockbogons":true,"typev4":"dhcp","ipaddr":"dhcp","subnet":null,"gateway":null,"dhcphostname":"","alias_address":"","alias_subnet":32,"dhcprejectfrom":[],"adv_dhcp_config_advanced":null,"adv_dhcp_pt_values":"SavedCfg","adv_dhcp_pt_timeout":null,"adv_dhcp_pt_retry":null,"adv_dhcp_pt_select_timeout":null,"adv_dhcp_pt_reboot":null,"adv_dhcp_pt_backoff_cutoff":null,"adv_dhcp_pt_initial_interval":null,"adv_dhcp_send_options":"","adv_dhcp_request_options":"","adv_dhcp_required_options":"","adv_dhcp_option_modifiers":"","adv_dhcp_config_file_override":null,"adv_dhcp_config_file_override_path":"","typev6":"staticv6","ipaddrv6":"2001:db8::200","subnetv6":128,"gatewayv6":null,"ipv6usev4iface":null,"slaacusev4iface":null,"prefix_6rd":null,"gateway_6rd":null,"prefix_6rd_v4plen":null,"track6_interface":null,"track6_prefix_id_hex":null},{"id":"lan","if":"hn1","enable":true,"descr":"LAN Interface Test","spoofmac":"","mtu":null,"mss":null,"media":"","mediaopt":"","blockpriv":false,"blockbogons":false,"typev4":"static","ipaddr":"192.168.1.100","subnet":24,"gateway":null,"dhcphostname":null,"alias_address":null,"alias_subnet":null,"dhcprejectfrom":null,"adv_dhcp_config_advanced":null,"adv_dhcp_pt_values":null,"adv_dhcp_pt_timeout":null,"adv_dhcp_pt_retry":null,"adv_dhcp_pt_select_timeout":null,"adv_dhcp_pt_reboot":null,"adv_dhcp_pt_backoff_cutoff":null,"adv_dhcp_pt_initial_interval":null,"adv_dhcp_send_options":null,"adv_dhcp_request_options":null,"adv_dhcp_required_options":null,"adv_dhcp_option_modifiers":null,"adv_dhcp_config_file_override":null,"adv_dhcp_config_file_override_path":null,"typev6":"track6","ipaddrv6":"track6","subnetv6":null,"gatewayv6":null,"ipv6usev4iface":null,"slaacusev4iface":null,"prefix_6rd":null,"gateway_6rd":null,"prefix_6rd_v4plen":null,"track6_interface":"wan","track6_prefix_id_hex":"0"}]}
+Testing Gateways (GET /routing/gateway)...
+FAILED: API request failed: {"code":400,"status":"bad request","response_id":"MODEL_REQUIRES_ID","message":"Field `id` is required.","data":[]}
+
+Testing Services (GET /services)...
+FAILED: API request failed: <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css" type="text/css">
+		<link rel="stylesheet" href="/css/login.css" type="text/css">
+		<title>404 - File Not Found</title>
+		<script type="text/javascript">
+			//<![CDATA{
+			var events = events || [];
+			//]]>
+		</script>
+		<script src="/vendor/jquery/jquery-3.7.1.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+			$(function(){
+				$("#logodiv").load("logo.svg");
+			});
+		</script>
+
+	</head>
+
+	<body id="login">
+		<div id="total">
+			<header>
+				<div id="headerrow">
+					<div class="row">
+						<div class="col-sm-4">
+							<div id="logodiv" style="text-align:center" class="nowarning">
+							</div>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center text-danger">
+							The requested file does not exist.<br/>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center">
+							<h4>404 Error</h4>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div style="background: #1e3f75;" class="pagebody">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4 logoCol">
+					<div class="loginCont center-block text-center">
+						<strong><a href="/">Return to Dashboard</a></strong>
+					</div>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<footer id="3">
+				<div id="footertext">
+					<p class="text-muted">
+						<a target="_blank" href="https://pfsense.org">pfSense</a>
+						software is developed and maintained by
+						<a target="_blank" href="https://netgate.com">Netgate</a>.
+						&copy; ESF 2004 - 2025
+						<a target="_blank" href="https://pfsense.org/license">View license</a>.
+					</p>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
+
+
+--- Schedules ---
+Testing Create Schedule (POST /firewall/schedule)...
+FAILED: API request failed: {"code":400,"status":"bad request","response_id":"FIELD_INVALID_MANY_VALUE","message":"Field `timerange` encountered a nested validation error: Field `month` must be of type `array`.","data":[]}
+
+
+--- Diagnostics Ping ---
+Testing Ping (Default) (POST /diagnostics/ping)...
+FAILED: API request failed: <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css" type="text/css">
+		<link rel="stylesheet" href="/css/login.css" type="text/css">
+		<title>404 - File Not Found</title>
+		<script type="text/javascript">
+			//<![CDATA{
+			var events = events || [];
+			//]]>
+		</script>
+		<script src="/vendor/jquery/jquery-3.7.1.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+			$(function(){
+				$("#logodiv").load("logo.svg");
+			});
+		</script>
+
+	</head>
+
+	<body id="login">
+		<div id="total">
+			<header>
+				<div id="headerrow">
+					<div class="row">
+						<div class="col-sm-4">
+							<div id="logodiv" style="text-align:center" class="nowarning">
+							</div>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center text-danger">
+							The requested file does not exist.<br/>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center">
+							<h4>404 Error</h4>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div style="background: #1e3f75;" class="pagebody">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4 logoCol">
+					<div class="loginCont center-block text-center">
+						<strong><a href="/">Return to Dashboard</a></strong>
+					</div>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<footer id="3">
+				<div id="footertext">
+					<p class="text-muted">
+						<a target="_blank" href="https://pfsense.org">pfSense</a>
+						software is developed and maintained by
+						<a target="_blank" href="https://netgate.com">Netgate</a>.
+						&copy; ESF 2004 - 2025
+						<a target="_blank" href="https://pfsense.org/license">View license</a>.
+					</p>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
+
+Testing Ping (Interface) (POST /diagnostics/interface/ping)...
+FAILED: API request failed: <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css" type="text/css">
+		<link rel="stylesheet" href="/css/login.css" type="text/css">
+		<title>404 - File Not Found</title>
+		<script type="text/javascript">
+			//<![CDATA{
+			var events = events || [];
+			//]]>
+		</script>
+		<script src="/vendor/jquery/jquery-3.7.1.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+			$(function(){
+				$("#logodiv").load("logo.svg");
+			});
+		</script>
+
+	</head>
+
+	<body id="login">
+		<div id="total">
+			<header>
+				<div id="headerrow">
+					<div class="row">
+						<div class="col-sm-4">
+							<div id="logodiv" style="text-align:center" class="nowarning">
+							</div>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center text-danger">
+							The requested file does not exist.<br/>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center">
+							<h4>404 Error</h4>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div style="background: #1e3f75;" class="pagebody">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4 logoCol">
+					<div class="loginCont center-block text-center">
+						<strong><a href="/">Return to Dashboard</a></strong>
+					</div>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<footer id="3">
+				<div id="footertext">
+					<p class="text-muted">
+						<a target="_blank" href="https://pfsense.org">pfSense</a>
+						software is developed and maintained by
+						<a target="_blank" href="https://netgate.com">Netgate</a>.
+						&copy; ESF 2004 - 2025
+						<a target="_blank" href="https://pfsense.org/license">View license</a>.
+					</p>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
+

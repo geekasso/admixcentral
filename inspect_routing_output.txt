@@ -1,0 +1,95 @@
+Fetching /routing/gateways ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 0
+                    [name] => WAN_DHCP
+                    [descr] => Interface WAN_DHCP Gateway
+                    [disabled] => 
+                    [ipprotocol] => inet
+                    [interface] => wan
+                    [gateway] => dynamic
+                    [monitor_disable] => 
+                    [monitor] => 
+                    [action_disable] => 
+                    [force_down] => 
+                    [dpinger_dont_add_static_route] => 
+                    [gw_down_kill_states] => 
+                    [nonlocalgateway] => 
+                    [weight] => 1
+                    [data_payload] => 1
+                    [latencylow] => 200
+                    [latencyhigh] => 500
+                    [losslow] => 10
+                    [losshigh] => 20
+                    [interval] => 500
+                    [loss_interval] => 2000
+                    [time_period] => 60000
+                    [alert_interval] => 1000
+                )
+
+            [1] => Array
+                (
+                    [id] => 1
+                    [name] => WAN_DHCP6
+                    [descr] => Interface WAN_DHCP6 Gateway
+                    [disabled] => 
+                    [ipprotocol] => inet6
+                    [interface] => wan
+                    [gateway] => 
+                    [monitor_disable] => 
+                    [monitor] => 
+                    [action_disable] => 
+                    [force_down] => 
+                    [dpinger_dont_add_static_route] => 
+                    [gw_down_kill_states] => 
+                    [nonlocalgateway] => 
+                    [weight] => 1
+                    [data_payload] => 1
+                    [latencylow] => 200
+                    [latencyhigh] => 500
+                    [losslow] => 10
+                    [losshigh] => 20
+                    [interval] => 500
+                    [loss_interval] => 2000
+                    [time_period] => 60000
+                    [alert_interval] => 1000
+                )
+
+        )
+
+)
+--------------------------------------------------
+Fetching /routing/static_routes ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+        )
+
+)
+--------------------------------------------------
+Fetching /routing/gateway/groups ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+        )
+
+)
+--------------------------------------------------

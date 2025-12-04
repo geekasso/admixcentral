@@ -1,0 +1,4 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   271    0   142  100   129   1273   1156 --:--:-- --:--:-- --:--:--  2419100   271    0   142  100   129   1271   1154 --:--:-- --:--:-- --:--:--  2419
+{"code":400,"status":"bad request","response_id":"FIELD_INVALID_MANY_VALUE","message":"Field `interface` must be of type `array`.","data":[]}

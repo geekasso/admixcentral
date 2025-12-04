@@ -1,0 +1,9 @@
+Using firewall: pfSense Lab (https://172.30.1.129:444)
+
+1. Listing OpenVPN Servers...
+Found 0 servers.
+
+2. Creating Test OpenVPN Server...
+
+5. Listing OpenVPN Clients...
+Found 0 clients.

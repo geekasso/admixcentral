@@ -1,0 +1,9 @@
+Using firewall: pfSense Lab (https://172.30.1.129:444)
+
+1. Listing OpenVPN Servers...
+Found 0 servers.
+
+Fetching CAs and Certs...
+No CA found. Uploading local CA...
+Error: syntax error, unexpected '=' in /home/baga/Code/admixcenter/certs.env on line 2
+

@@ -1,0 +1,10 @@
+Path: /api/v2/services/dhcp_relay
+Path: /api/v2/services/dhcp_server/address_pool
+Path: /api/v2/services/dhcp_server/apply
+Path: /api/v2/services/dhcp_server/backend
+Path: /api/v2/services/dhcp_server/custom_option
+Path: /api/v2/services/dhcp_server
+Path: /api/v2/services/dhcp_server/static_mapping
+Path: /api/v2/services/dhcp_servers
+Path: /api/v2/status/dhcp_server/leases
+Path: /api/v2/status/logs/dhcp

@@ -1,0 +1,12 @@
+Using firewall: pfSense Lab (https://172.30.1.129:444)
+
+1. Listing OpenVPN Servers...
+Found 0 servers.
+
+Fetching CAs and Certs...
+Using CA ref: 6927c4a9da632
+Using Cert ref: 6920d28a54bc4
+
+2. Creating Test OpenVPN Server...
+Error: API request failed: {"code":400,"status":"bad request","response_id":"FIELD_IS_REQUIRED","message":"Field `ecdh_curve` is required.","data":[]}
+

@@ -1,0 +1,12 @@
+Using firewall: pfSense Lab (https://172.30.1.129:444)
+
+1. Listing OpenVPN Servers...
+Found 1 servers.
+
+Fetching CAs and Certs...
+Using CA ref: 6927c4a9da632
+Using Cert ref: 6920d28a54bc4
+
+2. Creating Test OpenVPN Server...
+Error: API request failed: {"code":400,"status":"bad request","response_id":"FIELD_MUST_BE_UNIQUE","message":"Field `local_port` must be unique. Value is in use by object with ID `0`.","data":[]}
+

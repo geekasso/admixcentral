@@ -1,0 +1,8 @@
+Using firewall: pfSense Lab (https://172.30.1.129:444)
+
+1. Listing OpenVPN Servers...
+Found 0 servers.
+
+2. Creating Test OpenVPN Server...
+Error: API request failed: {"code":400,"status":"bad request","response_id":"FIELD_INVALID_TYPE","message":"Field `local_port` must be of type `string`","data":[]}
+

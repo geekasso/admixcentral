@@ -1,0 +1,99 @@
+Fetching /system/webgui/settings ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [protocol] => https
+            [port] => 444
+            [sslcertref] => 6920d28a54bc4
+        )
+
+)
+--------------------------------------------------
+Fetching /firewall/advanced_settings ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [aliasesresolveinterval] => 999999999
+            [checkaliasesurlcert] => 
+        )
+
+)
+--------------------------------------------------
+Fetching /system/notifications/email_settings ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [disable] => 
+            [ipaddress] => 
+            [port] => 25
+            [timeout] => 20
+            [ssl] => 
+            [sslvalidate] => 
+            [fromaddress] => 
+            [notifyemailaddress] => 
+            [authentication_mechanism] => PLAIN
+            [username] => 
+            [password] => 
+        )
+
+)
+--------------------------------------------------
+Fetching /system/tunables ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+        )
+
+)
+--------------------------------------------------
+Fetching /services/ssh ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [enable] => 1
+            [port] => 2222
+            [sshdkeyonly] => 
+            [sshdagentforwarding] => 
+        )
+
+)
+--------------------------------------------------
+Fetching /system/console ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [passwd_protect_console] => 
+        )
+
+)
+--------------------------------------------------

@@ -1,0 +1,117 @@
+Using firewall: pfSense Lab (https://172.30.1.129:444)
+
+1. Listing OpenVPN Servers...
+Found 1 servers.
+
+Fetching CAs and Certs...
+Using CA ref: 6927c4a9da632
+Using Cert ref: 6920d28a54bc4
+
+2. Creating Test OpenVPN Server...
+Creation failed (might already exist): API request failed: {"code":400,"status":"bad request","response_id":"FIELD_MUST_BE_UNIQUE","message":"Field `local_port` must be unique. Value is in use by object with ID `0`.","data":[]}
+
+
+3. Verifying Server in List...
+Array
+(
+    [id] => 0
+    [vpnid] => 1
+    [vpnif] => ovpns1
+    [description] => Test OpenVPN Server
+    [disable] => 
+    [mode] => server_tls
+    [authmode] => 
+    [dev_mode] => tun
+    [protocol] => UDP4
+    [interface] => wan
+    [local_port] => 1195
+    [use_tls] => 
+    [tls] => 
+    [tls_type] => 
+    [tlsauth_keydir] => 
+    [caref] => 6927c4a9da632
+    [certref] => 6920d28a54bc4
+    [cert_depth] => 1
+    [dh_length] => 2048
+    [ecdh_curve] => none
+    [data_ciphers] => Array
+        (
+            [0] => AES-256-GCM
+        )
+
+    [data_ciphers_fallback] => AES-256-GCM
+    [digest] => SHA256
+    [strictusercn] => 
+    [remote_cert_tls] => 1
+    [tunnel_network] => 10.0.9.0/24
+    [tunnel_networkv6] => 
+    [serverbridge_dhcp] => 
+    [serverbridge_interface] => 
+    [serverbridge_routegateway] => 
+    [serverbridge_dhcp_start] => 
+    [serverbridge_dhcp_end] => 
+    [gwredir] => 
+    [gwredir6] => 
+    [local_network] => Array
+        (
+        )
+
+    [local_networkv6] => Array
+        (
+        )
+
+    [remote_network] => Array
+        (
+        )
+
+    [remote_networkv6] => Array
+        (
+        )
+
+    [maxclients] => 
+    [allow_compression] => no
+    [passtos] => 
+    [client2client] => 
+    [duplicate_cn] => 
+    [connlimit] => 
+    [dynamic_ip] => 
+    [topology] => subnet
+    [inactive_seconds] => 300
+    [ping_method] => keepalive
+    [keepalive_interval] => 10
+    [keepalive_timeout] => 60
+    [ping_seconds] => 
+    [ping_push] => 
+    [ping_action] => 
+    [ping_action_seconds] => 
+    [ping_action_push] => 
+    [dns_domain] => 
+    [dns_server1] => 
+    [dns_server2] => 
+    [dns_server3] => 
+    [dns_server4] => 
+    [push_blockoutsidedns] => 
+    [push_register_dns] => 
+    [ntp_server1] => 
+    [ntp_server2] => 
+    [netbios_enable] => 
+    [netbios_ntype] => 
+    [netbios_scope] => 
+    [wins_server1] => 
+    [wins_server2] => 
+    [custom_options] => Array
+        (
+        )
+
+    [username_as_common_name] => 
+    [sndrcvbuf] => 
+    [create_gw] => both
+    [verbosity_level] => 1
+)
+Found created server with ID: 0
+
+4. Deleting Server...
+Server deleted.
+
+5. Listing OpenVPN Clients...
+Found 0 clients.

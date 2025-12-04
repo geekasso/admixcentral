@@ -1,0 +1,9 @@
+/api/v2/routing/apply
+/api/v2/routing/gateway/default
+/api/v2/routing/gateway
+/api/v2/routing/gateway/group
+/api/v2/routing/gateway/group/priority
+/api/v2/routing/gateway/groups
+/api/v2/routing/gateways
+/api/v2/routing/static_route
+/api/v2/routing/static_routes

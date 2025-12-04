@@ -1,0 +1,9 @@
+Using firewall: pfSense Lab (https://172.30.1.129:444)
+
+1. Listing OpenVPN Servers...
+Found 0 servers.
+
+Fetching CAs and Certs...
+No CA found. Generating one...
+Error: API request failed: {"code":500,"status":"internal server error","response_id":"CERTIFICATE_AUTHORITY_GENERATE_FAILED","message":"Failed to generate the certificate authority for unknown reason.","data":[]}
+

@@ -1,0 +1,2 @@
+Testing Rules API for firewall: pfSense Lab (https://172.30.1.129:444)
+SUCCESS! Found 23 rules.

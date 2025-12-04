@@ -1,0 +1,275 @@
+Testing System API for firewall: pfSense Lab
+Testing endpoint: /system/config ... Failed: API request failed: <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css" type="text/css">
+		<link rel="stylesheet" href="/css/login.css" type="text/css">
+		<title>404 - File Not Found</title>
+		<script type="text/javascript">
+			//<![CDATA{
+			var events = events || [];
+			//]]>
+		</script>
+		<script src="/vendor/jquery/jquery-3.7.1.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+			$(function(){
+				$("#logodiv").load("logo.svg");
+			});
+		</script>
+
+	</head>
+
+	<body id="login">
+		<div id="total">
+			<header>
+				<div id="headerrow">
+					<div class="row">
+						<div class="col-sm-4">
+							<div id="logodiv" style="text-align:center" class="nowarning">
+							</div>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center text-danger">
+							The requested file does not exist.<br/>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center">
+							<h4>404 Error</h4>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div style="background: #1e3f75;" class="pagebody">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4 logoCol">
+					<div class="loginCont center-block text-center">
+						<strong><a href="/">Return to Dashboard</a></strong>
+					</div>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<footer id="3">
+				<div id="footertext">
+					<p class="text-muted">
+						<a target="_blank" href="https://pfsense.org">pfSense</a>
+						software is developed and maintained by
+						<a target="_blank" href="https://netgate.com">Netgate</a>.
+						&copy; ESF 2004 - 2025
+						<a target="_blank" href="https://pfsense.org/license">View license</a>.
+					</p>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
+
+Testing endpoint: /system/general ... Failed: API request failed: <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css" type="text/css">
+		<link rel="stylesheet" href="/css/login.css" type="text/css">
+		<title>404 - File Not Found</title>
+		<script type="text/javascript">
+			//<![CDATA{
+			var events = events || [];
+			//]]>
+		</script>
+		<script src="/vendor/jquery/jquery-3.7.1.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+			$(function(){
+				$("#logodiv").load("logo.svg");
+			});
+		</script>
+
+	</head>
+
+	<body id="login">
+		<div id="total">
+			<header>
+				<div id="headerrow">
+					<div class="row">
+						<div class="col-sm-4">
+							<div id="logodiv" style="text-align:center" class="nowarning">
+							</div>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center text-danger">
+							The requested file does not exist.<br/>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center">
+							<h4>404 Error</h4>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div style="background: #1e3f75;" class="pagebody">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4 logoCol">
+					<div class="loginCont center-block text-center">
+						<strong><a href="/">Return to Dashboard</a></strong>
+					</div>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<footer id="3">
+				<div id="footertext">
+					<p class="text-muted">
+						<a target="_blank" href="https://pfsense.org">pfSense</a>
+						software is developed and maintained by
+						<a target="_blank" href="https://netgate.com">Netgate</a>.
+						&copy; ESF 2004 - 2025
+						<a target="_blank" href="https://pfsense.org/license">View license</a>.
+					</p>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
+
+Testing endpoint: /system/hostname ... OK (Status: ok)
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [hostname] => pfSense
+            [domain] => home.arpa
+        )
+
+)
+Testing endpoint: /system/domain ... Failed: API request failed: <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css" type="text/css">
+		<link rel="stylesheet" href="/css/login.css" type="text/css">
+		<title>404 - File Not Found</title>
+		<script type="text/javascript">
+			//<![CDATA{
+			var events = events || [];
+			//]]>
+		</script>
+		<script src="/vendor/jquery/jquery-3.7.1.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+			$(function(){
+				$("#logodiv").load("logo.svg");
+			});
+		</script>
+
+	</head>
+
+	<body id="login">
+		<div id="total">
+			<header>
+				<div id="headerrow">
+					<div class="row">
+						<div class="col-sm-4">
+							<div id="logodiv" style="text-align:center" class="nowarning">
+							</div>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center text-danger">
+							The requested file does not exist.<br/>
+						</div>
+						<div class="col-sm-4 nowarning msgbox text-center">
+							<h4>404 Error</h4>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div style="background: #1e3f75;" class="pagebody">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4 logoCol">
+					<div class="loginCont center-block text-center">
+						<strong><a href="/">Return to Dashboard</a></strong>
+					</div>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<footer id="3">
+				<div id="footertext">
+					<p class="text-muted">
+						<a target="_blank" href="https://pfsense.org">pfSense</a>
+						software is developed and maintained by
+						<a target="_blank" href="https://netgate.com">Netgate</a>.
+						&copy; ESF 2004 - 2025
+						<a target="_blank" href="https://pfsense.org/license">View license</a>.
+					</p>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
+
+Testing endpoint: /system/timezone ... OK (Status: ok)
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [timezone] => UTC
+        )
+
+)
+Testing endpoint: /system/dns ... OK (Status: ok)
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [dnsallowoverride] => 1
+            [dnslocalhost] => 
+            [dnsserver] => 
+        )
+
+)
+Testing endpoint: /status/system ... OK (Status: ok)
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [platform] => Microsoft Azure
+            [serial] => 
+            [netgate_id] => 900d3b9e43d67394f4c7
+            [uptime] => 7 Days 13 Hours 08 Minutes 03 Seconds
+            [bios_vendor] => American Megatrends Inc.
+            [bios_version] => 090008
+            [bios_date] => 12/07/2018
+            [kernel_pti] => 1
+            [mds_mitigation] => inactive
+            [temp_c] => 
+            [temp_f] => 
+            [cpu_model] => Intel(R) Xeon(R) Platinum 8168 CPU @ 2.70GHz
+            [cpu_load_avg] => Array
+                (
+                    [0] => 0.36
+                    [1] => 0.3
+                    [2] => 0.22
+                )
+
+            [cpu_count] => 8
+            [cpu_usage] => 4.5
+            [mbuf_usage] => 0
+            [mem_usage] => 13
+            [swap_usage] => 0
+            [disk_usage] => 7
+        )
+
+)

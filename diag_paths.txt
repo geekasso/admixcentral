@@ -1,0 +1,9 @@
+Path: /api/v2/diagnostics/arp_table
+Path: /api/v2/diagnostics/arp_table/entry
+Path: /api/v2/diagnostics/command_prompt
+Path: /api/v2/diagnostics/config_history/revision
+Path: /api/v2/diagnostics/config_history/revisions
+Path: /api/v2/diagnostics/halt_system
+Path: /api/v2/diagnostics/reboot
+Path: /api/v2/diagnostics/table
+Path: /api/v2/diagnostics/tables

@@ -1,0 +1,7 @@
+Testing VLAN API endpoints for firewall: pfSense Lab (https://172.30.1.129:444)
+Testing /auth/keys... Error: API request failed: {"code":401,"status":"unauthorized","response_id":"AUTH_AUTHENTICATION_FAILED","message":"Authentication failed.","data":[]}
+
+Testing /interface/vlan... Error: API request failed: {"code":401,"status":"unauthorized","response_id":"AUTH_AUTHENTICATION_FAILED","message":"Authentication failed.","data":[]}
+
+Testing /interface/vlans... Error: API request failed: {"code":401,"status":"unauthorized","response_id":"AUTH_AUTHENTICATION_FAILED","message":"Authentication failed.","data":[]}
+

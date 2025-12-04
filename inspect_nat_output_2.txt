@@ -1,0 +1,126 @@
+Fetching NAT Port Forwards...
+Fetching Firewall Rules...
+
+--- NAT Rules ---
+Index: 0
+Description: Update Test Rule UPDATED
+Associated Rule ID: N/A
+----------------
+Index: 1
+Description: Update Test Rule UPDATED
+Associated Rule ID: N/A
+----------------
+Index: 2
+Description: Update Test Rule UPDATED
+Associated Rule ID: N/A
+----------------
+Index: 3
+Description: Update Test Rule UPDATED
+Associated Rule ID: N/A
+----------------
+Index: 4
+Description: Test Linked Rule
+Associated Rule ID: N/A
+----------------
+
+--- Firewall Rules ---
+Index: 0
+Description: 
+Tracker: 1763758790
+Associated Rule ID: N/A
+----------------
+Index: 1
+Description: 
+Tracker: 1763758904
+Associated Rule ID: N/A
+----------------
+Index: 2
+Description: Default allow LAN to any rule
+Tracker: 100000101
+Associated Rule ID: N/A
+----------------
+Index: 3
+Description: Default allow LAN IPv6 to any rule
+Tracker: 100000102
+Associated Rule ID: N/A
+----------------
+Index: 4
+Description: 
+Tracker: 1763785984
+Associated Rule ID: N/A
+----------------
+Index: 5
+Description: Test Debug Rule
+Tracker: 1763869228
+Associated Rule ID: N/A
+----------------
+Index: 6
+Description: Fixed Bug Test Rule
+Tracker: 1763869413
+Associated Rule ID: N/A
+----------------
+Index: 7
+Description: Verification Rule WAN
+Tracker: 1763880348
+Associated Rule ID: N/A
+----------------
+Index: 8
+Description: Final Verify Rule
+Tracker: 1763880793
+Associated Rule ID: N/A
+----------------
+Index: 9
+Description: Final Verify Rule
+Tracker: 1763880891
+Associated Rule ID: N/A
+----------------
+Index: 10
+Description: Final Verify Rule
+Tracker: 1763881101
+Associated Rule ID: N/A
+----------------
+Index: 11
+Description: Bulk Test 1
+Tracker: 1763881854
+Associated Rule ID: N/A
+----------------
+Index: 12
+Description: Bulk Test 2
+Tracker: 1763881866
+Associated Rule ID: N/A
+----------------
+Index: 13
+Description: Order Test A
+Tracker: 1763882283
+Associated Rule ID: N/A
+----------------
+Index: 14
+Description: Order Test B
+Tracker: 1763882304
+Associated Rule ID: N/A
+----------------
+Index: 15
+Description: BrowserTestDelete
+Tracker: 1763953879
+Associated Rule ID: N/A
+----------------
+Index: 16
+Description: Toggle Test Rule
+Tracker: 1764010927
+Associated Rule ID: N/A
+----------------
+Index: 17
+Description: Toggle Test Rule
+Tracker: 1764010927
+Associated Rule ID: N/A
+----------------
+Index: 18
+Description: 
+Tracker: 1763758790
+Associated Rule ID: N/A
+----------------
+Index: 19
+Description: 
+Tracker: 1764013870
+Associated Rule ID: N/A
+----------------

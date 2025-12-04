@@ -1,0 +1,93 @@
+Fetching /users ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 0
+                    [name] => admin
+                    [password] => $2b$10$13u6qwCOwODv34GyCMgdWub6oQF3RX0rG7c3d3X4JvzuEmAXLYDd2
+                    [uid] => 0
+                    [scope] => system
+                    [priv] => Array
+                        (
+                            [0] => user-shell-access
+                        )
+
+                    [disabled] => 
+                    [descr] => System Administrator
+                    [expires] => 
+                    [cert] => 
+                    [authorizedkeys] => 
+                    [ipsecpsk] => 
+                )
+
+        )
+
+)
+--------------------------------------------------
+Fetching /user/groups ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 0
+                    [name] => all
+                    [gid] => 1998
+                    [scope] => system
+                    [description] => All Users
+                    [member] => Array
+                        (
+                            [0] => admin
+                        )
+
+                    [priv] => 
+                )
+
+            [1] => Array
+                (
+                    [id] => 1
+                    [name] => admins
+                    [gid] => 1999
+                    [scope] => system
+                    [description] => System Administrators
+                    [member] => Array
+                        (
+                            [0] => admin
+                        )
+
+                    [priv] => Array
+                        (
+                            [0] => page-all
+                        )
+
+                )
+
+        )
+
+)
+--------------------------------------------------
+Fetching /user/auth_servers ...
+Array
+(
+    [code] => 200
+    [status] => ok
+    [response_id] => SUCCESS
+    [message] => 
+    [data] => Array
+        (
+        )
+
+)
+--------------------------------------------------

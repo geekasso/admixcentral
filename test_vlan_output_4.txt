@@ -1,0 +1,5 @@
+Testing VLAN API endpoints for firewall: pfSense Lab (https://172.30.1.129:444)
+Testing /auth/keys... SUCCESS! Found data.
+Testing /interface/vlan... Error: API request failed: {"code":400,"status":"bad request","response_id":"MODEL_REQUIRES_ID","message":"Field `id` is required.","data":[]}
+
+Testing /interface/vlans... SUCCESS! Found data.

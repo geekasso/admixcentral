@@ -1,0 +1,17 @@
+Path: /api/v2/interface/apply
+Path: /api/v2/interface/available_interfaces
+Path: /api/v2/interface/bridge
+Path: /api/v2/interface/bridges
+Path: /api/v2/interface/gre
+Path: /api/v2/interface/gres
+Path: /api/v2/interface/group
+Path: /api/v2/interface/groups
+Path: /api/v2/interface/lagg
+Path: /api/v2/interface/laggs
+Path: /api/v2/interface/vlan
+Path: /api/v2/interface/vlans
+Path: /api/v2/interface
+Path: /api/v2/interfaces
+Path: /api/v2/services/freeradius/interface
+Path: /api/v2/services/freeradius/interfaces
+Path: /api/v2/status/interfaces

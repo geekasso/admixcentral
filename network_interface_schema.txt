@@ -1,0 +1,398 @@
+{
+  "type": "object",
+  "properties": {
+    "if": {
+      "description": "The real interface this configuration will be applied to.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 128
+    },
+    "enable": {
+      "description": "Enable or disable this interface.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "descr": {
+      "description": "The descriptive name for this interface.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 128
+    },
+    "spoofmac": {
+      "description": "Assigns (spoofs) the MAC address for this interface instead of using the interface's real MAC.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 17
+    },
+    "mtu": {
+      "description": "Sets the MTU for this interface. Assumes default MTU if value is `null`.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 1280,
+      "maximum": 8192
+    },
+    "mss": {
+      "description": "Sets the MSS for this interface. Assumes default MSS if value is `null`.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 576,
+      "maximum": 65535
+    },
+    "media": {
+      "description": "Sets the link speed for this interface. In most situations this can be left as the default.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "mediaopt": {
+      "description": "Sets the link duplex for this interface. In most situations this can be left as the default.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "blockpriv": {
+      "description": "Enable or disable automatically blocking RFC 1918 private networks on this interface.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "blockbogons": {
+      "description": "Enable or disable automatically blocking bogon networks on this interface.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "typev4": {
+      "description": "Selects the IPv4 address type to assign this interface.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "enum": [
+        "static",
+        "dhcp",
+        "none"
+      ],
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "ipaddr": {
+      "description": "Sets the IPv4 address to assign to this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be one of [ static, dhcp ]<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "subnet": {
+      "description": "Sets the subnet bit count to assign this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'static'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 32
+    },
+    "gateway": {
+      "description": "Sets the upstream gateway this interface will use. This is only applicable for WAN-type interfaces.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'static'`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string"
+    },
+    "dhcphostname": {
+      "description": "Sets the DHCP hostname this interface will advertise via DHCP.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "alias_address": {
+      "description": "Sets the value used as a fixed alias IPv4 address by the DHCP client.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "alias_subnet": {
+      "description": "Sets the value used as the fixed alias IPv4 address's subnet bit count by the DHCP client.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "default": 32,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 32
+    },
+    "dhcprejectfrom": {
+      "description": "Sets a list of IPv4 DHCP server addresses to reject DHCP offers for on this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 1024
+      }
+    },
+    "adv_dhcp_config_advanced": {
+      "description": "Enables or disables the advanced DHCP settings on this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "adv_dhcp_pt_values": {
+      "description": "Selects the advanced DHCP timing preset.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "default": "SavedCfg",
+      "type": "string",
+      "enum": [
+        "SavedCfg"
+      ],
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "adv_dhcp_pt_timeout": {
+      "description": "Manually sets the timeout timing value used when requested DHCP leases on this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99999999999999
+    },
+    "adv_dhcp_pt_retry": {
+      "description": "Manually sets the retry timing value used when requested DHCP leases on this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99999999999999
+    },
+    "adv_dhcp_pt_select_timeout": {
+      "description": "Manually sets the select timing value used when requested DHCP leases on this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 99999999999999
+    },
+    "adv_dhcp_pt_reboot": {
+      "description": "Manually sets the reboot timing value used when requested DHCP leases on this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99999999999999
+    },
+    "adv_dhcp_pt_backoff_cutoff": {
+      "description": "Manually sets the backoff cutoff timing value used when requested DHCP leases on this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99999999999999
+    },
+    "adv_dhcp_pt_initial_interval": {
+      "description": "Manually sets the initial interval timing value used when requested DHCP leases on this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99999999999999
+    },
+    "adv_dhcp_send_options": {
+      "description": "Sets DHCP options to be sent when requesting a DHCP lease for this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "adv_dhcp_request_options": {
+      "description": "Sets DHCP option 55 values to be sent when requesting a DHCP lease for this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "adv_dhcp_required_options": {
+      "description": "Sets DHCP options required by the client when requesting a DHCP lease for this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "adv_dhcp_option_modifiers": {
+      "description": "Sets DHCP option modifiers applied to the obtained DHCP lease.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_advanced` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "adv_dhcp_config_file_override": {
+      "description": "Enables or disables overriding the entire DHCP configuration file for this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "adv_dhcp_config_file_override_path": {
+      "description": "Sets the local file path of the custom DHCP configuration file.<br><br>This field is only available when the following conditions are met:<br>- `typev4` must be equal to `'dhcp'`<br>- `adv_dhcp_config_file_override` must be equal to `true`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "typev6": {
+      "description": "Selects the IPv6 address type to assign this interface.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "enum": [
+        "staticv6",
+        "dhcp6",
+        "slaac",
+        "6rd",
+        "track6",
+        "6to4",
+        "none"
+      ],
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "ipaddrv6": {
+      "description": "Sets the IPv6 address to assign to this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be one of [ staticv6, dhcp6, slaac, 6rd, track6, 6to4 ]<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "subnetv6": {
+      "description": "Sets the subnet bit count to assign this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be equal to `'staticv6'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 128
+    },
+    "gatewayv6": {
+      "description": "Sets the upstream IPv6 gateway this interface will use. This is only applicable for WAN-type interfaces.<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be equal to `'staticv6'`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string"
+    },
+    "ipv6usev4iface": {
+      "description": "Enable or disable IPv6 using the IPv4 connectivity link (PPPoE).<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be equal to `'staticv6'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "slaacusev4iface": {
+      "description": "Enable or disable IPv6 using the IPv4 connectivity link (PPPoE).<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be equal to `'slaac'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "prefix_6rd": {
+      "description": "Sets the 6RD IPv6 prefix assigned by the ISP for this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be equal to `'6rd'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "gateway_6rd": {
+      "description": "Sets the 6RD IPv4 gateway address assigned by the ISP for this interface.<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be equal to `'6rd'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "prefix_6rd_v4plen": {
+      "description": "Sets the 6RD IPv4 prefix length. Normally specified by the ISP. A value of 0 means embed theentire IPv4 address in the 6RD prefix.<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be equal to `'6rd'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 32
+    },
+    "track6_interface": {
+      "description": "Sets the dynamic IPv6 WAN interface to track for configuration.<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be equal to `'track6'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "track6_prefix_id_hex": {
+      "description": "Sets the hexadecimal IPv6 prefix ID. This determines the configurable network ID based on the dynamic IPv6 connection.<br><br>This field is only available when the following conditions are met:<br>- `typev6` must be equal to `'track6'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    }
+  }
+}

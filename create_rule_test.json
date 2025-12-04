@@ -1,0 +1,4 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   318    0   198  100   120   1832   1110 --:--:-- --:--:-- --:--:--  2944
+{"code":405,"status":"method not allowed","response_id":"ENDPOINT_METHOD_NOT_ALLOWED","message":"Resource at \/api\/v2\/firewall\/rules does not support the requested HTTP method `POST`","data":[]}

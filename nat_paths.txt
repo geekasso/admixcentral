@@ -1,0 +1,7 @@
+Path: /api/v2/firewall/nat/one_to_one/mapping
+Path: /api/v2/firewall/nat/one_to_one/mappings
+Path: /api/v2/firewall/nat/outbound/mapping
+Path: /api/v2/firewall/nat/outbound/mappings
+Path: /api/v2/firewall/nat/outbound/mode
+Path: /api/v2/firewall/nat/port_forward
+Path: /api/v2/firewall/nat/port_forwards

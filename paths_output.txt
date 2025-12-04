@@ -1,0 +1,4 @@
+Methods for /api/v2/firewall/alias:
+dict_keys(['get', 'post', 'patch', 'delete'])
+DELETE parameters:
+[{'in': 'query', 'name': 'id', 'description': 'The ID of the object to target.', 'required': True, 'schema': {'oneOf': [{'type': 'integer'}, {'type': 'string'}]}}, {'in': 'query', 'name': 'apply', 'description': 'Apply this deletion immediately.', 'required': False, 'schema': {'type': 'boolean', 'default': False}}]

@@ -1,0 +1,19 @@
+Starting verification...
+Testing against firewall: pfSense Lab ()
+
+1. Listing Aliases...
+Found 8 aliases.
+ - TestAliasBrowser (host)
+ - TestAlias (host)
+ - TestAliasNew (host)
+
+2. Creating Test Alias 'TestAlias_1764804617'...
+Alias created successfully.
+
+3. Verifying Alias Creation...
+Found created alias at index 8.
+
+4. Deleting Test Alias (ID: 8)...
+Alias deleted successfully.
+
+✅ Firewall Aliases Verification Complete!

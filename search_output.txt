@@ -1,0 +1,12 @@
+Read 3734873 bytes
+Total paths: 226
+/api/v2/auth/jwt
+/api/v2/auth/key
+/api/v2/auth/keys
+/api/v2/diagnostics/arp_table
+/api/v2/diagnostics/arp_table/entry
+/api/v2/diagnostics/command_prompt
+/api/v2/diagnostics/config_history/revision
+/api/v2/diagnostics/config_history/revisions
+/api/v2/diagnostics/halt_system
+/api/v2/diagnostics/reboot

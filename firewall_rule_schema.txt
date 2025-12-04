@@ -1,0 +1,382 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "The action to take against traffic that matches this rule.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "enum": [
+        "pass",
+        "block",
+        "reject"
+      ],
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "interface": {
+      "description": "The interface where packets must originate to match this rule.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 1024
+      }
+    },
+    "ipprotocol": {
+      "description": "The IP version(s) this rule applies to.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "enum": [
+        "inet",
+        "inet6",
+        "inet46"
+      ],
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "protocol": {
+      "description": "The IP/transport protocol this rule should match.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "enum": [
+        "tcp",
+        "udp",
+        "tcp/udp",
+        "icmp",
+        "esp",
+        "ah",
+        "gre",
+        "ipv6",
+        "igmp",
+        "pim",
+        "ospf",
+        "carp",
+        "pfsync"
+      ],
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "icmptype": {
+      "description": "Th ICMP subtypes this rule applies to. This field is only applicable when `ipprotocol` is `inet` and `protocol` is `icmp`.<br><br>This field is only available when the following conditions are met:<br>- `protocol` must be equal to `'icmp'`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "default": [
+        "any"
+      ],
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "enum": [
+          "any",
+          "althost",
+          "dataconv",
+          "echorep",
+          "echoreq",
+          "inforep",
+          "inforeq",
+          "ipv6-here",
+          "ipv6-where",
+          "maskrep",
+          "maskreq",
+          "mobredir",
+          "mobregrep",
+          "mobregreq",
+          "paramprob",
+          "photuris",
+          "redir",
+          "routeradv",
+          "routersol",
+          "skip",
+          "squench",
+          "timerep",
+          "timereq",
+          "timex",
+          "trace",
+          "unreach"
+        ],
+        "minLength": 0,
+        "maxLength": 1024
+      }
+    },
+    "source": {
+      "description": "The source address this rule applies to. Valid value options are: an existing interface, an IP address, a subnet CIDR, an existing alias, `any`, `(self)`, `l2tp`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "source_port": {
+      "description": "The source port this rule applies to. Set to `null` to allow any source port. Valid options are: a TCP/UDP port number, a TCP/UDP port range separated by `:`, an existing port type firewall alias<br><br>This field is only available when the following conditions are met:<br>- `protocol` must be one of [ tcp, udp, tcp/udp ]<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string"
+    },
+    "destination": {
+      "description": "The destination address this rule applies to. Valid value options are: an existing interface, an IP address, a subnet CIDR, an existing alias, `any`, `(self)`, `l2tp`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "destination_port": {
+      "description": "The destination port this rule applies to. Set to `null` to allow any destination port. Valid options are: a TCP/UDP port number, a TCP/UDP port range separated by `:`, an existing port type firewall alias<br><br>This field is only available when the following conditions are met:<br>- `protocol` must be one of [ tcp, udp, tcp/udp ]<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string"
+    },
+    "descr": {
+      "description": "A description detailing the purpose or justification of this firewall rule.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "disabled": {
+      "description": "Enable or disable this firewall rule.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "log": {
+      "description": "Enable or disable logging of traffic that matches this rule.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "tag": {
+      "description": "A packet matching this rule can be marked and this mark used to match on other NAT/filter rules. It is called <br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "statetype": {
+      "description": "The state mechanism to use for this firewall rule.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "default": "keep state",
+      "type": "string",
+      "enum": [
+        "keep state",
+        "sloppy state",
+        "synproxy state",
+        "none"
+      ],
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "tcp_flags_any": {
+      "description": "Allow any TCP flags.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "tcp_flags_out_of": {
+      "description": "The TCP flags that can be set for this rule to match.<br><br>This field is only available when the following conditions are met:<br>- `tcp_flags_any` must be equal to `false`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "enum": [
+          "fin",
+          "syn",
+          "rst",
+          "psh",
+          "ack",
+          "urg",
+          "ece",
+          "cwr"
+        ],
+        "minLength": 0,
+        "maxLength": 1024
+      }
+    },
+    "tcp_flags_set": {
+      "description": "The TCP flags that must be set for this rule to match.<br><br>This field is only available when the following conditions are met:<br>- `tcp_flags_any` must be equal to `false`<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "enum": [
+          "fin",
+          "syn",
+          "rst",
+          "psh",
+          "ack",
+          "urg",
+          "ece",
+          "cwr"
+        ],
+        "minLength": 0,
+        "maxLength": 1024
+      }
+    },
+    "gateway": {
+      "description": "The gateway traffic matching this rule will be routed to. Set to `null` to use default.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string"
+    },
+    "sched": {
+      "description": "The name of an existing firewall schedule to assign to this firewall rule.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string"
+    },
+    "dnpipe": {
+      "description": "The name of the traffic shaper limiter pipe or queue to use for incoming traffic.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "pdnpipe": {
+      "description": "The name of the traffic shaper limiter pipe or queue to use for outgoing traffic.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "defaultqueue": {
+      "description": "The name of the traffic shaper queue to assume as the default queue for traffic matching this rule.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string"
+    },
+    "ackqueue": {
+      "description": "The name of the traffic shaper queue to assume as the ACK queue for ACK traffic matching this rule.<br>",
+      "nullable": true,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "string"
+    },
+    "floating": {
+      "description": "Mark this rule as a floating firewall rule.<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "quick": {
+      "description": "Apply this action to traffic that matches this rule immediately. This field only applies to floating firewall rules.<br><br>This field is only available when the following conditions are met:<br>- `floating` must be equal to `true`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "type": "boolean"
+    },
+    "direction": {
+      "description": "The direction of traffic this firewall rule applies to. This field only applies to floating firewall rules.<br><br>This field is only available when the following conditions are met:<br>- `floating` must be equal to `true`<br>",
+      "nullable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "default": "any",
+      "type": "string",
+      "enum": [
+        "any",
+        "in",
+        "out"
+      ],
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "tracker": {
+      "description": "The internal tracking ID for this firewall rule.<br>",
+      "nullable": true,
+      "readOnly": true,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 99999999999999
+    },
+    "associated_rule_id": {
+      "description": "The internal rule ID for the NAT rule associated with this rule.<br>",
+      "nullable": true,
+      "readOnly": true,
+      "writeOnly": false,
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "created_time": {
+      "description": "The unix timestamp of when this firewall rule was original created.<br>",
+      "nullable": true,
+      "readOnly": true,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 99999999999999
+    },
+    "created_by": {
+      "description": "The username and IP of the user who originally created this firewall rule.<br>",
+      "nullable": true,
+      "readOnly": true,
+      "writeOnly": false,
+      "default": "@unknown IP (API)",
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    },
+    "updated_time": {
+      "description": "The unix timestamp of when this firewall rule was original created.<br>",
+      "nullable": true,
+      "readOnly": true,
+      "writeOnly": false,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 99999999999999
+    },
+    "updated_by": {
+      "description": "The username and IP of the user who last updated this firewall rule.<br>",
+      "nullable": true,
+      "readOnly": true,
+      "writeOnly": false,
+      "default": "@unknown IP (API)",
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 1024
+    }
+  }
+}

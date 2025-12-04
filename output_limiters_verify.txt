@@ -1,0 +1,15 @@
+--- Verifying Firewall Limiters Backend ---
+
+1. Testing Create Limiter...
+Create Response Status: 302
+
+2. Finding Created Limiter...
+Found limiter at index: 0
+
+3. Testing Update Limiter...
+Update Response Status: 302
+
+4. Testing Delete Limiter...
+Delete Response Status: 302
+
+Backend Verification Complete.

@@ -1,0 +1,16 @@
+Path: /api/v2/services/dns_forwarder/apply
+Path: /api/v2/services/dns_forwarder/host_override/alias
+Path: /api/v2/services/dns_forwarder/host_override
+Path: /api/v2/services/dns_forwarder/host_overrides
+Path: /api/v2/services/dns_resolver/access_list
+Path: /api/v2/services/dns_resolver/access_list/network
+Path: /api/v2/services/dns_resolver/access_lists
+Path: /api/v2/services/dns_resolver/apply
+Path: /api/v2/services/dns_resolver/domain_override
+Path: /api/v2/services/dns_resolver/domain_overrides
+Path: /api/v2/services/dns_resolver/host_override/alias
+Path: /api/v2/services/dns_resolver/host_override
+Path: /api/v2/services/dns_resolver/host_overrides
+Path: /api/v2/services/dns_resolver/settings
+Path: /api/v2/services/haproxy/settings/dns_resolver
+Path: /api/v2/system/dns

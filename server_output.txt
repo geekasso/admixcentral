@@ -1,0 +1,1107 @@
+
+   INFO  Server running on [http://127.0.0.1:8009].  
+
+  Press Ctrl+C to stop the server
+
+  2025-11-25 01:28:01 /firewall/1/interfaces  ~ 500.36ms
+  2025-11-25 01:28:01 /build/assets/app-CAKnemi-.css  ~ 500.71ms
+  2025-11-25 01:28:02 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 01:28:02 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:28:54 /firewall/1/interfaces  ~ 0.14ms
+  2025-11-25 01:28:54 /build/assets/app-CAKnemi-.css  ~ 0.22ms
+  2025-11-25 01:28:54 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:28:54 /favicon.ico ...... ~ 0.13ms
+  2025-11-25 01:28:59 /firewall/1/interfaces/lan/edit  ~ 0.12ms
+  2025-11-25 01:28:59 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:29:00 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:29:00 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 01:29:26 /firewall/1/interfaces/lan  ~ 500.36ms
+  2025-11-25 01:29:26 /firewall/1/interfaces  ~ 0.02ms
+  2025-11-25 01:29:26 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 01:29:26 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 01:29:27 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:29:55 /firewall/1/rules  ~ 500.38ms
+  2025-11-25 01:29:55 /build/assets/app-CAKnemi-.css  ~ 500.49ms
+  2025-11-25 01:29:55 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:29:56 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:30:00 /firewall/1/rules  ~ 500.46ms
+  2025-11-25 01:30:00 /build/assets/app-CAKnemi-.css  ~ 500.62ms
+  2025-11-25 01:30:00 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 01:30:00 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 01:30:06 /firewall/1/rules/create  ~ 500.35ms
+  2025-11-25 01:30:06 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:30:06 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:30:06 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:30:16 /firewall/1/rules  ~ 500.42ms
+  2025-11-25 01:30:16 /firewall/1/rules . ~ 0.03ms
+  2025-11-25 01:30:17 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 01:30:17 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 01:30:17 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 01:30:21 /dashboard ........ ~ 0.11ms
+  2025-11-25 01:30:21 /build/assets/app-CAKnemi-.css  ~ 0.25ms
+  2025-11-25 01:30:21 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:30:22 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:30:25 /firewall/1/rules  ~ 500.36ms
+  2025-11-25 01:30:25 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:30:25 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:30:25 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:30:30 /firewall/1/rules  ~ 500.44ms
+  2025-11-25 01:30:30 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 01:30:30 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 01:30:30 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 01:30:38 /firewall/1/rules  ~ 500.41ms
+  2025-11-25 01:30:38 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 01:30:38 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 01:30:38 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:30:43 /firewall/1/rules  ~ 500.35ms
+  2025-11-25 01:30:43 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 01:30:43 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 01:30:43 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:31:22 /firewall/1/rules  ~ 500.42ms
+  2025-11-25 01:31:22 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 01:31:22 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 01:31:22 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:31:27 /firewall/1/rules . ~ 0.17ms
+  2025-11-25 01:31:27 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 01:31:27 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 01:31:27 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 01:31:37 /firewall/1/rules/create  ~ 500.45ms
+  2025-11-25 01:31:37 /build/assets/app-CAKnemi-.css  ~ 500.60ms
+  2025-11-25 01:31:37 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 01:31:37 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 01:31:47 /firewall/1/rules . ~ 0.16ms
+  2025-11-25 01:31:47 /firewall/1/rules  ~ 500.41ms
+  2025-11-25 01:31:47 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:31:47 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:31:48 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:31:53 /firewall/1/rules  ~ 500.49ms
+  2025-11-25 01:31:53 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:31:53 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:31:53 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 01:31:59 /firewall/1/apply . ~ 0.14ms
+  2025-11-25 01:31:59 /firewall/1/rules  ~ 500.54ms
+  2025-11-25 01:31:59 /build/assets/app-CAKnemi-.css  ~ 0.07ms
+  2025-11-25 01:31:59 /build/assets/app-CJy8ASEk.js  ~ 0.14ms
+  2025-11-25 01:31:59 /favicon.ico ...... ~ 0.04ms
+  2025-11-25 01:32:05 /firewall/1/rules/create  ~ 0.15ms
+  2025-11-25 01:32:05 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 01:32:05 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 01:32:05 /favicon.ico ...... ~ 0.18ms
+  2025-11-25 01:32:16 /firewall/1/rules . ~ 0.14ms
+  2025-11-25 01:32:16 /firewall/1/rules . ~ 0.02ms
+  2025-11-25 01:32:16 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 01:32:16 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 01:32:16 /favicon.ico ...... ~ 0.15ms
+  2025-11-25 01:32:22 /firewall/1/rules  ~ 500.46ms
+  2025-11-25 01:32:22 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:32:22 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:32:22 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:32:28 /firewall/1/rules/create  ~ 500.47ms
+  2025-11-25 01:32:28 /build/assets/app-CAKnemi-.css  ~ 500.62ms
+  2025-11-25 01:32:28 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 01:32:28 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 01:32:39 /firewall/1/rules  ~ 500.51ms
+  2025-11-25 01:32:39 /firewall/1/rules . ~ 0.03ms
+  2025-11-25 01:32:39 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 01:32:39 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 01:32:39 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:32:50 /firewall/1/rules  ~ 500.42ms
+  2025-11-25 01:32:50 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:32:50 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:32:50 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:32:56 /firewall/1/rules/create  ~ 0.17ms
+  2025-11-25 01:32:57 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 01:32:57 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 01:32:57 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 01:33:07 /firewall/1/rules . ~ 0.14ms
+  2025-11-25 01:33:07 /firewall/1/rules . ~ 0.02ms
+  2025-11-25 01:33:07 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 01:33:07 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:33:07 /favicon.ico ...... ~ 0.25ms
+  2025-11-25 01:34:20 /firewall/1/rules . ~ 0.18ms
+  2025-11-25 01:34:20 /build/assets/app-CAKnemi-.css  ~ 0.30ms
+  2025-11-25 01:34:20 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 01:34:20 /favicon.ico ...... ~ 0.20ms
+  2025-11-25 01:34:25 /firewall/1/rules . ~ 0.15ms
+  2025-11-25 01:34:26 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:34:26 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:34:26 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 01:37:29 /firewall/1/aliases  ~ 0.19ms
+  2025-11-25 01:37:29 /build/assets/app-CAKnemi-.css  ~ 0.24ms
+  2025-11-25 01:37:29 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:37:29 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 01:37:34 /firewall/1/aliases/create  ~ 0.17ms
+  2025-11-25 01:37:35 /build/assets/app-CAKnemi-.css  ~ 0.09ms
+  2025-11-25 01:37:35 /build/assets/app-CJy8ASEk.js  ~ 0.27ms
+  2025-11-25 01:37:35 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:37:45 /firewall/1/aliases  ~ 500.43ms
+  2025-11-25 01:37:45 /firewall/1/aliases  ~ 0.02ms
+  2025-11-25 01:37:45 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 01:37:45 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 01:37:45 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:37:54 /firewall/1/aliases  ~ 0.16ms
+  2025-11-25 01:37:54 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:37:54 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:37:54 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:38:42 /firewall/1/nat/port-forward  ~ 500.47ms
+  2025-11-25 01:38:42 /build/assets/app-CAKnemi-.css  ~ 500.59ms
+  2025-11-25 01:38:42 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 01:38:42 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:39:00 /firewall/1/nat/port-forward  ~ 0.14ms
+  2025-11-25 01:39:00 /firewall/1/nat/port-forward  ~ 500.49ms
+  2025-11-25 01:39:00 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 01:39:00 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 01:39:00 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 01:39:06 /firewall/1/nat/port-forward  ~ 500.42ms
+  2025-11-25 01:39:07 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 01:39:07 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 01:39:07 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:39:16 /firewall/1/nat/port-forward  ~ 0.16ms
+  2025-11-25 01:39:17 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:39:17 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 01:39:17 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:40:05 /firewall/1/system/general  ~ 0.26ms
+  2025-11-25 01:40:05 /firewall/1/nat/port-forward  ~ 500.44ms
+  2025-11-25 01:40:05 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 01:40:05 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 01:40:06 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 01:40:11 /firewall/1/system/general  ~ 0.14ms
+  2025-11-25 01:40:11 /firewall/1/nat/port-forward  ~ 0.02ms
+  2025-11-25 01:40:11 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 01:40:11 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 01:40:11 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:30:30 /firewall/1/virtual_ips  ~ 0.12ms
+  2025-11-25 11:30:30 /login ............ ~ 0.19ms
+  2025-11-25 11:30:30 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:30:30 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 11:30:30 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:30:47 /login .......... ~ 500.40ms
+  2025-11-25 11:30:47 /login ............ ~ 0.02ms
+  2025-11-25 11:30:47 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:30:47 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:30:47 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:30:51 /firewall/1/virtual_ips  ~ 0.13ms
+  2025-11-25 11:30:51 /login ............ ~ 0.21ms
+  2025-11-25 11:30:51 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:30:51 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 11:30:51 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:31:08 /login .......... ~ 500.37ms
+  2025-11-25 11:31:08 /login ............ ~ 0.02ms
+  2025-11-25 11:31:08 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:31:08 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 11:31:08 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:31:23 /login ............ ~ 0.11ms
+  2025-11-25 11:31:23 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:31:23 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 11:31:23 /favicon.ico ...... ~ 0.16ms
+  2025-11-25 11:31:41 /login ............ ~ 0.16ms
+  2025-11-25 11:31:41 /login ............ ~ 0.02ms
+  2025-11-25 11:31:41 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:31:41 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 11:31:41 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 11:31:45 /firewall/1/virtual_ips  ~ 0.12ms
+  2025-11-25 11:31:45 /login ............ ~ 0.02ms
+  2025-11-25 11:31:45 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:31:45 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 11:31:45 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:32:02 /login ............ ~ 0.09ms
+  2025-11-25 11:32:03 /login .......... ~ 500.33ms
+  2025-11-25 11:32:03 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:32:03 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 11:32:03 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:32:07 /firewall/1/virtual_ips  ~ 0.11ms
+  2025-11-25 11:32:07 /login ............ ~ 0.02ms
+  2025-11-25 11:32:07 /build/assets/app-CAKnemi-.css  ~ 0.13ms
+  2025-11-25 11:32:07 /build/assets/app-CJy8ASEk.js  ~ 0.19ms
+  2025-11-25 11:32:07 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:32:20 /login ............ ~ 0.10ms
+  2025-11-25 11:32:21 /login .......... ~ 500.41ms
+  2025-11-25 11:32:21 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 11:32:21 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 11:32:21 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:32:25 /dashboard ........ ~ 0.09ms
+  2025-11-25 11:32:25 /login .......... ~ 500.35ms
+  2025-11-25 11:32:25 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:32:25 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:32:25 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 11:33:16 /login ............ ~ 0.16ms
+  2025-11-25 11:33:16 /build/assets/app-CAKnemi-.css  ~ 0.42ms
+  2025-11-25 11:33:16 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 11:33:16 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:33:35 /login .......... ~ 500.36ms
+  2025-11-25 11:33:35 /login ............ ~ 0.02ms
+  2025-11-25 11:33:35 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:33:35 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:33:35 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:33:38 /dashboard ........ ~ 0.14ms
+  2025-11-25 11:33:38 /login ............ ~ 0.02ms
+  2025-11-25 11:33:38 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:33:38 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 11:33:38 /favicon.ico ...... ~ 0.01ms
+
+   INFO  Environment modified. Restarting server...  
+
+   INFO  Server running on [http://127.0.0.1:8009].  
+
+  Press Ctrl+C to stop the server
+
+  2025-11-25 11:34:07 /login ............ ~ 0.12ms
+  2025-11-25 11:34:08 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:34:08 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:34:08 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 11:34:21 /login ............ ~ 0.13ms
+  2025-11-25 11:34:21 /login ............ ~ 0.32ms
+  2025-11-25 11:34:21 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:34:21 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:34:21 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:34:25 /dashboard ........ ~ 0.12ms
+  2025-11-25 11:34:25 /login ............ ~ 0.02ms
+  2025-11-25 11:34:25 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:34:25 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:34:25 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:35:04 /login ............ ~ 0.12ms
+  2025-11-25 11:35:04 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:35:04 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 11:35:04 /favicon.ico ...... ~ 0.13ms
+  2025-11-25 11:35:21 /dashboard ........ ~ 0.15ms
+  2025-11-25 11:35:21 /login ............ ~ 0.02ms
+  2025-11-25 11:35:21 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:35:21 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:35:21 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 11:35:32 /login ............ ~ 0.13ms
+  2025-11-25 11:35:32 /dashboard ........ ~ 0.02ms
+  2025-11-25 11:35:32 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:35:32 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:35:32 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:35:33 /dashboard ........ ~ 0.02ms
+  2025-11-25 11:35:33 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:35:33 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 11:35:33 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 11:35:45 /firewall/1/virtual_ips  ~ 500.38ms
+  2025-11-25 11:35:45 /build/assets/app-CAKnemi-.css  ~ 500.49ms
+  2025-11-25 11:35:45 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:35:46 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 11:36:09 /firewall/1/virtual_ips  ~ 0.11ms
+  2025-11-25 11:36:09 /firewall/1/virtual_ips  ~ 0.02ms
+  2025-11-25 11:36:09 /build/assets/app-CAKnemi-.css  ~ 0.21ms
+  2025-11-25 11:36:09 /build/assets/app-CJy8ASEk.js  ~ 0.03ms
+  2025-11-25 11:36:09 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:36:32 /firewall/1/virtual_ips  ~ 0.15ms
+  2025-11-25 11:36:32 /firewall/1/virtual_ips  ~ 0.03ms
+  2025-11-25 11:36:33 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:36:33 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 11:36:33 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:37:53 /firewall/1/limiters  ~ 500.40ms
+  2025-11-25 11:37:53 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:37:53 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 11:37:53 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:38:16 /firewall/1/limiters  ~ 500.35ms
+  2025-11-25 11:38:16 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:38:16 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:38:16 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:38:41 /firewall/1/limiters  ~ 500.42ms
+  2025-11-25 11:38:41 /firewall/1/limiters  ~ 500.37ms
+  2025-11-25 11:38:42 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:38:42 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 11:38:42 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:39:26 /firewall/1/limiters  ~ 500.36ms
+  2025-11-25 11:39:27 /firewall/1/limiters .. ~ 1s
+  2025-11-25 11:39:27 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:39:27 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 11:39:28 /favicon.ico ...... ~ 0.07ms
+  2025-11-25 11:39:58 /firewall/1/limiters  ~ 500.34ms
+  2025-11-25 11:39:59 /firewall/1/limiters .. ~ 1s
+  2025-11-25 11:39:59 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:39:59 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 11:39:59 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:41:57 /firewall/1/vlans  ~ 500.37ms
+  2025-11-25 11:41:57 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:41:57 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 11:41:57 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:42:22 /firewall/1/vlans . ~ 0.23ms
+  2025-11-25 11:42:22 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 11:42:22 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 11:42:22 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:42:34 /firewall/1/vlans/create  ~ 0.18ms
+  2025-11-25 11:42:34 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:42:34 /build/assets/app-CJy8ASEk.js  ~ 0.03ms
+  2025-11-25 11:42:34 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 11:42:50 /firewall/1/vlans . ~ 0.12ms
+  2025-11-25 11:42:50 /firewall/1/vlans/create  ~ 0.03ms
+  2025-11-25 11:42:50 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:42:50 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 11:42:50 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:43:19 /firewall/1/vlans . ~ 0.12ms
+  2025-11-25 11:43:19 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:43:19 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:43:19 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:44:00 /firewall/1/services/dhcp  ~ 500.43ms
+  2025-11-25 11:44:00 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 11:44:00 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 11:44:00 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 11:44:00 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 11:44:12 /firewall/1/services/dhcp  ~ 0.15ms
+  2025-11-25 11:44:12 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 11:44:12 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:44:12 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 11:44:12 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:44:35 /favicon.ico ...... ~ 0.13ms
+  2025-11-25 11:44:47 /firewall/1/services/dns-resolver  ~ 0.13ms
+  2025-11-25 11:44:47 /firewall/1/vlans . ~ 0.02ms
+  2025-11-25 11:44:47 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:44:47 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 11:44:47 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:47:53 /firewall/1/apply . ~ 0.16ms
+  2025-11-25 11:47:53 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 11:47:53 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:47:53 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 11:47:53 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 11:47:58 /firewall/1/nat/port-forward  ~ 500.51ms
+  2025-11-25 11:47:58 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 11:47:58 /build/assets/app-CJy8ASEk.js  ~ 0.03ms
+  2025-11-25 11:47:58 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:48:05 /firewall/1/nat/port-forward/7  ~ 500.34ms
+  2025-11-25 11:48:06 /firewall/1/nat/port-forward  ~ 0.02ms
+  2025-11-25 11:48:06 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:48:06 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:48:06 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:48:07 /firewall/1/apply . ~ 0.11ms
+  2025-11-25 11:48:07 /firewall/1/nat/port-forward  ~ 0.02ms
+  2025-11-25 11:48:07 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:48:07 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:48:07 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:48:11 /firewall/1/rules . ~ 0.12ms
+  2025-11-25 11:48:11 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:48:11 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 11:48:11 /favicon.ico ...... ~ 0.17ms
+  2025-11-25 11:48:16 /favicon.ico ...... ~ 0.20ms
+  2025-11-25 11:50:24 /firewall/1/nat/port-forward  ~ 0.13ms
+  2025-11-25 11:50:24 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:50:24 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 11:50:24 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 11:50:45 /firewall/1/nat/port-forward  ~ 0.12ms
+  2025-11-25 11:50:45 /firewall/1/nat/port-forward  ~ 500.41ms
+  2025-11-25 11:50:46 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 11:50:46 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 11:50:46 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 11:51:02 /firewall/1/nat/port-forward  ~ 0.13ms
+  2025-11-25 11:51:02 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:51:02 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:51:02 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:51:21 /firewall/1/nat/port-forward/7  ~ 0.14ms
+  2025-11-25 11:51:21 /firewall/1/nat/port-forward  ~ 500.39ms
+  2025-11-25 11:51:22 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 11:51:22 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 11:51:22 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:54:11 /firewall/1/rules  ~ 500.40ms
+  2025-11-25 11:54:11 /build/assets/app-CAKnemi-.css  ~ 500.52ms
+  2025-11-25 11:54:11 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:54:11 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:54:19 /firewall/1/rules/create  ~ 500.37ms
+  2025-11-25 11:54:19 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:54:19 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:54:19 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:54:31 /firewall/1/rules  ~ 500.40ms
+  2025-11-25 11:54:31 /firewall/1/rules . ~ 0.02ms
+  2025-11-25 11:54:32 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 11:54:32 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:54:32 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:54:49 /firewall/1/rules/1764089671  ~ 500.41ms
+  2025-11-25 11:54:49 /firewall/1/rules . ~ 0.02ms
+  2025-11-25 11:54:50 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:54:50 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 11:54:50 /favicon.ico ...... ~ 0.12ms
+  2025-11-25 11:56:37 /firewall/1/traffic_shaper/limiters  ~ 0.18ms
+  2025-11-25 11:56:37 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 11:56:42 /firewall/1/limiters .. ~ 1s
+  2025-11-25 11:56:43 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 11:56:43 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 11:56:43 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:57:06 /firewall/1/limiters .. ~ 1s
+  2025-11-25 11:57:07 /firewall/1/limiters .. ~ 1s
+  2025-11-25 11:57:09 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:57:09 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 11:57:09 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:58:11 /firewall/1/limiters .. ~ 1s
+  2025-11-25 11:58:13 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:58:13 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 11:58:13 /favicon.ico ...... ~ 0.13ms
+  2025-11-25 11:58:31 /firewall/1/limiters .. ~ 1s
+  2025-11-25 11:58:33 /firewall/1/limiters .. ~ 3s
+  2025-11-25 11:58:36 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:58:36 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 11:58:36 /favicon.ico ...... ~ 0.15ms
+  2025-11-25 11:59:02 /firewall/1/limiters .. ~ 3s
+  2025-11-25 11:59:05 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:59:05 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 11:59:05 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 11:59:28 /firewall/1/limiters/1  ~ 1s
+  2025-11-25 11:59:28 /firewall/1/limiters .. ~ 4s
+  2025-11-25 11:59:32 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 11:59:32 /build/assets/app-CJy8ASEk.js  ~ 0.11ms
+  2025-11-25 11:59:32 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 11:59:38 /firewall/1/limiters .. ~ 3s
+  2025-11-25 11:59:41 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 11:59:41 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 11:59:41 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:00:11 /firewall/1/limiters/1  ~ 1s
+  2025-11-25 12:00:12 /firewall/1/limiters .. ~ 3s
+  2025-11-25 12:00:16 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:00:16 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 12:00:16 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:00:38 /firewall/1/limiters/0  ~ 1s
+  2025-11-25 12:00:39 /firewall/1/limiters .. ~ 1s
+  2025-11-25 12:00:41 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:00:41 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 12:00:41 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:00:47 /firewall/1/limiters/0  ~ 500.36ms
+  2025-11-25 12:00:48 /firewall/1/limiters .. ~ 1s
+  2025-11-25 12:00:49 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:00:49 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:00:49 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:00:57 /firewall/1/limiters/0  ~ 500.38ms
+  2025-11-25 12:00:57 /firewall/1/limiters  ~ 0.02ms
+  2025-11-25 12:00:57 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:00:57 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 12:00:57 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:01:55 /firewall/1/limiters  ~ 500.46ms
+  2025-11-25 12:01:55 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:01:55 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:01:55 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:02:17 /firewall/1/limiters  ~ 0.12ms
+  2025-11-25 12:02:17 /firewall/1/limiters .. ~ 1s
+  2025-11-25 12:02:18 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:02:18 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:02:18 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:02:31 /firewall/1/limiters/0  ~ 0.14ms
+  2025-11-25 12:02:31 /firewall/1/limiters .. ~ 1s
+  2025-11-25 12:02:32 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:02:32 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 12:02:32 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:04:41 /firewall/1/limiters  ~ 500.33ms
+  2025-11-25 12:04:42 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:04:42 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:04:42 /favicon.ico ...... ~ 0.13ms
+  2025-11-25 12:05:00 /firewall/1/limiters  ~ 500.36ms
+  2025-11-25 12:05:01 /firewall/1/limiters .. ~ 2s
+  2025-11-25 12:05:02 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:05:02 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 12:05:03 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:05:17 /firewall/1/limiters/1  ~ 2s
+  2025-11-25 12:05:19 /firewall/1/limiters .. ~ 1s
+  2025-11-25 12:05:21 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:05:21 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:05:21 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:05:25 /firewall/1/limiters/1  ~ 500.38ms
+  2025-11-25 12:05:25 /firewall/1/limiters .. ~ 1s
+  2025-11-25 12:05:27 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:05:27 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:05:27 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:05:32 /firewall/1/limiters/0  ~ 500.37ms
+  2025-11-25 12:05:32 /firewall/1/limiters  ~ 0.02ms
+  2025-11-25 12:05:32 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:05:32 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:05:32 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:06:28 /firewall/1/virtual_ips  ~ 0.12ms
+  2025-11-25 12:06:28 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:06:28 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:06:28 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:06:46 /firewall/1/virtual_ips  ~ 0.15ms
+  2025-11-25 12:06:47 /firewall/1/virtual_ips  ~ 0.02ms
+  2025-11-25 12:06:47 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 12:06:47 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 12:06:47 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:09:03 /firewall/1/virtual_ips  ~ 500.38ms
+  2025-11-25 12:09:03 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:09:03 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:09:03 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:09:23 /firewall/1/virtual_ips  ~ 0.15ms
+  2025-11-25 12:09:23 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:09:23 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:09:23 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:09:40 /firewall/1/virtual_ips  ~ 500.45ms
+  2025-11-25 12:09:40 /firewall/1/virtual_ips  ~ 0.03ms
+  2025-11-25 12:09:41 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:09:41 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:09:41 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:10:00 /firewall/1/virtual_ips/0  ~ 0.12ms
+  2025-11-25 12:10:00 /firewall/1/virtual_ips  ~ 0.02ms
+  2025-11-25 12:10:00 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:10:00 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 12:10:00 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 12:10:42 /firewall/1/virtual_ips  ~ 0.26ms
+  2025-11-25 12:10:42 /firewall/1/virtual_ips  ~ 0.03ms
+  2025-11-25 12:10:42 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:10:42 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:10:42 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:11:05 /firewall/1/virtual_ips  ~ 0.14ms
+  2025-11-25 12:11:05 /firewall/1/virtual_ips  ~ 500.37ms
+  2025-11-25 12:11:05 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:11:05 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:11:05 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:11:32 /firewall/1/virtual_ips  ~ 500.38ms
+  2025-11-25 12:11:32 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 12:11:32 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 12:11:32 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:12:32 /firewall/1/virtual_ips  ~ 0.13ms
+  2025-11-25 12:12:32 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:12:32 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:12:32 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:12:48 /firewall/1/virtual_ips  ~ 500.42ms
+  2025-11-25 12:12:48 /firewall/1/virtual_ips  ~ 0.02ms
+  2025-11-25 12:12:49 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:12:49 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 12:12:49 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:13:11 /firewall/1/virtual_ips  ~ 0.13ms
+  2025-11-25 12:13:11 /firewall/1/virtual_ips  ~ 0.02ms
+  2025-11-25 12:13:11 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:13:11 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:13:11 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:13:31 /firewall/1/virtual_ips  ~ 500.41ms
+  2025-11-25 12:13:31 /firewall/1/virtual_ips  ~ 0.03ms
+  2025-11-25 12:13:31 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:13:31 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:13:31 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:15:32 /firewall/1/vlans . ~ 0.15ms
+  2025-11-25 12:15:32 /build/assets/app-CAKnemi-.css  ~ 0.23ms
+  2025-11-25 12:15:32 /build/assets/app-CJy8ASEk.js  ~ 0.11ms
+  2025-11-25 12:15:32 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:15:38 /firewall/1/vlans/create  ~ 0.16ms
+  2025-11-25 12:15:38 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 12:15:38 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 12:15:38 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:15:55 /firewall/1/vlans  ~ 500.39ms
+  2025-11-25 12:15:56 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 12:15:56 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:15:56 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:15:56 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:16:19 /firewall/1/vlans  ~ 500.39ms
+  2025-11-25 12:16:20 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 12:16:20 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 12:16:20 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:21:06 /firewall/1/services/dhcp/lan  ~ 500.37ms
+  2025-11-25 12:21:06 /firewall/1/vlans . ~ 0.02ms
+  2025-11-25 12:21:06 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:21:06 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:21:06 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:21:22 /firewall/1/services/dhcp/lan  ~ 0.11ms
+  2025-11-25 12:21:22 /firewall/1/vlans . ~ 0.02ms
+  2025-11-25 12:21:22 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:21:22 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 12:21:22 /favicon.ico ...... ~ 0.16ms
+  2025-11-25 12:21:43 /firewall/1/services/dhcp/lan  ~ 0.12ms
+  2025-11-25 12:21:43 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 12:21:43 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:21:43 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 12:21:43 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:22:08 /firewall/1/services/dhcp/lan  ~ 0.16ms
+  2025-11-25 12:22:08 /firewall/1/vlans  ~ 500.39ms
+  2025-11-25 12:22:08 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:22:08 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:22:08 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:22:37 /firewall/1/services/dhcp/lan  ~ 0.19ms
+  2025-11-25 12:22:37 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 12:22:37 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:22:37 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:22:37 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:22:44 /firewall/1/services/dhcp/lan  ~ 0.16ms
+  2025-11-25 12:22:44 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 12:22:45 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:22:45 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 12:22:45 /favicon.ico ...... ~ 0.14ms
+  2025-11-25 12:23:07 /firewall/1/services/dhcp/lan  ~ 0.12ms
+  2025-11-25 12:23:07 /firewall/1/vlans . ~ 0.02ms
+  2025-11-25 12:23:07 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:23:07 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 12:23:07 /favicon.ico ...... ~ 0.14ms
+  2025-11-25 12:23:19 /firewall/1/services/dhcp/lan  ~ 500.42ms
+  2025-11-25 12:23:19 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 12:23:19 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:23:19 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:23:19 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:24:16 /firewall/1/services/dhcp/lan  ~ 500.39ms
+  2025-11-25 12:24:16 /firewall/1/vlans . ~ 0.02ms
+  2025-11-25 12:24:16 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:24:16 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:24:16 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:24:34 /firewall/1/services/dhcp/lan  ~ 500.45ms
+  2025-11-25 12:24:34 /firewall/1/vlans  ~ 500.52ms
+  2025-11-25 12:24:34 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:24:34 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:24:34 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:24:41 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 12:24:41 /firewall/1/vlans . ~ 0.02ms
+  2025-11-25 12:24:41 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:24:41 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:24:42 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:25:45 /firewall/1/services/dhcp/lan  ~ 0.16ms
+  2025-11-25 12:25:45 /firewall/1/vlans . ~ 0.02ms
+  2025-11-25 12:25:46 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 12:25:46 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 12:25:46 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:26:37 /firewall/1/services/dhcp/lan  ~ 500.44ms
+  2025-11-25 12:26:37 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 12:26:37 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:26:37 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:26:37 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:26:58 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 12:26:58 /firewall/1/vlans . ~ 0.02ms
+  2025-11-25 12:26:58 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:26:58 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 12:26:58 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:27:37 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 12:27:37 /firewall/1/vlans . ~ 0.02ms
+  2025-11-25 12:27:37 /build/assets/app-CAKnemi-.css  ~ 0.13ms
+  2025-11-25 12:27:37 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 12:27:37 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:37:07 /firewall/1/vlans  ~ 500.46ms
+  2025-11-25 12:37:08 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:37:08 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 12:37:08 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:37:09 /firewall/1/apply . ~ 0.15ms
+  2025-11-25 12:37:10 /firewall/1/vlans . ~ 0.03ms
+  2025-11-25 12:37:10 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:37:10 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 12:37:10 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:37:13 /firewall/1/interfaces  ~ 0.12ms
+  2025-11-25 12:37:13 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:37:13 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 12:37:13 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:37:16 /firewall/1/nat/port-forward  ~ 0.12ms
+  2025-11-25 12:37:16 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:37:16 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 12:37:16 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 12:37:18 /dashboard ........ ~ 0.17ms
+  2025-11-25 12:37:18 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:37:18 /build/assets/app-CJy8ASEk.js  ~ 0.04ms
+  2025-11-25 12:37:18 /favicon.ico ...... ~ 0.04ms
+  2025-11-25 12:37:19 /dashboard ........ ~ 0.13ms
+  2025-11-25 12:37:19 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:37:19 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 12:37:19 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:37:20 /firewalls ........ ~ 0.15ms
+  2025-11-25 12:37:20 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:37:20 /build/assets/app-CJy8ASEk.js  ~ 0.03ms
+  2025-11-25 12:37:20 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:37:21 /dashboard ...... ~ 500.37ms
+  2025-11-25 12:37:21 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:37:21 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 12:37:21 /favicon.ico ...... ~ 0.13ms
+  2025-11-25 12:37:24 /profile .......... ~ 0.16ms
+  2025-11-25 12:37:24 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 12:37:24 /build/assets/app-CJy8ASEk.js  ~ 0.03ms
+  2025-11-25 12:37:24 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:37:28 /dashboard ........ ~ 0.16ms
+  2025-11-25 12:37:28 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:37:28 /build/assets/app-CJy8ASEk.js  ~ 0.03ms
+  2025-11-25 12:37:28 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:37:29 /firewalls ...... ~ 500.58ms
+  2025-11-25 12:37:29 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:37:29 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 12:37:29 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:37:32 /favicon.ico ...... ~ 0.14ms
+  2025-11-25 12:37:33 /favicon.ico ...... ~ 0.18ms
+  2025-11-25 12:37:33 /favicon.ico ...... ~ 0.14ms
+  2025-11-25 12:37:34 /favicon.ico ...... ~ 0.16ms
+  2025-11-25 12:37:35 /favicon.ico ...... ~ 0.15ms
+  2025-11-25 12:37:35 /favicon.ico ...... ~ 0.14ms
+  2025-11-25 12:39:42 /firewall/1/services/dhcp/lan  ~ 500.42ms
+  2025-11-25 12:39:43 /firewalls ........ ~ 0.03ms
+  2025-11-25 12:39:43 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:39:43 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:39:43 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:40:28 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 12:40:28 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:41:01 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 12:41:01 /firewalls ........ ~ 0.02ms
+  2025-11-25 12:41:01 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:41:01 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:41:01 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:41:54 /firewall/1/services/dhcp/lan  ~ 0.14ms
+  2025-11-25 12:41:54 /firewalls ........ ~ 0.03ms
+  2025-11-25 12:41:54 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:41:54 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:41:54 /favicon.ico ...... ~ 0.04ms
+  2025-11-25 12:42:56 /firewall/1/services/dhcp/lan  ~ 0.22ms
+  2025-11-25 12:42:56 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:43:28 /firewall/1/services/dhcp/lan  ~ 500.45ms
+  2025-11-25 12:43:28 /firewalls ........ ~ 0.06ms
+  2025-11-25 12:43:28 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 12:43:28 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:43:28 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:44:23 /firewall/1/services/dhcp/lan  ~ 0.16ms
+  2025-11-25 12:44:23 /firewalls ........ ~ 0.02ms
+  2025-11-25 12:44:23 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:44:23 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 12:44:23 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:45:02 /firewall/1/services/dhcp/lan  ~ 0.14ms
+  2025-11-25 12:45:02 /firewalls ........ ~ 0.02ms
+  2025-11-25 12:45:02 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:45:02 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 12:45:02 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:45:50 /firewall/1/services/dhcp/lan  ~ 0.17ms
+  2025-11-25 12:45:50 /favicon.ico .... ~ 500.40ms
+  2025-11-25 12:46:39 /firewall/1/services/dhcp/lan  ~ 500.36ms
+  2025-11-25 12:46:39 /firewalls ........ ~ 0.02ms
+  2025-11-25 12:46:39 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:46:39 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:46:39 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 12:47:38 /firewall/1/services/dhcp/lan  ~ 500.41ms
+  2025-11-25 12:47:38 /firewalls ........ ~ 0.02ms
+  2025-11-25 12:47:38 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:47:38 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 12:47:38 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:48:38 /firewall/1/services/dhcp/lan  ~ 0.15ms
+  2025-11-25 12:48:38 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:49:09 /firewall/1/services/dhcp/lan  ~ 0.11ms
+  2025-11-25 12:49:09 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:50:02 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 12:50:02 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 12:51:07 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 12:51:07 /firewalls ........ ~ 0.02ms
+  2025-11-25 12:51:07 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:51:07 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:51:07 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:52:00 /firewall/1/services/dhcp/lan  ~ 0.12ms
+  2025-11-25 12:52:00 /firewalls ........ ~ 0.02ms
+  2025-11-25 12:52:00 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 12:52:00 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:52:00 /favicon.ico ...... ~ 0.13ms
+  2025-11-25 12:52:58 /firewall/1/services/dhcp/lan  ~ 0.16ms
+  2025-11-25 12:52:58 /firewalls ........ ~ 0.24ms
+  2025-11-25 12:52:58 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:52:58 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 12:52:59 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:53:47 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 12:53:47 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:54:29 /firewall/1/services/dhcp/lan  ~ 0.14ms
+  2025-11-25 12:54:29 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 12:55:36 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 12:55:36 /favicon.ico .... ~ 500.52ms
+  2025-11-25 12:57:03 /firewall/1/services/dhcp/lan  ~ 0.15ms
+  2025-11-25 12:57:03 /firewalls ........ ~ 0.02ms
+  2025-11-25 12:57:03 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 12:57:03 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 12:57:03 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:30:52 /firewall/1/schedules  ~ 0.14ms
+  2025-11-25 13:30:52 /build/assets/app-CAKnemi-.css  ~ 0.21ms
+  2025-11-25 13:30:52 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 13:30:52 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:31:14 /firewall/1/schedules  ~ 0.12ms
+  2025-11-25 13:31:14 /firewall/1/schedules  ~ 500.33ms
+  2025-11-25 13:31:15 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 13:31:15 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 13:31:15 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 13:31:30 /firewall/1/schedules  ~ 500.37ms
+  2025-11-25 13:31:30 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 13:31:30 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 13:31:31 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:31:48 /firewall/1/schedules  ~ 500.39ms
+  2025-11-25 13:31:48 /firewall/1/schedules  ~ 0.02ms
+  2025-11-25 13:31:48 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 13:31:48 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 13:31:48 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:32:01 /firewall/1/schedules/0  ~ 500.42ms
+  2025-11-25 13:32:01 /firewall/1/schedules  ~ 0.03ms
+  2025-11-25 13:32:01 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 13:32:01 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 13:32:01 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:32:27 /firewall/1/schedules  ~ 0.14ms
+  2025-11-25 13:32:27 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 13:32:27 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 13:32:27 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:32:46 /firewall/1/diagnostics/ping  ~ 500.44ms
+  2025-11-25 13:32:47 /firewall/1/status ... ~ 15s
+  2025-11-25 13:33:02 /firewall/1/diagnostics/ping  ~ 0.02ms
+  2025-11-25 13:33:09 /firewall/1/status  ~ 0.13ms
+  2025-11-25 13:33:09 /firewall/1/diagnostics/ping  ~ 0.02ms
+  2025-11-25 13:33:14 /users ............ ~ 0.13ms
+  2025-11-25 13:33:14 /favicon.ico .... ~ 500.44ms
+  2025-11-25 13:34:15 /firewall/1/diagnostics/ping  ~ 0.13ms
+  2025-11-25 13:34:15 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 13:34:15 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 13:34:15 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:34:34 /firewall/1/status  ~ 500.46ms
+  2025-11-25 13:34:34 /firewall/1/diagnostics/ping  ~ 0.02ms
+  2025-11-25 13:34:34 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 13:34:34 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 13:34:34 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:34:38 /firewall/1/diagnostics/ping  ~ 0.12ms
+  2025-11-25 13:34:38 /build/assets/app-CAKnemi-.css  ~ 500.45ms
+  2025-11-25 13:34:38 /build/assets/app-CJy8ASEk.js  ~ 0.22ms
+  2025-11-25 13:34:39 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:38:03 /firewall/1/status  ~ 500.51ms
+  2025-11-25 13:38:04 /firewall/1/diagnostics/ping  ~ 0.03ms
+  2025-11-25 13:38:04 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 13:38:04 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 13:38:04 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 13:39:19 /dashboard ........ ~ 0.13ms
+  2025-11-25 13:39:19 /build/assets/app-CAKnemi-.css  ~ 0.27ms
+  2025-11-25 13:39:19 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 13:39:19 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 13:39:23 /users ............ ~ 0.14ms
+  2025-11-25 13:39:23 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 14:51:28 /firewall/1/status  ~ 0.11ms
+  2025-11-25 14:51:28 /users ............ ~ 0.02ms
+  2025-11-25 14:51:28 /favicon.ico ...... ~ 0.14ms
+  2025-11-25 14:52:49 /firewall/1/status  ~ 500.37ms
+  2025-11-25 14:52:49 /users .......... ~ 500.44ms
+  2025-11-25 14:52:50 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 14:53:50 /firewall/1/status  ~ 0.16ms
+  2025-11-25 14:53:50 /favicon.ico ...... ~ 0.03ms
+  2025-11-25 14:54:59 /firewall/1/status  ~ 0.17ms
+  2025-11-25 14:54:59 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 14:58:12 /dashboard ........ ~ 0.12ms
+  2025-11-25 14:58:12 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 14:58:12 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 14:58:12 /favicon.ico ...... ~ 0.14ms
+  2025-11-25 14:58:13 /firewall/1 ..... ~ 500.44ms
+  2025-11-25 14:58:14 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 14:58:14 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 14:58:14 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 14:58:17 /firewall/1/interfaces  ~ 0.14ms
+  2025-11-25 14:58:17 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 14:58:17 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 14:58:17 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 14:58:27 /favicon.ico ...... ~ 0.14ms
+  2025-11-25 14:58:33 /firewall/1/virtual_ips  ~ 0.13ms
+  2025-11-25 14:58:33 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 14:58:33 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 14:58:33 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 14:58:35 /firewall/1/limiters  ~ 0.16ms
+  2025-11-25 14:58:35 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 14:58:35 /build/assets/app-CJy8ASEk.js  ~ 0.02ms
+  2025-11-25 14:58:35 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 14:58:37 /firewall/1/rules  ~ 500.44ms
+  2025-11-25 14:58:38 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 14:58:38 /build/assets/app-CJy8ASEk.js  ~ 0.03ms
+  2025-11-25 14:58:38 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:06:27 /firewall/1/status  ~ 0.14ms
+  2025-11-25 18:06:27 /login ............ ~ 0.22ms
+  2025-11-25 18:06:27 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:06:27 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 18:06:27 /favicon.ico ...... ~ 0.13ms
+  2025-11-25 18:06:36 /login ............ ~ 0.13ms
+  2025-11-25 18:06:36 /firewall/1/status  ~ 500.37ms
+  2025-11-25 18:06:36 /login ............ ~ 0.02ms
+  2025-11-25 18:06:36 /dashboard ........ ~ 0.01ms
+  2025-11-25 18:06:36 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 18:06:36 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 18:06:37 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 18:06:41 /firewall/1/status  ~ 500.37ms
+  2025-11-25 18:06:41 /dashboard ........ ~ 0.02ms
+  2025-11-25 18:06:41 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:06:41 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 18:06:42 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:06:51 /firewall/1/schedules  ~ 500.38ms
+  2025-11-25 18:06:51 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:06:51 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 18:06:51 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:07:07 /firewall/1/schedules  ~ 0.12ms
+  2025-11-25 18:07:07 /firewall/1/schedules  ~ 500.34ms
+  2025-11-25 18:07:07 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:07:07 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 18:07:07 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 18:07:11 /firewall/1/schedules/create  ~ 0.13ms
+  2025-11-25 18:07:11 /firewall/1/schedules . ~ 4s
+  2025-11-25 18:07:16 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:07:16 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 18:07:16 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:07:34 /firewall/1/schedules  ~ 500.40ms
+  2025-11-25 18:07:34 /firewall/1/schedules  ~ 0.03ms
+  2025-11-25 18:07:34 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:07:34 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 18:07:34 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:07:46 /firewall/1/schedules/0  ~ 0.16ms
+  2025-11-25 18:07:46 /firewall/1/schedules  ~ 0.03ms
+  2025-11-25 18:07:46 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:07:46 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 18:07:46 /favicon.ico ...... ~ 0.14ms
+  2025-11-25 18:08:08 /firewall/1/schedules  ~ 500.38ms
+  2025-11-25 18:08:08 /firewall/1/schedules  ~ 0.02ms
+  2025-11-25 18:08:08 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 18:08:08 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 18:08:08 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 18:08:21 /firewall/1/schedules/0  ~ 0.15ms
+  2025-11-25 18:08:21 /firewall/1/schedules  ~ 0.03ms
+  2025-11-25 18:08:21 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:08:21 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 18:08:21 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:08:32 /users ............ ~ 0.12ms
+  2025-11-25 18:08:32 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 18:08:32 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 18:08:32 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:08:51 /users ............ ~ 0.13ms
+  2025-11-25 18:08:51 /users ............ ~ 0.35ms
+  2025-11-25 18:08:51 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:08:51 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 18:08:51 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:09:14 /firewall/1/status  ~ 500.39ms
+  2025-11-25 18:09:15 /users ............ ~ 0.03ms
+  2025-11-25 18:09:15 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 18:09:15 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 18:09:15 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:09:20 /users ............ ~ 0.13ms
+  2025-11-25 18:09:20 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 18:09:20 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 18:09:20 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:09:38 /users/9 .......... ~ 0.22ms
+  2025-11-25 18:09:38 /users ............ ~ 0.03ms
+  2025-11-25 18:09:38 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 18:09:38 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 18:09:38 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:12:24 /firewall/1/status  ~ 0.17ms
+  2025-11-25 18:12:24 /build/assets/app-CAKnemi-.css  ~ 0.27ms
+  2025-11-25 18:12:25 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 18:12:25 /favicon.ico ...... ~ 0.13ms
+  2025-11-25 18:30:51 /firewall/1/status  ~ 500.41ms
+  2025-11-25 18:30:51 /favicon.ico ...... ~ 0.04ms
+  2025-11-25 18:34:00 /firewall/1/status  ~ 500.35ms
+  2025-11-25 18:34:00 /firewall/1/status  ~ 500.36ms
+  2025-11-25 18:34:01 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:01 /firewall/1/status  ~ 500.46ms
+  2025-11-25 18:34:01 /firewall/1/status  ~ 500.35ms
+  2025-11-25 18:34:02 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:02 /firewall/1/status  ~ 500.35ms
+  2025-11-25 18:34:02 /firewall/1/status  ~ 500.36ms
+  2025-11-25 18:34:03 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:03 /firewall/1/status  ~ 500.42ms
+  2025-11-25 18:34:03 /firewall/1/status  ~ 500.42ms
+  2025-11-25 18:34:04 /firewall/1/status  ~ 0.08ms
+  2025-11-25 18:34:04 /firewall/1/status  ~ 500.28ms
+  2025-11-25 18:34:04 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:05 /firewall/1/status  ~ 500.34ms
+  2025-11-25 18:34:05 /firewall/1/status  ~ 500.37ms
+  2025-11-25 18:34:05 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:06 /firewall/1/status  ~ 500.31ms
+  2025-11-25 18:34:06 /firewall/1/status  ~ 500.35ms
+  2025-11-25 18:34:06 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:08 /firewall/1/status  ~ 500.37ms
+  2025-11-25 18:34:08 /firewall/1/status  ~ 500.36ms
+  2025-11-25 18:34:08 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:08 /firewall/1/status  ~ 500.36ms
+  2025-11-25 18:34:09 /firewall/1/status  ~ 500.32ms
+  2025-11-25 18:34:09 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:09 /firewall/1/status  ~ 500.40ms
+  2025-11-25 18:34:10 /firewall/1/status  ~ 500.41ms
+  2025-11-25 18:34:10 /firewall/1/status  ~ 0.03ms
+  2025-11-25 18:34:10 /firewall/1/status  ~ 500.42ms
+  2025-11-25 18:34:11 /firewall/1/status  ~ 500.42ms
+  2025-11-25 18:34:11 /firewall/1/status  ~ 0.03ms
+  2025-11-25 18:34:11 /firewall/1/status  ~ 500.42ms
+  2025-11-25 18:34:12 /firewall/1/status  ~ 0.03ms
+  2025-11-25 18:34:12 /firewall/1/status  ~ 500.42ms
+  2025-11-25 18:34:12 /firewall/1/status  ~ 500.38ms
+  2025-11-25 18:34:13 /firewall/1/status  ~ 0.03ms
+  2025-11-25 18:34:13 /firewall/1/status  ~ 500.41ms
+  2025-11-25 18:34:13 /firewall/1/status  ~ 500.37ms
+  2025-11-25 18:34:14 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:19 /firewall/1/status  ~ 500.35ms
+  2025-11-25 18:34:19 /firewall/1/status  ~ 500.31ms
+  2025-11-25 18:34:20 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:20 /firewall/1/status  ~ 500.36ms
+  2025-11-25 18:34:20 /firewall/1/status  ~ 500.30ms
+  2025-11-25 18:34:21 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:21 /firewall/1/status  ~ 500.31ms
+  2025-11-25 18:34:21 /firewall/1/status  ~ 500.45ms
+  2025-11-25 18:34:22 /firewall/1/status  ~ 0.03ms
+  2025-11-25 18:34:22 /firewall/1/status  ~ 500.40ms
+  2025-11-25 18:34:22 /firewall/1/status  ~ 500.31ms
+  2025-11-25 18:34:23 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:23 /firewall/1/status  ~ 500.43ms
+  2025-11-25 18:34:23 /firewall/1/status  ~ 500.39ms
+  2025-11-25 18:34:24 /firewall/1/status  ~ 0.03ms
+  2025-11-25 18:34:24 /firewall/1/status  ~ 500.41ms
+  2025-11-25 18:34:24 /firewall/1/status  ~ 500.37ms
+  2025-11-25 18:34:25 /firewall/1/status  ~ 0.02ms
+  2025-11-25 18:34:25 /firewall/1/status  ~ 500.35ms
+  2025-11-25 18:34:25 /firewall/1/status  ~ 500.35ms
+  2025-11-25 18:34:41 /dashboard ........ ~ 0.12ms
+  2025-11-25 18:34:41 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:34:41 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 18:34:41 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:35:01 /firewall/1 ..... ~ 500.36ms
+  2025-11-25 18:35:01 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:35:01 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 18:35:01 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:35:22 /favicon.ico ...... ~ 0.17ms
+  2025-11-25 18:35:28 /firewall/1/status  ~ 0.13ms
+  2025-11-25 18:35:28 /firewall/1 ..... ~ 500.35ms
+  2025-11-25 18:35:28 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:35:28 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 18:35:29 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:36:32 /firewall/1/status  ~ 500.36ms
+  2025-11-25 18:36:32 /firewall/1 ..... ~ 500.42ms
+  2025-11-25 18:36:33 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 18:36:33 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 18:36:33 /favicon.ico ...... ~ 0.12ms
+  2025-11-25 18:37:17 /firewall/1/status  ~ 0.13ms
+  2025-11-25 18:37:17 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 18:37:41 /firewall/1/status  ~ 0.12ms
+  2025-11-25 18:37:41 /firewall/1 ..... ~ 500.37ms
+  2025-11-25 18:37:41 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 18:37:41 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 18:37:41 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:12:46 /firewall/1/status  ~ 500.36ms
+  2025-11-25 19:12:46 /build/assets/app-CAKnemi-.css  ~ 500.46ms
+  2025-11-25 19:12:46 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 19:12:46 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:13:47 /firewall/1/rules  ~ 500.37ms
+  2025-11-25 19:13:47 /build/assets/app-CAKnemi-.css  ~ 500.50ms
+  2025-11-25 19:13:47 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 19:13:47 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:14:00 /firewall/1/rules/create  ~ 0.11ms
+  2025-11-25 19:14:01 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 19:14:01 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 19:14:01 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 19:14:10 /firewall/1/rules . ~ 0.13ms
+  2025-11-25 19:14:10 /firewall/1/rules  ~ 500.36ms
+  2025-11-25 19:14:10 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 19:14:10 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 19:14:10 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:14:17 /firewall/1/rules/create  ~ 0.14ms
+  2025-11-25 19:14:17 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 19:14:17 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 19:14:17 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:14:34 /firewall/1/rules . ~ 0.13ms
+  2025-11-25 19:14:35 /firewall/1/rules  ~ 500.37ms
+  2025-11-25 19:14:35 /build/assets/app-CAKnemi-.css  ~ 0.05ms
+  2025-11-25 19:14:35 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 19:14:35 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:14:49 /firewall/1/rules/1764116074  ~ 0.12ms
+  2025-11-25 19:14:49 /firewall/1/rules  ~ 500.34ms
+  2025-11-25 19:14:50 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 19:14:50 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 19:14:50 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:15:37 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 19:15:38 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 19:15:38 /build/assets/app-CJy8ASEk.js  ~ 0.08ms
+  2025-11-25 19:15:38 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:15:56 /firewall/1/services/dhcp/lan  ~ 500.34ms
+  2025-11-25 19:15:56 /build/assets/app-CAKnemi-.css  ~ 0.03ms
+  2025-11-25 19:15:56 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 19:15:56 /favicon.ico ...... ~ 0.01ms
+  2025-11-25 19:16:12 /firewall/1/services/dhcp/lan  ~ 0.13ms
+  2025-11-25 19:16:12 /firewall/1/services/dhcp/lan  ~ 500.36ms
+  2025-11-25 19:16:12 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 19:16:12 /build/assets/app-CJy8ASEk.js  ~ 0.07ms
+  2025-11-25 19:16:12 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:19:41 /firewall/1/limiters  ~ 500.36ms
+  2025-11-25 19:19:41 /build/assets/app-CAKnemi-.css  ~ 500.49ms
+  2025-11-25 19:19:41 /build/assets/app-CJy8ASEk.js  ~ 0.06ms
+  2025-11-25 19:19:41 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:20:04 /firewall/1/limiters  ~ 0.13ms
+  2025-11-25 19:20:04 /firewall/1/limiters .. ~ 1s
+  2025-11-25 19:20:05 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 19:20:05 /build/assets/app-CJy8ASEk.js  ~ 0.10ms
+  2025-11-25 19:20:05 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:20:47 /firewall/1/limiters/0  ~ 500.38ms
+  2025-11-25 19:20:48 /firewall/1/limiters  ~ 0.02ms
+  2025-11-25 19:20:48 /build/assets/app-CAKnemi-.css  ~ 0.02ms
+  2025-11-25 19:20:48 /build/assets/app-CJy8ASEk.js  ~ 0.05ms
+  2025-11-25 19:20:48 /favicon.ico ...... ~ 0.02ms
+  2025-11-25 19:21:21 /firewall/1/vpn/openvpn/server  ~ 0.16ms
+  2025-11-25 19:21:21 /firewall/1/limiters  ~ 500.39ms
+  2025-11-25 19:21:21 /build/assets/app-CAKnemi-.css  ~ 0.04ms
+  2025-11-25 19:21:21 /build/assets/app-CJy8ASEk.js  ~ 0.09ms
+  2025-11-25 19:21:21 /favicon.ico ...... ~ 0.02ms
