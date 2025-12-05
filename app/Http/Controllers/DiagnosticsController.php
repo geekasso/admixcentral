@@ -9,7 +9,14 @@ class DiagnosticsController extends Controller
 {
     public function arpTable(Firewall $firewall)
     {
-        return view('diagnostics.arp-table', compact('firewall'));
+        $api = new \App\Services\PfSenseApiService($firewall);
+        $arpTable = [];
+        try {
+            $arpTable = $api->getArpTable()['data'] ?? [];
+        } catch (\Exception $e) {
+            // Log error or handle gracefully
+        }
+        return view('diagnostics.arp-table', compact('firewall', 'arpTable'));
     }
 
     public function authentication(Firewall $firewall)
@@ -22,9 +29,20 @@ class DiagnosticsController extends Controller
         return view('diagnostics.backup-restore', compact('firewall'));
     }
 
-    public function commandPrompt(Firewall $firewall)
+    public function commandPrompt(Request $request, Firewall $firewall)
     {
-        return view('diagnostics.command-prompt', compact('firewall'));
+        $output = null;
+        if ($request->isMethod('post')) {
+            $request->validate(['command' => 'required|string']);
+            $api = new \App\Services\PfSenseApiService($firewall);
+            try {
+                $response = $api->diagnosticsCommandPrompt($request->input('command'));
+                $output = $response['data'] ?? [];
+            } catch (\Exception $e) {
+                $output = ['error' => $e->getMessage()];
+            }
+        }
+        return view('diagnostics.command-prompt', compact('firewall', 'output'));
     }
 
     public function dnsLookup(Firewall $firewall)
@@ -42,8 +60,17 @@ class DiagnosticsController extends Controller
         return view('diagnostics.factory-defaults', compact('firewall'));
     }
 
-    public function haltSystem(Firewall $firewall)
+    public function haltSystem(Request $request, Firewall $firewall)
     {
+        if ($request->isMethod('post')) {
+            $api = new \App\Services\PfSenseApiService($firewall);
+            try {
+                $api->diagnosticsHalt();
+                return back()->with('success', 'System halt initiated.');
+            } catch (\Exception $e) {
+                return back()->with('error', 'Failed to halt system: ' . $e->getMessage());
+            }
+        }
         return view('diagnostics.halt-system', compact('firewall'));
     }
 
@@ -77,8 +104,17 @@ class DiagnosticsController extends Controller
         return view('diagnostics.ping', compact('firewall'));
     }
 
-    public function reboot(Firewall $firewall)
+    public function reboot(Request $request, Firewall $firewall)
     {
+        if ($request->isMethod('post')) {
+            $api = new \App\Services\PfSenseApiService($firewall);
+            try {
+                $api->diagnosticsReboot();
+                return back()->with('success', 'System reboot initiated.');
+            } catch (\Exception $e) {
+                return back()->with('error', 'Failed to reboot system: ' . $e->getMessage());
+            }
+        }
         return view('diagnostics.reboot', compact('firewall'));
     }
 
@@ -99,7 +135,14 @@ class DiagnosticsController extends Controller
 
     public function states(Firewall $firewall)
     {
-        return view('diagnostics.states', compact('firewall'));
+        $api = new \App\Services\PfSenseApiService($firewall);
+        $states = [];
+        try {
+            $states = $api->getFirewallStates()['data'] ?? [];
+        } catch (\Exception $e) {
+            // Log error
+        }
+        return view('diagnostics.states', compact('firewall', 'states'));
     }
 
     public function statesSummary(Firewall $firewall)
@@ -112,9 +155,22 @@ class DiagnosticsController extends Controller
         return view('diagnostics.system-activity', compact('firewall'));
     }
 
-    public function tables(Firewall $firewall)
+    public function tables(Request $request, Firewall $firewall)
     {
-        return view('diagnostics.tables', compact('firewall'));
+        $api = new \App\Services\PfSenseApiService($firewall);
+        $tables = [];
+        $tableContent = [];
+        $selectedTable = $request->input('table');
+
+        try {
+            $tables = $api->getDiagnosticsTables()['data'] ?? [];
+            if ($selectedTable) {
+                $tableContent = $api->getDiagnosticsTable($selectedTable)['data'] ?? [];
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Diagnostics Tables Error: ' . $e->getMessage());
+        }
+        return view('diagnostics.tables', compact('firewall', 'tables', 'tableContent', 'selectedTable'));
     }
 
     public function testPort(Firewall $firewall)

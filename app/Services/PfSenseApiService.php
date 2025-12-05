@@ -19,6 +19,10 @@ class PfSenseApiService
         $this->baseUrl = rtrim($firewall->url, '/') . '/api/v2';
         $this->username = $firewall->api_key;
         $this->password = $firewall->api_secret;
+
+        if (empty($this->username) || empty($this->password)) {
+            throw new \Exception("Firewall API credentials are missing for firewall ID: " . $firewall->id);
+        }
     }
 
     /**
@@ -1003,4 +1007,69 @@ class PfSenseApiService
         return $this->get('/vpn/wireguard/peers');
     }
 
+    /**
+     * Get ARP Table
+     */
+    public function getArpTable()
+    {
+        return $this->get('/diagnostics/arp_table');
+    }
+
+    /**
+     * Get Firewall States
+     */
+    public function getFirewallStates()
+    {
+        return $this->get('/firewall/states');
+    }
+
+    /**
+     * Get System Logs
+     *
+     * @param string $type system, firewall, dhcp, auth, ipsec, pptp, openvpn, ntp
+     */
+    public function getSystemLogs(string $type = 'system')
+    {
+        return $this->get("/status/logs/{$type}");
+    }
+
+    /**
+     * Diagnostics: Command Prompt
+     */
+    public function diagnosticsCommandPrompt(string $command)
+    {
+        return $this->post('/diagnostics/command_prompt', ['command' => $command]);
+    }
+
+    /**
+     * Diagnostics: Reboot
+     */
+    public function diagnosticsReboot()
+    {
+        return $this->post('/diagnostics/reboot');
+    }
+
+    /**
+     * Diagnostics: Halt System
+     */
+    public function diagnosticsHalt()
+    {
+        return $this->post('/diagnostics/halt_system');
+    }
+
+    /**
+     * Diagnostics: Get Tables
+     */
+    public function getDiagnosticsTables()
+    {
+        return $this->get('/diagnostics/tables');
+    }
+
+    /**
+     * Diagnostics: Get Table Content
+     */
+    public function getDiagnosticsTable(string $table)
+    {
+        return $this->get("/diagnostics/table?table={$table}");
+    }
 }

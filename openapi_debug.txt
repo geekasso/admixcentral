@@ -1,0 +1,2511 @@
+Checking Command Prompt schema...
+Array
+(
+    [responses] => Array
+        (
+            [401] => Array
+                (
+                    [description] => The client has failed to authenticate the API call.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/AuthenticationError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [409] => Array
+                (
+                    [description] => The client's request cannot be fulfilled due to one or more conflicts.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ConflictError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [424] => Array
+                (
+                    [description] => The client has requested a resource that requires a dependency which is not installed.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/FailedDependencyError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [403] => Array
+                (
+                    [description] => The client does not have sufficient privileges to make this API call.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ForbiddenError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [200] => Array
+                (
+                    [description] => The client has made a successful request.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/Success
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [$ref] => #/components/schemas/CommandPrompt
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [415] => Array
+                (
+                    [description] => The client has requested a content-type that is not supported by the server.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/MediaTypeError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [405] => Array
+                (
+                    [description] => The client has requested an HTTP method that is not supported by the current URL.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/MethodNotAllowedError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [406] => Array
+                (
+                    [description] => The client has requested content in a format that is not supported.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/NotAcceptableError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [404] => Array
+                (
+                    [description] => The client has requested a resource that could not be found.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/NotFoundError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [500] => Array
+                (
+                    [description] => The server encountered an unexpected error and cannot complete the request.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ServerError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [503] => Array
+                (
+                    [description] => The requested service is temporarily unavailable.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ServiceUnavailableError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [422] => Array
+                (
+                    [description] => The client has requested a resource that requires a dependency which is not installed.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/UnprocessableContentError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [400] => Array
+                (
+                    [description] => The client request data has one or more input validation errors.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ValidationError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [operationId] => postDiagnosticsCommandPromptEndpoint
+    [deprecated] => 
+    [description] => <h3>Description:</h3>Executes a shell command.<br><h3>Details:</h3>**Endpoint type**: Singular<br>**Associated model**: CommandPrompt<br>**Parent model**: None<br>**Requires authentication**: Yes<br>**Supported authentication modes:** [ BasicAuth, JWTAuth, KeyAuth ]<br>**Allowed privileges**: [ page-all, api-v2-diagnostics-command-prompt-post ]<br>**Required packages**: [ None ]<br>**Applies immediately**: Not Applicable<br>**Utilizes cache**: None
+    [tags] => Array
+        (
+            [0] => DIAGNOSTICS
+        )
+
+    [requestBody] => Array
+        (
+            [content] => Array
+                (
+                    [application/json] => Array
+                        (
+                            [schema] => Array
+                                (
+                                    [allOf] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [$ref] => #/components/schemas/CommandPrompt
+                                                )
+
+                                            [1] => Array
+                                                (
+                                                    [type] => object
+                                                    [required] => Array
+                                                        (
+                                                            [0] => command
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [application/x-www-form-urlencoded] => Array
+                        (
+                            [schema] => Array
+                                (
+                                    [allOf] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [$ref] => #/components/schemas/CommandPrompt
+                                                )
+
+                                            [1] => Array
+                                                (
+                                                    [type] => object
+                                                    [required] => Array
+                                                        (
+                                                            [0] => command
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+Checking Reboot schema...
+Array
+(
+    [responses] => Array
+        (
+            [401] => Array
+                (
+                    [description] => The client has failed to authenticate the API call.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/AuthenticationError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [409] => Array
+                (
+                    [description] => The client's request cannot be fulfilled due to one or more conflicts.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ConflictError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [424] => Array
+                (
+                    [description] => The client has requested a resource that requires a dependency which is not installed.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/FailedDependencyError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [403] => Array
+                (
+                    [description] => The client does not have sufficient privileges to make this API call.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ForbiddenError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [200] => Array
+                (
+                    [description] => The client has made a successful request.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/Success
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [$ref] => #/components/schemas/SystemReboot
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [415] => Array
+                (
+                    [description] => The client has requested a content-type that is not supported by the server.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/MediaTypeError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [405] => Array
+                (
+                    [description] => The client has requested an HTTP method that is not supported by the current URL.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/MethodNotAllowedError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [406] => Array
+                (
+                    [description] => The client has requested content in a format that is not supported.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/NotAcceptableError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [404] => Array
+                (
+                    [description] => The client has requested a resource that could not be found.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/NotFoundError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [500] => Array
+                (
+                    [description] => The server encountered an unexpected error and cannot complete the request.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ServerError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [503] => Array
+                (
+                    [description] => The requested service is temporarily unavailable.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ServiceUnavailableError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [422] => Array
+                (
+                    [description] => The client has requested a resource that requires a dependency which is not installed.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/UnprocessableContentError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [400] => Array
+                (
+                    [description] => The client request data has one or more input validation errors.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ValidationError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [operationId] => postDiagnosticsRebootEndpoint
+    [deprecated] => 
+    [description] => <h3>Description:</h3>Initiates a System Reboot.<br><h3>Details:</h3>**Endpoint type**: Singular<br>**Associated model**: SystemReboot<br>**Parent model**: None<br>**Requires authentication**: Yes<br>**Supported authentication modes:** [ BasicAuth, JWTAuth, KeyAuth ]<br>**Allowed privileges**: [ page-all, api-v2-diagnostics-reboot-post ]<br>**Required packages**: [ None ]<br>**Applies immediately**: Not Applicable<br>**Utilizes cache**: None
+    [tags] => Array
+        (
+            [0] => DIAGNOSTICS
+        )
+
+    [requestBody] => Array
+        (
+            [content] => Array
+                (
+                    [application/json] => Array
+                        (
+                            [schema] => Array
+                                (
+                                    [allOf] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [$ref] => #/components/schemas/SystemReboot
+                                                )
+
+                                            [1] => Array
+                                                (
+                                                    [type] => object
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [application/x-www-form-urlencoded] => Array
+                        (
+                            [schema] => Array
+                                (
+                                    [allOf] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [$ref] => #/components/schemas/SystemReboot
+                                                )
+
+                                            [1] => Array
+                                                (
+                                                    [type] => object
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+Checking Tables schema...
+Array
+(
+    [responses] => Array
+        (
+            [401] => Array
+                (
+                    [description] => The client has failed to authenticate the API call.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/AuthenticationError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [409] => Array
+                (
+                    [description] => The client's request cannot be fulfilled due to one or more conflicts.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ConflictError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [424] => Array
+                (
+                    [description] => The client has requested a resource that requires a dependency which is not installed.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/FailedDependencyError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [403] => Array
+                (
+                    [description] => The client does not have sufficient privileges to make this API call.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ForbiddenError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [200] => Array
+                (
+                    [description] => The client has made a successful request.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/Success
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [type] => array
+                                                                            [items] => Array
+                                                                                (
+                                                                                    [allOf] => Array
+                                                                                        (
+                                                                                            [0] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                    [properties] => Array
+                                                                                                        (
+                                                                                                            [id] => Array
+                                                                                                                (
+                                                                                                                    [type] => string
+                                                                                                                )
+
+                                                                                                        )
+
+                                                                                                )
+
+                                                                                            [1] => Array
+                                                                                                (
+                                                                                                    [$ref] => #/components/schemas/Table
+                                                                                                )
+
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [415] => Array
+                (
+                    [description] => The client has requested a content-type that is not supported by the server.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/MediaTypeError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [405] => Array
+                (
+                    [description] => The client has requested an HTTP method that is not supported by the current URL.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/MethodNotAllowedError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [406] => Array
+                (
+                    [description] => The client has requested content in a format that is not supported.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/NotAcceptableError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [404] => Array
+                (
+                    [description] => The client has requested a resource that could not be found.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/NotFoundError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [500] => Array
+                (
+                    [description] => The server encountered an unexpected error and cannot complete the request.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ServerError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [503] => Array
+                (
+                    [description] => The requested service is temporarily unavailable.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ServiceUnavailableError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [422] => Array
+                (
+                    [description] => The client has requested a resource that requires a dependency which is not installed.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/UnprocessableContentError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [400] => Array
+                (
+                    [description] => The client request data has one or more input validation errors.
+                    [content] => Array
+                        (
+                            [application/json] => Array
+                                (
+                                    [schema] => Array
+                                        (
+                                            [allOf] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [$ref] => #/components/schemas/ValidationError
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [type] => object
+                                                            [properties] => Array
+                                                                (
+                                                                    [data] => Array
+                                                                        (
+                                                                            [oneOf] => Array
+                                                                                (
+                                                                                    [0] => Array
+                                                                                        (
+                                                                                            [type] => array
+                                                                                            [items] => Array
+                                                                                                (
+                                                                                                    [type] => object
+                                                                                                )
+
+                                                                                        )
+
+                                                                                    [1] => Array
+                                                                                        (
+                                                                                            [type] => object
+                                                                                        )
+
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [operationId] => getDiagnosticsTablesEndpoint
+    [deprecated] => 
+    [description] => <h3>Description:</h3>Retrieves the entries from all tables. For systems with a large number of tables or entries, it is recommended to use pagination and/or querying to limit the amount of data returned.<br><h3>Details:</h3>**Endpoint type**: Plural<br>**Associated model**: Table<br>**Parent model**: None<br>**Requires authentication**: Yes<br>**Supported authentication modes:** [ BasicAuth, JWTAuth, KeyAuth ]<br>**Allowed privileges**: [ page-all, api-v2-diagnostics-tables-get ]<br>**Required packages**: [ None ]<br>**Applies immediately**: Not Applicable<br>**Utilizes cache**: None
+    [tags] => Array
+        (
+            [0] => DIAGNOSTICS
+        )
+
+    [parameters] => Array
+        (
+            [0] => Array
+                (
+                    [in] => query
+                    [name] => limit
+                    [description] => The number of objects to obtain at once. Set to 0 for no limit.
+                    [schema] => Array
+                        (
+                            [type] => integer
+                            [default] => 0
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [in] => query
+                    [name] => offset
+                    [description] => The starting point in the dataset to begin fetching objects.
+                    [schema] => Array
+                        (
+                            [type] => integer
+                            [default] => 0
+                        )
+
+                )
+
+            [2] => Array
+                (
+                    [in] => query
+                    [name] => sort_by
+                    [description] => The fields to sort response data by.
+                    [schema] => Array
+                        (
+                            [type] => array
+                            [items] => Array
+                                (
+                                    [type] => string
+                                )
+
+                            [nullable] => 1
+                            [default] => 
+                        )
+
+                )
+
+            [3] => Array
+                (
+                    [in] => query
+                    [name] => sort_order
+                    [description] => The order to sort response data by.
+                    [schema] => Array
+                        (
+                            [type] => string
+                            [enum] => Array
+                                (
+                                    [0] => SORT_ASC
+                                    [1] => SORT_DESC
+                                )
+
+                            [nullable] => 1
+                        )
+
+                )
+
+            [4] => Array
+                (
+                    [in] => query
+                    [name] => sort_flags
+                    [description] => The sort flag to use to customize the behavior of the sort.
+                    [schema] => Array
+                        (
+                            [type] => string
+                            [nullable] => 1
+                            [enum] => Array
+                                (
+                                    [0] => SORT_REGULAR
+                                    [1] => SORT_NUMERIC
+                                    [2] => SORT_STRING
+                                    [3] => SORT_LOCALE_STRING
+                                    [4] => SORT_NATURAL
+                                    [5] => SORT_FLAG_CASE
+                                )
+
+                        )
+
+                )
+
+            [5] => Array
+                (
+                    [in] => query
+                    [name] => query
+                    [style] => form
+                    [explode] => 1
+                    [description] => The arbitrary query parameters to include in the request.<br><br>Note: This does not define a real parameter (e.g. there is no `query` parameter), rather it allows for any arbitrary query parameters to be included in the request.
+                    [schema] => Array
+                        (
+                            [type] => object
+                            [default] => Array
+                                (
+                                )
+
+                            [additionalProperties] => Array
+                                (
+                                    [type] => string
+                                )
+
+                        )
+
+                )
+
+        )
+
+)

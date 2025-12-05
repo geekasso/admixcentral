@@ -45,7 +45,14 @@ class StatusController extends Controller
 
     public function dhcpLeases(Firewall $firewall)
     {
-        return view('status.dhcp-leases', compact('firewall'));
+        $api = new \App\Services\PfSenseApiService($firewall);
+        $leases = [];
+        try {
+            $leases = $api->getDhcpLeases()['data'] ?? [];
+        } catch (\Exception $e) {
+            // Log error
+        }
+        return view('status.dhcp-leases', compact('firewall', 'leases'));
     }
 
     public function dhcpv6Leases(Firewall $firewall)
@@ -162,7 +169,15 @@ class StatusController extends Controller
 
     public function systemLogs(Firewall $firewall)
     {
-        return view('status.system-logs', compact('firewall'));
+        $api = new \App\Services\PfSenseApiService($firewall);
+        $logs = [];
+        try {
+            // Default to system logs
+            $logs = $api->getSystemLogs('system')['data'] ?? [];
+        } catch (\Exception $e) {
+            // Log error
+        }
+        return view('status.system-logs', compact('firewall', 'logs'));
     }
 
     public function trafficGraph(Firewall $firewall)
