@@ -303,6 +303,24 @@ class FirewallRuleController extends Controller
             $sourceData = $rules[$globalIndex];
             $targetData = $rules[$targetGlobalIndex];
 
+            // Remove immutable metadata fields to prevent API errors
+            $immutableFields = [
+                'tracker',
+                'created',
+                'updated',
+                'created_time',
+                'created_username',
+                'created_by',
+                'updated_time',
+                'updated_username',
+                'updated_by'
+            ];
+
+            foreach ($immutableFields as $field) {
+                unset($sourceData[$field]);
+                unset($targetData[$field]);
+            }
+
             // Update source index with target data
             $api->updateFirewallRule($globalIndex, $targetData);
 
