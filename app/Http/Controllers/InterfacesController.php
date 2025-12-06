@@ -136,7 +136,11 @@ class InterfacesController extends Controller
             // Actually, usually we edit by ID (0, 1, 2...).
             // Let's assume ID is the index or ID returned by API.
             // I'll update logic to look for 'id' key if present, or match 'vlanif'.
-            foreach ($vlans as $v) {
+            foreach ($vlans as $index => $v) {
+                if ((string) $index === $id) {
+                    $vlan = $v;
+                    break;
+                }
                 if (isset($v['id']) && (string) $v['id'] === $id) {
                     $vlan = $v;
                     break;
