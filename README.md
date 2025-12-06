@@ -77,7 +77,11 @@ AdmixCentral is a centralized firewall management dashboard tailored for managin
    ```bash
    php artisan serve
    ```
-   The application will be available at `http://127.0.0.1:8000`.
+   or preferably using composer to start backend and frontend (Vite) concurrently:
+   ```bash
+   composer run dev
+   ```
+   The application will be available at `http://127.0.0.1:8000` (and `http://0.0.0.0:8000` for external access).
 
 ## Default Credentials
 
