@@ -60,11 +60,11 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                                @if(    $alias['type'] === 'host') bg-blue-100 text-blue-800
-                                                                @els    eif($alias['type'] === 'network') bg-green-100 text-green-800
-                                                                @els    eif($alias['type'] === 'port') bg-purple-100 text-purple-800
-                                                                @els    e bg-gray-100 text-gray-800
-                                                                @end    if">
+                                                                        @if($alias['type'] === 'host') bg-blue-100 text-blue-800
+                                                                        @elseif($alias['type'] === 'network') bg-green-100 text-green-800
+                                                                        @elseif($alias['type'] === 'port') bg-purple-100 text-purple-800
+                                                                        @else bg-gray-100 text-gray-800
+                                                                        @endif">
                                                 {{ strtoupper($alias['type']) }}
                                             </span>
                                         </td>

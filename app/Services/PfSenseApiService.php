@@ -629,7 +629,7 @@ class PfSenseApiService
      */
     public function deleteAlias(string $id)
     {
-        return $this->delete("/firewall/alias?id={$id}");
+        return $this->delete('/firewall/alias', ['id' => $id]);
     }
 
     /**
