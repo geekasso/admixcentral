@@ -57,7 +57,17 @@ class SystemController extends Controller
         try {
             switch ($tab) {
                 case 'admin':
-                    $webGuiData = $request->only(['protocol', 'port', 'sslcertref']);
+                    $validated = $request->validate([
+                        'protocol' => 'required|in:http,https',
+                        'port' => 'nullable|integer',
+                        'sslcertref' => 'nullable|string',
+                        'ssh_port' => 'nullable|integer',
+                    ]);
+                    $webGuiData = [
+                        'protocol' => $validated['protocol'],
+                        'port' => $validated['port'],
+                        'sslcertref' => $validated['sslcertref'] ?? '',
+                    ];
 
                     // Handle checkboxes/booleans if needed, though API inspection showed strings/empty.
                     // SSH
@@ -202,6 +212,10 @@ class SystemController extends Controller
 
             // Update Hostname
             if ($request->has('hostname') || $request->has('domain')) {
+                $validated = $request->validate([
+                    'hostname' => 'nullable|string|max:63',
+                    'domain' => 'nullable|string|max:255',
+                ]);
                 $api->updateSystemHostname($request->only(['hostname', 'domain']));
             }
 

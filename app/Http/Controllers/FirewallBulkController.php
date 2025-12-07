@@ -125,51 +125,69 @@ class FirewallBulkController extends Controller
                     $api->createAlias($data);
 
                 } elseif ($type === 'nat') {
-                    // Map form inputs to API payload structure
-                    $input = $request->all();
+                    // Validate
+                    $validated = $request->validate([
+                        'dstport' => 'required',
+                        'target' => 'required',
+                        'local_port' => 'required',
+                        'src' => 'nullable',
+                        'srcport' => 'nullable',
+                        'protocol' => 'nullable',
+                        'interface' => 'nullable',
+                        'descr' => 'nullable',
+                        'associated_rule' => 'nullable',
+                        'natreflection' => 'nullable',
+                    ]);
 
                     $data = [
-                        'interface' => $input['interface'] ?? 'wan',
-                        'protocol' => $input['protocol'] ?? 'tcp',
-                        'destination_port' => $input['dstport'],
-                        'target' => $input['target'],
-                        'local_port' => $input['local_port'],
-                        'descr' => $input['descr'] ?? '',
-                        'associated-rule-id' => $input['associated_rule'] ?? 'pass',
-                        'natreflection' => $input['natreflection'] ?? 'system-default',
+                        'interface' => $validated['interface'] ?? 'wan',
+                        'protocol' => $validated['protocol'] ?? 'tcp',
+                        'destination_port' => $validated['dstport'],
+                        'target' => $validated['target'],
+                        'local_port' => $validated['local_port'],
+                        'descr' => $validated['descr'] ?? '',
+                        'associated-rule-id' => $validated['associated_rule'] ?? 'pass',
+                        'natreflection' => $validated['natreflection'] ?? 'system-default',
                     ];
 
                     // Handle Source
-                    $src = $input['src'] ?? 'any';
+                    $src = $validated['src'] ?? 'any';
                     $data['source'] = ($src === 'any') ? 'any' : $src;
 
-                    if (!empty($input['srcport']) && $input['srcport'] !== 'any') {
-                        $data['source_port'] = $input['srcport'];
+                    if (!empty($validated['srcport']) && $validated['srcport'] !== 'any') {
+                        $data['source_port'] = $validated['srcport'];
                     }
 
-                    // Handle Destination (default to any/wan address if not explicit in bulk, 
-                    // but usually Bulk NAT implies redirection from WAN IP)
-                    // The form only asks for Destination Port. 
-                    // Standard Port Forward implies Destination = Interface Address often, or 'any' if not specified?
-                    // Edit form defaults 'dst' to 'any' or WAN address in UI?
-                    // API requires 'destination'.
-                    $data['destination'] = [
-                        'network' => 'any' // Default to any or interface address? FirewallNatController uses 'any' default if empty.
-                        // Ideally we should have asked for Destination Address in the bulk form too, but user didn't explicitly ask for it, just Source.
-                        // But wait, user said "source" was missing.
-                        // I will assume destination is 'any' or based on interface if not provided.
-                        // Let's restart the loop or check if we added destination input.
-                        // I didn't add Destination Input. I only added Source, Protocol, etc.
-                        // I'll default destination to 'any' for now as safer default, or 'wanip'?
-                        // Actually, 'any' is safe.
-                    ];
-                    // Wait, API expects: 'destination' => 'any' or array?
-                    // FirewallNatController: 'destination' => ($validated['dst'] ?? 'any') === 'any' ? 'any' : $validated['dst']
-                    $data['destination'] = 'any'; // Default for Bulk if not specified
+                    // Handle Destination
+                    $data['destination'] = 'any';
 
                     $api->createNatPortForward($data);
                 } elseif ($type === 'rule') {
-                    $data = $request->all();
+                    // Validate
+                    $validated = $request->validate([
+                        'type' => 'required',
+                        'interface' => 'required',
+                        'ipprotocol' => 'required',
+                        'protocol' => 'required',
+                        'src' => 'nullable',
+                        'srcport' => 'nullable',
+                        'dst' => 'nullable',
+                        'dstport' => 'nullable',
+                        'descr' => 'nullable',
+                    ]);
+
+                    $data = [
+                        'type' => $validated['type'],
+                        'interface' => $validated['interface'],
+                        'ipprotocol' => $validated['ipprotocol'],
+                        'protocol' => $validated['protocol'],
+                        'src' => $validated['src'] ?? 'any',
+                        'srcport' => $validated['srcport'] ?? '',
+                        'dst' => $validated['dst'] ?? 'any',
+                        'dstport' => $validated['dstport'] ?? '',
+                        'descr' => $validated['descr'] ?? '',
+                    ];
+
                     $api->createFirewallRule($data);
 
                 } elseif ($type === 'ipsec') {

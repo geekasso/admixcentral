@@ -29,7 +29,7 @@ class EnsureTenantScope
                     : Firewall::find($firewallParam);
 
                 if (!$firewall || $firewall->company_id !== $user->company_id) {
-                    file_put_contents('/tmp/debug_middleware.log', "EnsureTenantScope: Firewall access denied\n", FILE_APPEND);
+
                     abort(403, 'Unauthorized access to this firewall.');
                 }
             }
@@ -42,13 +42,13 @@ class EnsureTenantScope
                     : $companyParam;
 
                 if ($companyId != $user->company_id) {
-                    file_put_contents('/tmp/debug_middleware.log', "EnsureTenantScope: Company access denied\n", FILE_APPEND);
+
                     abort(403, 'Unauthorized access to this company.');
                 }
             }
         }
 
-        file_put_contents('/tmp/debug_middleware.log', "EnsureTenantScope: Fallthrough (Access Granted)\n", FILE_APPEND);
+
         return $next($request);
     }
 }
