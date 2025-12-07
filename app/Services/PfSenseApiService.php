@@ -1331,12 +1331,12 @@ class PfSenseApiService
 
     public function backupConfiguration()
     {
-        return $this->get('/diagnostics/backup');
+        return $this->get('/api/v1/diagnostics/backup');
     }
 
     public function restoreConfiguration(array $data)
     {
-        return $this->post('/diagnostics/restore', $data);
+        return $this->post('/api/v1/diagnostics/restore', $data);
     }
 
     /*
