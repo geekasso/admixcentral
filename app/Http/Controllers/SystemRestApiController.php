@@ -26,16 +26,29 @@ class SystemRestApiController extends Controller
             // Keep default
         }
 
-        // Fetch Latest Version from GitHub
+        // Fetch All Releases from GitHub
+        $availableVersions = [];
         try {
-            $response = \Illuminate\Support\Facades\Http::get('https://api.github.com/repos/jaredhendrickson13/pfsense-api/releases/latest');
+            $response = \Illuminate\Support\Facades\Http::get('https://api.github.com/repos/jaredhendrickson13/pfsense-api/releases');
             if ($response->successful()) {
-                $releaseData = $response->json();
-                $latestVersion = str_replace('v', '', $releaseData['tag_name'] ?? 'Unknown');
-                $releaseDate = \Carbon\Carbon::parse($releaseData['published_at'])->format('M d, Y');
+                $releases = $response->json();
+                foreach ($releases as $release) {
+                    $availableVersions[] = [
+                        'version' => str_replace('v', '', $release['tag_name'] ?? 'Unknown'),
+                        'published_at' => \Carbon\Carbon::parse($release['published_at'])->format('M d, Y'),
+                        'name' => $release['name'] ?? $release['tag_name'],
+                        'body' => $release['body'] ?? '',
+                    ];
+                }
             }
         } catch (\Exception $e) {
-            // Keep default
+            // Keep empty
+        }
+
+        // Set latest version from the first item in the list if available
+        if (!empty($availableVersions)) {
+            $latestVersion = $availableVersions[0]['version'];
+            $releaseDate = $availableVersions[0]['published_at'];
         }
 
         // Compare Versions
@@ -43,7 +56,7 @@ class SystemRestApiController extends Controller
             $updateAvailable = version_compare($installedVersion, $latestVersion, '<');
         }
 
-        return view('system.rest-api.index', compact('firewall', 'installedVersion', 'latestVersion', 'releaseDate', 'updateAvailable'));
+        return view('system.rest-api.index', compact('firewall', 'installedVersion', 'latestVersion', 'releaseDate', 'updateAvailable', 'availableVersions'));
     }
 
     public function update(Firewall $firewall)
@@ -57,15 +70,33 @@ class SystemRestApiController extends Controller
             // Re-using the command prompt capability
             $response = $api->commandPrompt($command);
 
-            // We might want to pass the output back, or just success message
-            // The command might take a while, but standard timeout is usually generous.
-            // If it restarts the PHP process/web server, we might lose connection, so catch that.
-
             $output = $response['data']['output'] ?? 'Command executed.';
 
             return back()->with('success', 'REST API update initiated. Output: ' . substr($output, 0, 200) . '...');
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to update REST API: ' . $e->getMessage());
+        }
+    }
+
+    public function revert(Firewall $firewall, Request $request)
+    {
+        $request->validate([
+            'version' => 'required|string',
+        ]);
+
+        $version = $request->input('version');
+        $api = new PfSenseApiService($firewall);
+
+        try {
+            // Command: pfsense-restapi revert <version>
+            $command = "pfsense-restapi revert {$version}";
+
+            $response = $api->commandPrompt($command);
+            $output = $response['data']['output'] ?? 'Command executed.';
+
+            return back()->with('success', "Revert to {$version} initiated. Output: " . substr($output, 0, 200) . '...');
+        } catch (\Exception $e) {
+            return back()->with('error', "Failed to revert to {$version}: " . $e->getMessage());
         }
     }
 }

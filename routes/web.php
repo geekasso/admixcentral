@@ -262,6 +262,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/firewall/{firewall}/system/rest-api', [App\Http\Controllers\SystemRestApiController::class, 'update'])
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
         ->name('system.rest-api.update');
+    Route::post('/firewall/{firewall}/system/rest-api/revert', [App\Http\Controllers\SystemRestApiController::class, 'revert'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.rest-api.revert');
 
     // Services - DHCP Server
     Route::get('/firewall/{firewall}/services/dhcp/{interface?}', [App\Http\Controllers\ServicesDhcpServerController::class, 'index'])
