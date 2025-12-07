@@ -1,0 +1,17 @@
+Checking environment...
+Symlink public/storage EXISTS correctly.
+Target: /home/baga/Code/admixcentral/storage/app/public
+Customization dir EXISTS.
+Files in customization dir: ., ..
+Manifest EXISTS.
+Manifest content excerpt: {
+  "resources/css/app.css": {
+    "file": "assets/app-BckqbzOo.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources

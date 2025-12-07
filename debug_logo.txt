@@ -1,0 +1,10 @@
+Deep Debugging Logo...
+File EXISTS.
+Size: 0 bytes
+Perms: 0644
+Owner: 1000
+Mime: application/x-empty
+Link info:
+Target: /home/baga/Code/admixcentral/storage/app/public
+Fixing permissions...
+Permissions updated.

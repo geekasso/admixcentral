@@ -1,0 +1,6 @@
+Deep Debugging Logo Round 2...
+File EXISTS.
+Size: 72988 bytes
+Perms: 0644
+Owner: 1000
+Mime: image/png

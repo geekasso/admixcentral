@@ -58,6 +58,8 @@
                                     <a href="{{ route('system.user_manager.index', request()->route('firewall')) }}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">User
                                         Manager</a>
+                                    <a href="{{ route('system.customization.index') }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Customization</a>
                                 </div>
                             </div>
                         </div>
@@ -393,6 +395,10 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                     {{ __('Users') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('system.customization.index')"
+                    :active="request()->routeIs('system.customization.*')">
+                    {{ __('Customization') }}
                 </x-responsive-nav-link>
             @elseif(Auth::user()->isCompanyAdmin())
                 <x-responsive-nav-link :href="route('companies.show', Auth::user()->company_id)"

@@ -241,6 +241,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('users', App\Http\Controllers\UserController::class)
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin']);
 
+    // System Customization (Global Admin)
+    Route::get('/system/customization', [App\Http\Controllers\SystemCustomizationController::class, 'index'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.customization.index');
+    Route::post('/system/customization', [App\Http\Controllers\SystemCustomizationController::class, 'update'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.customization.update');
+
     // Services - DHCP Server
     Route::get('/firewall/{firewall}/services/dhcp/{interface?}', [App\Http\Controllers\ServicesDhcpServerController::class, 'index'])
         ->middleware(App\Http\Middleware\EnsureTenantScope::class)

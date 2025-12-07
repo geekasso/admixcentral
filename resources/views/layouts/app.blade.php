@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@php
+    $settings = \App\Models\SystemSetting::pluck('value', 'key')->toArray();
+    $theme = $settings['theme'] ?? 'light';
+@endphp
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $theme === 'dark' ? 'dark' : '' }}">
 
 <head>
     <meta charset="utf-8">
@@ -14,6 +18,10 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @if(isset($settings['favicon_path']))
+        <link rel="icon" href="{{ $settings['favicon_path'] }}">
+    @endif
 </head>
 
 <body class="font-sans antialiased">
