@@ -82,6 +82,8 @@
                             <div x-show="interfacesOpen"
                                 class="absolute z-10 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
                                 <div class="py-1" role="menu">
+                                    <a href="{{ route('firewall.interfaces.index', [request()->route('firewall')]) }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Overview</a>
                                     <a href="{{ route('interfaces.assignments', [request()->route('firewall')]) }}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Assignments</a>
                                     <a href="{{ route('interfaces.vlans.index', [request()->route('firewall')]) }}"
