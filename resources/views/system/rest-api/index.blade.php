@@ -11,13 +11,54 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
                     <div class="mb-6">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">REST API Package Update
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">REST API Package Status
                         </h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                            Update the installed `pfSense-pkg-RESTAPI` package to the latest version available in the
-                            repository.
-                        </p>
 
+                        {{-- Version Comparison Table --}}
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-6">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead
+                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">Current Version</th>
+                                        <th scope="col" class="px-6 py-3">Available Version</th>
+                                        <th scope="col" class="px-6 py-3">Release Date</th>
+                                        <th scope="col" class="px-6 py-3">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td
+                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $installedVersion }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $latestVersion }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $releaseDate }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @if($updateAvailable)
+                                                <span
+                                                    class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Update
+                                                    Available</span>
+                                            @elseif($installedVersion === 'Unknown')
+                                                <span
+                                                    class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Unknown</span>
+                                            @else
+                                                <span
+                                                    class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Up
+                                                    to Date</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{-- Update Warning --}}
                         <div class="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 p-4 mb-4">
                             <div class="flex">
                                 <div class="flex-shrink-0">
@@ -29,19 +70,20 @@
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm text-yellow-700 dark:text-yellow-200">
-                                        Warning: This action will run `pkg update && pkg install -y
-                                        pfSense-pkg-RESTAPI`. This may briefly restart the API service.
+                                        Warning: This action will run a forced update of the `pfSense-pkg-RESTAPI`
+                                        package from the repository. This may briefly restart the API service.
                                     </p>
                                 </div>
                             </div>
                         </div>
 
+                        {{-- Action Button --}}
                         <form action="{{ route('system.rest-api.update', $firewall) }}" method="POST">
                             @csrf
                             <button type="submit"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
-                                onclick="return confirm('Are you sure you want to update the REST API package?');">
-                                Update REST API
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out {{ !$updateAvailable ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                {{ !$updateAvailable ? 'onclick="return confirm(\'The system appears up to date. Force update anyway?\')"' : 'onclick="return confirm(\'Are you sure you want to update the REST API package?\')"' }}>
+                                {{ $updateAvailable ? 'Update REST API' : 'Reinstall / Force Update' }}
                             </button>
                         </form>
                     </div>

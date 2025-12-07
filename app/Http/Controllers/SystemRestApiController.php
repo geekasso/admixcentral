@@ -10,7 +10,40 @@ class SystemRestApiController extends Controller
 {
     public function index(Firewall $firewall)
     {
-        return view('system.rest-api.index', compact('firewall'));
+        $api = new PfSenseApiService($firewall);
+        $installedVersion = 'Unknown';
+        $latestVersion = 'Unknown';
+        $releaseDate = 'Unknown';
+        $updateAvailable = false;
+
+        // Fetch Installed Version
+        try {
+            $versionResponse = $api->getApiVersion();
+            $installedVersion = $versionResponse['data']['output'] ?? 'Unknown';
+            // Clean up version string
+            $installedVersion = trim($installedVersion);
+        } catch (\Exception $e) {
+            // Keep default
+        }
+
+        // Fetch Latest Version from GitHub
+        try {
+            $response = \Illuminate\Support\Facades\Http::get('https://api.github.com/repos/jaredhendrickson13/pfsense-api/releases/latest');
+            if ($response->successful()) {
+                $releaseData = $response->json();
+                $latestVersion = str_replace('v', '', $releaseData['tag_name'] ?? 'Unknown');
+                $releaseDate = \Carbon\Carbon::parse($releaseData['published_at'])->format('M d, Y');
+            }
+        } catch (\Exception $e) {
+            // Keep default
+        }
+
+        // Compare Versions
+        if ($installedVersion !== 'Unknown' && $latestVersion !== 'Unknown') {
+            $updateAvailable = version_compare($installedVersion, $latestVersion, '<');
+        }
+
+        return view('system.rest-api.index', compact('firewall', 'installedVersion', 'latestVersion', 'releaseDate', 'updateAvailable'));
     }
 
     public function update(Firewall $firewall)
