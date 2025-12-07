@@ -36,7 +36,7 @@ class PackageManagerController extends Controller
 
         try {
             $api->installSystemPackage($name);
-            return redirect()->route('system.package_manager.index', ['firewall' => $firewall->id, 'tab' => 'installed'])
+            return redirect()->route('system.package_manager.index', ['firewall' => $firewall, 'tab' => 'installed'])
                 ->with('success', "Package '$name' installation started. It may take a few minutes to appear.");
         } catch (\Exception $e) {
             return back()->withErrors(['error' => "Failed to install package '$name': " . $e->getMessage()]);
@@ -50,7 +50,7 @@ class PackageManagerController extends Controller
 
         try {
             $api->uninstallSystemPackage($name);
-            return redirect()->route('system.package_manager.index', ['firewall' => $firewall->id, 'tab' => 'installed'])
+            return redirect()->route('system.package_manager.index', ['firewall' => $firewall, 'tab' => 'installed'])
                 ->with('success', "Package '$name' uninstallation started.");
         } catch (\Exception $e) {
             return back()->withErrors(['error' => "Failed to uninstall package '$name': " . $e->getMessage()]);
