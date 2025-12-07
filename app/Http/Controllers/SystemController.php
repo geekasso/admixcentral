@@ -114,7 +114,8 @@ class SystemController extends Controller
             return redirect()->route('system.advanced', ['firewall' => $firewall, 'tab' => $tab])
                 ->with('success', 'System settings updated successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Failed to update system settings: ' . $e->getMessage()]);
+            \Illuminate\Support\Facades\Log::error('System Settings Update Failed: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Failed to update system settings. Please check logs for details.']);
         }
     }
 
@@ -134,7 +135,8 @@ class SystemController extends Controller
             return redirect()->route('system.advanced', ['firewall' => $firewall, 'tab' => 'tunables'])
                 ->with('success', 'Tunable created successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Failed to create tunable: ' . $e->getMessage()]);
+            \Illuminate\Support\Facades\Log::error('Tunable Creation Failed: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Failed to create tunable.']);
         }
     }
 
@@ -166,7 +168,8 @@ class SystemController extends Controller
             return redirect()->route('system.advanced', ['firewall' => $firewall, 'tab' => 'tunables'])
                 ->with('success', 'Tunable updated successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Failed to update tunable: ' . $e->getMessage()]);
+            \Illuminate\Support\Facades\Log::error('Tunable Update Failed: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Failed to update tunable.']);
         }
     }
 
@@ -180,7 +183,8 @@ class SystemController extends Controller
             return redirect()->route('system.advanced', ['firewall' => $firewall, 'tab' => 'tunables'])
                 ->with('success', 'Tunable deleted successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Failed to delete tunable: ' . $e->getMessage()]);
+            \Illuminate\Support\Facades\Log::error('Tunable Deletion Failed: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Failed to delete tunable.']);
         }
     }
 
@@ -238,7 +242,8 @@ class SystemController extends Controller
 
             return redirect()->route('system.general-setup', $firewall)->with('success', 'System settings updated successfully.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update system settings: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('General Setup Update Failed: ' . $e->getMessage());
+            return back()->with('error', 'Failed to update system settings.');
         }
     }
 

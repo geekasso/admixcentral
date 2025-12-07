@@ -67,30 +67,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware(App\Http\Middleware\EnsureTenantScope::class)
         ->name('status.dashboard');
 
-    // Probe OpenVPN API
-    Route::get('/probe-openvpn', function () {
-        $firewall = \App\Models\Firewall::first();
-        $api = new \App\Services\PfSenseApiService($firewall);
 
-        $endpoints = [
-            '/vpn/openvpn/server',
-            '/vpn/openvpn/servers',
-            '/services/openvpn/server',
-            '/services/openvpn/servers',
-            '/api/v1/vpn/openvpn/server',
-        ];
-
-        $results = [];
-        foreach ($endpoints as $endpoint) {
-            try {
-                $response = $api->get($endpoint);
-                $results[$endpoint] = 'Success: ' . json_encode($response);
-            } catch (\Exception $e) {
-                $results[$endpoint] = 'Error: ' . $e->getMessage();
-            }
-        }
-        return $results;
-    });
     // Firewall-specific dashboard (must come AFTER resource routes to avoid conflicts)
     Route::get('/firewall/{firewall}', [App\Http\Controllers\DashboardController::class, 'firewall'])
         ->middleware(App\Http\Middleware\EnsureTenantScope::class)
@@ -496,56 +473,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
-// Probe CARP API
-Route::get('/probe-carp', function () {
-    $firewall = \App\Models\Firewall::first();
-    $api = new \App\Services\PfSenseApiService($firewall);
 
-    $endpoints = [
-        '/status/carp',
-        '/system/carp',
-        '/firewall/virtual_ips',
-        '/firewall/virtual_ip',
-        '/status/vip',
-        '/api/v1/status/carp',
-    ];
 
-    $results = [];
-    foreach ($endpoints as $endpoint) {
-        try {
-            $response = $api->get($endpoint);
-            $results[$endpoint] = 'Success: ' . json_encode($response);
-        } catch (\Exception $e) {
-            $results[$endpoint] = 'Error: ' . $e->getMessage();
-        }
-    }
-    return $results;
-});
 
-// Probe VPN Status API
-Route::get('/probe-vpn-status', function () {
-    $firewall = \App\Models\Firewall::first();
-    $api = new \App\Services\PfSenseApiService($firewall);
-
-    $endpoints = [
-        '/status/ipsec',
-        '/vpn/ipsec/status',
-        '/status/openvpn',
-        '/vpn/openvpn/status',
-        '/status/openvpn/server',
-        '/status/openvpn/client',
-    ];
-
-    $results = [];
-    foreach ($endpoints as $endpoint) {
-        try {
-            $response = $api->get($endpoint);
-            $results[$endpoint] = 'Success: ' . json_encode($response);
-        } catch (\Exception $e) {
-            $results[$endpoint] = 'Error: ' . $e->getMessage();
-        }
-    }
-    return $results;
-});
 
 require __DIR__ . '/auth.php';
