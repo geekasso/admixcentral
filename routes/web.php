@@ -201,9 +201,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Status
         Route::get('/status/interfaces', [App\Http\Controllers\StatusInterfaceController::class, 'index'])->name('status.interfaces.index');
 
-        // Diagnostics
-        Route::get('/diagnostics/ping', [App\Http\Controllers\DiagnosticsPingController::class, 'index'])->name('diagnostics.ping.index');
-        Route::post('/diagnostics/ping', [App\Http\Controllers\DiagnosticsPingController::class, 'ping'])->name('diagnostics.ping.run');
+
 
         // OpenVPN
         Route::get('/vpn/openvpn/server', [App\Http\Controllers\VpnOpenVpnController::class, 'servers'])->name('vpn.openvpn.servers');
@@ -376,6 +374,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/freeradius/interfaces', [App\Http\Controllers\ServicesFreeradiusController::class, 'storeInterface'])->name('freeradius.interfaces.store');
         Route::delete('/freeradius/interfaces/{id}', [App\Http\Controllers\ServicesFreeradiusController::class, 'destroyInterface'])->name('freeradius.interfaces.destroy');
 
+        // Bind (DNS Server)
+        Route::get('/bind', [App\Http\Controllers\ServicesBindController::class, 'index'])->name('bind.index');
+        Route::get('/bind/settings', [App\Http\Controllers\ServicesBindController::class, 'settings'])->name('bind.settings');
+
         Route::get('/dhcp-relay', [App\Http\Controllers\ServicesController::class, 'dhcpRelay'])->name('dhcp-relay');
         Route::post('/dhcp-relay', [App\Http\Controllers\ServicesController::class, 'updateDhcpRelay'])->name('dhcp-relay.update');
         Route::get('/dhcpv6-relay', [App\Http\Controllers\ServicesController::class, 'dhcpv6Relay'])->name('dhcpv6-relay');
@@ -448,7 +450,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/authentication', [App\Http\Controllers\DiagnosticsController::class, 'authentication'])->name('authentication');
         Route::get('/backup-restore', [App\Http\Controllers\DiagnosticsController::class, 'backupRestore'])->name('backup-restore');
         Route::match(['get', 'post'], '/command-prompt', [App\Http\Controllers\DiagnosticsController::class, 'commandPrompt'])->name('command-prompt');
-        Route::get('/dns-lookup', [App\Http\Controllers\DiagnosticsController::class, 'dnsLookup'])->name('dns-lookup');
+        Route::match(['get', 'post'], '/dns-lookup', [App\Http\Controllers\DiagnosticsController::class, 'dnsLookup'])->name('dns-lookup');
         Route::get('/edit-file', [App\Http\Controllers\DiagnosticsController::class, 'editFile'])->name('edit-file');
         Route::get('/factory-defaults', [App\Http\Controllers\DiagnosticsController::class, 'factoryDefaults'])->name('factory-defaults');
         Route::match(['get', 'post'], '/halt-system', [App\Http\Controllers\DiagnosticsController::class, 'haltSystem'])->name('halt-system');
@@ -457,7 +459,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/packet-capture', [App\Http\Controllers\DiagnosticsController::class, 'packetCapture'])->name('packet-capture');
         Route::get('/pf-info', [App\Http\Controllers\DiagnosticsController::class, 'pfInfo'])->name('pf-info');
         Route::get('/pf-top', [App\Http\Controllers\DiagnosticsController::class, 'pfTop'])->name('pf-top');
-        Route::get('/ping', [App\Http\Controllers\DiagnosticsController::class, 'ping'])->name('ping');
+        Route::match(['get', 'post'], '/ping', [App\Http\Controllers\DiagnosticsController::class, 'ping'])->name('ping');
         Route::match(['get', 'post'], '/reboot', [App\Http\Controllers\DiagnosticsController::class, 'reboot'])->name('reboot');
         Route::get('/routes', [App\Http\Controllers\DiagnosticsController::class, 'routes'])->name('routes');
         Route::get('/smart-status', [App\Http\Controllers\DiagnosticsController::class, 'smartStatus'])->name('smart-status');
@@ -467,7 +469,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/system-activity', [App\Http\Controllers\DiagnosticsController::class, 'systemActivity'])->name('system-activity');
         Route::get('/tables', [App\Http\Controllers\DiagnosticsController::class, 'tables'])->name('tables');
         Route::get('/test-port', [App\Http\Controllers\DiagnosticsController::class, 'testPort'])->name('test-port');
-        Route::get('/traceroute', [App\Http\Controllers\DiagnosticsController::class, 'traceroute'])->name('traceroute');
+        Route::match(['get', 'post'], '/traceroute', [App\Http\Controllers\DiagnosticsController::class, 'traceroute'])->name('traceroute');
     });
 
 

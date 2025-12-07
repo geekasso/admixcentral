@@ -45,9 +45,21 @@ class DiagnosticsController extends Controller
         return view('diagnostics.command-prompt', compact('firewall', 'output'));
     }
 
-    public function dnsLookup(Firewall $firewall)
+    public function dnsLookup(Request $request, Firewall $firewall)
     {
-        return view('diagnostics.dns-lookup', compact('firewall'));
+        $output = null;
+        if ($request->isMethod('post')) {
+            $request->validate(['host' => 'required|string']);
+            $api = new \App\Services\PfSenseApiService($firewall);
+            try {
+                $host = escapeshellarg($request->input('host'));
+                $response = $api->commandPrompt("host " . $host);
+                $output = $response['data']['output'] ?? [];
+            } catch (\Exception $e) {
+                $output = ['error' => $e->getMessage()];
+            }
+        }
+        return view('diagnostics.dns-lookup', compact('firewall', 'output'));
     }
 
     public function editFile(Firewall $firewall)
@@ -99,9 +111,31 @@ class DiagnosticsController extends Controller
         return view('diagnostics.pf-top', compact('firewall'));
     }
 
-    public function ping(Firewall $firewall)
+    public function ping(Request $request, Firewall $firewall)
     {
-        return view('diagnostics.ping', compact('firewall'));
+        $output = null;
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'host' => 'required|string',
+                'count' => 'nullable|integer|min:1|max:10',
+                'interface' => 'nullable|string',
+            ]);
+            $api = new \App\Services\PfSenseApiService($firewall);
+            try {
+                $host = escapeshellarg($request->input('host'));
+                $count = (int) $request->input('count', 3);
+                $interface = $request->input('interface', 'wan');
+
+                // If interface is a specific IP or name, we might pass -S. For now simple ping.
+                $command = "ping -c {$count} " . $host;
+
+                $response = $api->commandPrompt($command);
+                $output = $response['data']['output'] ?? [];
+            } catch (\Exception $e) {
+                $output = ['error' => $e->getMessage()];
+            }
+        }
+        return view('diagnostics.ping', compact('firewall', 'output'));
     }
 
     public function reboot(Request $request, Firewall $firewall)
@@ -178,8 +212,22 @@ class DiagnosticsController extends Controller
         return view('diagnostics.test-port', compact('firewall'));
     }
 
-    public function traceroute(Firewall $firewall)
+    public function traceroute(Request $request, Firewall $firewall)
     {
-        return view('diagnostics.traceroute', compact('firewall'));
+        $output = null;
+        if ($request->isMethod('post')) {
+            $request->validate(['host' => 'required|string']);
+            $api = new \App\Services\PfSenseApiService($firewall);
+            try {
+                $host = escapeshellarg($request->input('host'));
+                $command = "traceroute -w 2 -m 15 " . $host;
+
+                $response = $api->commandPrompt($command);
+                $output = $response['data']['output'] ?? [];
+            } catch (\Exception $e) {
+                $output = ['error' => $e->getMessage()];
+            }
+        }
+        return view('diagnostics.traceroute', compact('firewall', 'output'));
     }
 }

@@ -1121,4 +1121,20 @@ class PfSenseApiService
     {
         return $this->get('/diagnostics/table', ['id' => $table]);
     }
+
+    /**
+     * Get Bind Zones
+     */
+    public function getBindZones()
+    {
+        return $this->get('/services/bind/zones');
+    }
+
+    /**
+     * Get Bind Settings
+     */
+    public function getBindSettings()
+    {
+        return $this->get('/services/bind/settings');
+    }
 }
