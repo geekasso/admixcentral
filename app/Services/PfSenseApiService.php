@@ -1120,6 +1120,30 @@ class PfSenseApiService
     }
 
     /**
+     * Diagnostics: SMART Status
+     */
+    public function getSmartStatus()
+    {
+        return $this->get('/diagnostics/smart_status');
+    }
+
+    /**
+     * Diagnostics: Sockets
+     */
+    public function getSockets()
+    {
+        return $this->get('/diagnostics/sockets');
+    }
+
+    /**
+     * Diagnostics: States Summary
+     */
+    public function getStatesSummary()
+    {
+        return $this->get('/firewall/states/summary');
+    }
+
+    /**
      * Diagnostics: Get Table Content
      */
     public function getDiagnosticsTable(string $table)

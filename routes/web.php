@@ -516,12 +516,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pf-info', [App\Http\Controllers\DiagnosticsController::class, 'pfInfo'])->name('pf-info');
         Route::get('/pf-top', [App\Http\Controllers\DiagnosticsController::class, 'pfTop'])->name('pf-top');
         Route::match(['get', 'post'], '/ping', [App\Http\Controllers\DiagnosticsController::class, 'ping'])->name('ping');
-        Route::match(['get', 'post'], '/reboot', [App\Http\Controllers\DiagnosticsController::class, 'reboot'])->name('reboot');
+        // Route::match(['get', 'post'], '/reboot', [App\Http\Controllers\DiagnosticsController::class, 'reboot'])->name('reboot'); // Replaced by independent controller
         Route::get('/routes', [App\Http\Controllers\DiagnosticsController::class, 'routes'])->name('routes');
-        Route::get('/smart-status', [App\Http\Controllers\DiagnosticsController::class, 'smartStatus'])->name('smart-status');
-        Route::get('/sockets', [App\Http\Controllers\DiagnosticsController::class, 'sockets'])->name('sockets');
-        Route::get('/states', [App\Http\Controllers\DiagnosticsController::class, 'states'])->name('states');
-        Route::get('/states-summary', [App\Http\Controllers\DiagnosticsController::class, 'statesSummary'])->name('states-summary');
+        Route::get('/smart-status', [App\Http\Controllers\DiagnosticsSmartStatusController::class, 'index'])->name('smart-status');
+        Route::get('/sockets', [App\Http\Controllers\DiagnosticsSocketsController::class, 'index'])->name('sockets');
+        Route::get('/states', [App\Http\Controllers\DiagnosticsStatesController::class, 'index'])->name('states');
+        Route::get('/states-summary', [App\Http\Controllers\DiagnosticsStatesController::class, 'summary'])->name('states-summary');
         Route::get('/system-activity', [App\Http\Controllers\DiagnosticsController::class, 'systemActivity'])->name('system-activity');
         Route::get('/tables', [App\Http\Controllers\DiagnosticsController::class, 'tables'])->name('tables');
         Route::get('/test-port', [App\Http\Controllers\DiagnosticsTestPortController::class, 'index'])->name('test_port.index');
