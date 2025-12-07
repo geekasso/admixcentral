@@ -90,7 +90,7 @@ Use these instructions for setting up a local development environment.
 
 6. **Serve the Application (Development Mode)**
    ```bash
-   php artisan serve
+   php artisan serve --host=0.0.0.0 --port=8000
    ```
    or preferably using composer to start backend and frontend (Vite) concurrently:
    ```bash
