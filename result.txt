@@ -1,0 +1,10 @@
+Checking storage/app/public/customization/bhIawSHCGJqwWoEotorgcf1VzU9zbKQwQYuwhdq6.png...
+File MISSING.
+Directory storage/app/public/customization EXISTS.
+Contents:
+Array
+(
+    [0] => .
+    [1] => ..
+    [2] => test_logo.png
+)

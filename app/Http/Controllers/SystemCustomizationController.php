@@ -23,12 +23,12 @@ class SystemCustomizationController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('public/customization');
+            $path = $request->file('logo')->store('customization', 'public');
             SystemSetting::updateOrCreate(['key' => 'logo_path'], ['value' => Storage::url($path)]);
         }
 
         if ($request->hasFile('favicon')) {
-            $path = $request->file('favicon')->store('public/customization');
+            $path = $request->file('favicon')->store('customization', 'public');
             SystemSetting::updateOrCreate(['key' => 'favicon_path'], ['value' => Storage::url($path)]);
         }
 

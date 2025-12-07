@@ -1,0 +1,4 @@
+Psy Shell v0.12.14 (PHP 8.4.15 — cli) by Justin Hileman
+New PHP manual is available (latest: 3.0.0). Update with `--update-manual`
+Simulating Real Upload (Hashed)...
+Error: GD extension is not installed.

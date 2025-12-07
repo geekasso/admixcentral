@@ -1,0 +1,5 @@
+Simulating Real Upload (Hashed)...
+PHP Fatal error:  Uncaught Error: Class "Illuminate\Http\UploadedFile" not found in /home/baga/Code/admixcentral/simulate_real_upload.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/baga/Code/admixcentral/simulate_real_upload.php on line 8

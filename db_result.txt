@@ -1,0 +1,52 @@
+App\Models\SystemSetting {#6725
+  #connection: "sqlite"
+  #table: "system_settings"
+  #primaryKey: "id"
+  #keyType: "int"
+  +incrementing: true
+  #with: []
+  #withCount: []
+  +preventsLazyLoading: false
+  #perPage: 15
+  +exists: true
+  +wasRecentlyCreated: false
+  #escapeWhenCastingToString: false
+  #attributes: array:5 [
+    "id" => 2
+    "key" => "logo_path"
+    "value" => "/storage/customization/bhIawSHCGJqwWoEotorgcf1VzU9zbKQwQYuwhdq6.png"
+    "created_at" => "2025-12-07 02:23:16"
+    "updated_at" => "2025-12-07 03:18:05"
+  ]
+  #original: array:5 [
+    "id" => 2
+    "key" => "logo_path"
+    "value" => "/storage/customization/bhIawSHCGJqwWoEotorgcf1VzU9zbKQwQYuwhdq6.png"
+    "created_at" => "2025-12-07 02:23:16"
+    "updated_at" => "2025-12-07 03:18:05"
+  ]
+  #changes: []
+  #previous: []
+  #casts: []
+  #classCastCache: []
+  #attributeCastCache: []
+  #dateFormat: null
+  #appends: []
+  #dispatchesEvents: []
+  #observables: []
+  #relations: []
+  #touches: []
+  #relationAutoloadCallback: null
+  #relationAutoloadContext: null
+  +timestamps: true
+  +usesUniqueIds: false
+  #hidden: []
+  #visible: []
+  #fillable: array:2 [
+    0 => "key"
+    1 => "value"
+  ]
+  #guarded: array:1 [
+    0 => "*"
+  ]
+} // vendor/psy/psysh/src/ExecutionClosure.php(40) : eval()'d code:1
