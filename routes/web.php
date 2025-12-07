@@ -299,9 +299,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/certificate-manager/cas/{id}', [App\Http\Controllers\CertificateManagerController::class, 'destroyCa'])->name('certificate_manager.cas.destroy');
 
         // Certificates
-        Route::get('/certificate-manager/certificates/create', [App\Http\Controllers\CertificateManagerController::class, 'createCert'])->name('certificate_manager.certificates.create');
         Route::post('/certificate-manager/certificates', [App\Http\Controllers\CertificateManagerController::class, 'storeCert'])->name('certificate_manager.certificates.store');
+        Route::get('/certificate-manager/certificates/create', [App\Http\Controllers\CertificateManagerController::class, 'createCert'])->name('certificate_manager.certificates.create');
         Route::delete('/certificate-manager/certificates/{id}', [App\Http\Controllers\CertificateManagerController::class, 'destroyCert'])->name('certificate_manager.certificates.destroy');
+
+        // CRLs
+        Route::post('/certificate-manager/crls', [App\Http\Controllers\CertificateManagerController::class, 'storeCrl'])->name('certificate_manager.crls.store');
+        Route::get('/certificate-manager/crls/create', [App\Http\Controllers\CertificateManagerController::class, 'createCrl'])->name('certificate_manager.crls.create');
+        Route::delete('/certificate-manager/crls/{id}', [App\Http\Controllers\CertificateManagerController::class, 'destroyCrl'])->name('certificate_manager.crls.destroy');
     });
 
 

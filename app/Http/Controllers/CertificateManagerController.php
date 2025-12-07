@@ -22,6 +22,9 @@ class CertificateManagerController extends Controller
             } elseif ($tab === 'certificates') {
                 $response = $api->getCertificates();
                 $data['certificates'] = $response['data'] ?? [];
+            } elseif ($tab === 'crls') {
+                $response = $api->getCRLs();
+                $data['crls'] = $response['data'] ?? [];
             }
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -43,6 +46,8 @@ class CertificateManagerController extends Controller
 
         try {
             if ($method === 'internal') {
+                $data['keylen'] = (int) ($data['keylen'] ?? 2048);
+                $data['lifetime'] = (int) ($data['lifetime'] ?? 3650);
                 $api->generateCertificateAuthority($data);
             } else {
                 $api->createCertificateAuthority($data);
@@ -107,6 +112,50 @@ class CertificateManagerController extends Controller
                 ->with('success', 'Certificate deleted successfully.');
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to delete Certificate: ' . $e->getMessage());
+        }
+    }
+    public function createCrl(Firewall $firewall)
+    {
+        $api = new PfSenseApiService($firewall);
+        $cas = [];
+        try {
+            $response = $api->getCertificateAuthorities();
+            $cas = $response['data'] ?? [];
+        } catch (\Exception $e) {
+            // Ignore error
+        }
+        return view('system.certificate_manager.crls.create', compact('firewall', 'cas'));
+    }
+
+    public function storeCrl(Firewall $firewall, Request $request)
+    {
+        $api = new PfSenseApiService($firewall);
+        $method = $request->input('method');
+        $data = $request->except(['_token', 'method']);
+
+        try {
+            // Standardize logic: 'internal' usually means creating a new internal list, 
+            // but for CRLs it might just be 'create'. 
+            // The API payload structure depends on the endpoint requirements.
+            // For now, passing data through.
+            $api->createCRL($data);
+
+            return redirect()->route('system.certificate_manager.index', ['firewall' => $firewall, 'tab' => 'crls'])
+                ->with('success', 'CRL created successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to create CRL: ' . $e->getMessage())->withInput();
+        }
+    }
+
+    public function destroyCrl(Firewall $firewall, string $id)
+    {
+        $api = new PfSenseApiService($firewall);
+        try {
+            $api->deleteCRL($id);
+            return redirect()->route('system.certificate_manager.index', ['firewall' => $firewall, 'tab' => 'crls'])
+                ->with('success', 'CRL deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete CRL: ' . $e->getMessage());
         }
     }
 }

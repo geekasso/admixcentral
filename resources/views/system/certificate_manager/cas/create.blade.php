@@ -36,7 +36,15 @@
                         <!-- Internal CA Fields -->
                         <div x-show="method === 'internal'">
                             <div class="mb-4">
-                                <x-input-label for="keylen" :value="__('Key Length')" />
+                                <x-input-label for="keytype" :value="__('Key Type')" />
+                                <select id="keytype" name="keytype"
+                                    class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                    <option value="RSA">RSA</option>
+                                    <option value="ECDSA">ECDSA</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <x-input-label for="keylen" :value="__('Key Length (RSA)')" />
                                 <select id="keylen" name="keylen"
                                     class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
                                     <option value="2048">2048</option>

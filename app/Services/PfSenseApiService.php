@@ -1137,4 +1137,47 @@ class PfSenseApiService
     {
         return $this->get('/services/bind/settings');
     }
+
+    /**
+     * Get Certificate Revocation Lists (CRLs)
+     */
+    public function getCRLs()
+    {
+        return $this->get('/system/crls');
+    }
+
+    /**
+     * Get a specific CRL
+     */
+    public function getCRL($id)
+    {
+        return $this->get('/system/crl', ['id' => $id]);
+    }
+
+    /**
+     * Create/Import CRL
+     */
+    public function createCRL(array $data)
+    {
+        return $this->post('/system/crl', $data);
+    }
+
+    /**
+     * Delete CRL
+     */
+    public function deleteCRL($id)
+    {
+        return $this->delete('/system/crl', ['id' => $id]);
+    }
+
+    /**
+     * Update CRL (Add/Remove Certs)
+     */
+    public function updateCRL($id, array $data)
+    {
+        // Assuming PATCH or PUT for update, typically to add revoked certs
+        // Using PATCH as it's a modification
+        $data['id'] = $id;
+        return $this->patch('/system/crl', $data);
+    }
 }

@@ -21,6 +21,11 @@
                                 class="{{ $tab === 'certificates' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                                 Certificates
                             </a>
+                            </a>
+                            <a href="{{ route('system.certificate_manager.index', ['firewall' => $firewall, 'tab' => 'crls']) }}"
+                                class="{{ $tab === 'crls' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                                Revocation
+                            </a>
                         </nav>
                     </div>
 
@@ -141,6 +146,8 @@
                                 </tbody>
                             </table>
                         </div>
+                    @elseif($tab === 'crls')
+                        @include('system.certificate_manager.crls.index')
                     @endif
 
                 </div>
