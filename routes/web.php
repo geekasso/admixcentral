@@ -256,6 +256,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
         ->name('system.customization.update');
 
+    Route::get('/firewall/{firewall}/system/rest-api', [App\Http\Controllers\SystemRestApiController::class, 'index'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.rest-api.index');
+    Route::post('/firewall/{firewall}/system/rest-api', [App\Http\Controllers\SystemRestApiController::class, 'update'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.rest-api.update');
+
     // Services - DHCP Server
     Route::get('/firewall/{firewall}/services/dhcp/{interface?}', [App\Http\Controllers\ServicesDhcpServerController::class, 'index'])
         ->middleware(App\Http\Middleware\EnsureTenantScope::class)
