@@ -1435,6 +1435,13 @@ class PfSenseApiService
         // or -v for just version if supported, but simple info is safer.
         // pkg query %v pfSense-pkg-RESTAPI is best for just version.
         $command = 'pkg query %v pfSense-pkg-RESTAPI';
-        return $this->diagnosticsCommandPrompt($command);
+        $response = $this->diagnosticsCommandPrompt($command);
+
+        if (isset($response['data']['output'])) {
+            // Format version: 2.6_5 -> 2.6.5
+            $response['data']['output'] = str_replace('_', '.', $response['data']['output']);
+        }
+
+        return $response;
     }
 }
