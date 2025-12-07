@@ -40,15 +40,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'user',
         ]);
 
-        // Create Firewall
-        \App\Models\Firewall::create([
-            'company_id' => $company->id,
-            'name' => 'pfSense Lab',
-            'url' => 'https://172.30.1.129:444',
-            'api_key' => 'admin', // Placeholder, real key needed later
-            'api_secret' => 'pfsense', // Placeholder
-            'description' => 'Lab firewall instance',
-            'netgate_id' => '900d3b9e43d67394f4c7', // Lab Netgate ID
-        ]);
+
     }
 }
