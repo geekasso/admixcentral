@@ -135,7 +135,7 @@
                                                 @if($installedVersion !== $release['version'])
                                                     <form action="{{ route('system.rest-api.revert', $firewall) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to revert/update to version {{ $release['version'] }}? This may restart services.');">
                                                         @csrf
-                                                        <input type="hidden" name="version" value="{{ $release['version'] }}">
+                                                        <input type="hidden" name="version" value="{{ $release['tag'] }}">
                                                         <button type="submit" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300">
                                                             {{ version_compare($installedVersion, $release['version'], '<') ? 'Update' : 'Revert' }}
                                                         </button>

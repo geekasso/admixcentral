@@ -34,6 +34,7 @@ class SystemRestApiController extends Controller
                 $releases = $response->json();
                 foreach ($releases as $release) {
                     $availableVersions[] = [
+                        'tag' => $release['tag_name'] ?? 'Unknown',
                         'version' => str_replace('v', '', $release['tag_name'] ?? 'Unknown'),
                         'published_at' => \Carbon\Carbon::parse($release['published_at'])->format('M d, Y'),
                         'name' => $release['name'] ?? $release['tag_name'],
