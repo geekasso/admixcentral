@@ -20,7 +20,12 @@ class EnsureSystemIsSetup
         // Avoid intercepting debugbar or similar if present
 
         $userCount = User::count();
-        $isSetupRoute = $request->routeIs('setup.*');
+        // Use path checking as route() might be null in early global middleware
+        $isSetupRoute = $request->is('setup') || $request->is('setup/*');
+
+        // Safe logging
+        $routeName = $request->route() ? $request->route()->getName() : 'NULL';
+        \Log::info("Middleware: Count={$userCount}, RouteName={$routeName}, IsSetupPath=" . ($isSetupRoute ? 'YES' : 'NO'));
 
         if ($userCount === 0) {
             // System is NOT setup

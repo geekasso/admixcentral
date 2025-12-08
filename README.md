@@ -76,10 +76,10 @@ Use these instructions for setting up a local development environment.
    touch database/database.sqlite
    ```
 
-4. **Run Migrations & Seed Database**
-   This sets up the database schema and creates default demo users.
+4. **Run Migrations**
+   This sets up the database schema.
    ```bash
-   php artisan migrate --seed
+   php artisan migrate
    ```
 
 5. **Build Frontend Assets**
@@ -97,6 +97,7 @@ Use these instructions for setting up a local development environment.
    composer run dev
    ```
    The application will be available at `http://127.0.0.1:8000`.
+   **Note:** On first access, you will be redirected to the Setup Wizard to create your admin account.
 
 ---
 
@@ -202,14 +203,14 @@ Certbot will automatically update your Nginx configuration with the correct SSL 
 
 ---
 
-## Default Credentials
+## Initial Setup
 
-The database seeder creates the following default users:
+Upon first installation, AdmixCentral requires you to create a **Global Admin** account via the secure Setup Wizard.
 
-| Role | Email | Password |
-|------|-------|----------|
-| **Global Admin** | `admin@admixcentral.com` | `password` |
-| **Demo User** | `user@demo.com` | `password` |
+1. Access the application in your browser (e.g., `http://dashboard.yourdomain.com`).
+2. You will be automatically redirected to the **Setup Wizard**.
+3. Create your admin account details.
+4. You will then be logged in and redirected to the Dashboard.
 
 ## Firewall Setup
 
