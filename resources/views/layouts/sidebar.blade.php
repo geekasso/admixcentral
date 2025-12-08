@@ -60,6 +60,15 @@
                     </svg>
                     <span x-show="!collapsed" class="transition-opacity duration-300">{{ __('Users') }}</span>
                 </a>
+                <a href="{{ route('system.customization.index') }}"
+                    class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('system.customization.*') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                    <svg class="mr-3 h-6 w-6 flex-shrink-0 {{ request()->routeIs('system.customization.*') ? 'text-white' : 'text-gray-400 group-hover:text-gray-300' }}"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    <span x-show="!collapsed" class="transition-opacity duration-300">{{ __('Customization') }}</span>
+                </a>
             @endif
 
             <!-- User Dropdown (Moved) -->
