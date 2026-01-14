@@ -34,4 +34,30 @@ class Firewall extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    /**
+     * Get all device connections for this firewall.
+     */
+    public function deviceConnections()
+    {
+        return $this->hasMany(DeviceConnection::class);
+    }
+
+    /**
+     * Get the most recent active connection for this firewall.
+     */
+    public function activeConnection()
+    {
+        return $this->hasOne(DeviceConnection::class)
+            ->whereNull('disconnected_at')
+            ->latest('connected_at');
+    }
+
+    /**
+     * Check if this firewall has an active WebSocket connection.
+     */
+    public function isConnectedViaWebSocket(): bool
+    {
+        return $this->activeConnection()->exists();
+    }
 }

@@ -19,6 +19,15 @@ Route::get('/test-routing', function () {
 Route::get('/setup', [App\Http\Controllers\SetupController::class, 'welcome'])->name('setup.welcome');
 Route::post('/setup', [App\Http\Controllers\SetupController::class, 'store'])->name('setup.store');
 
+// WebSocket Routes (for device communication)
+Route::prefix('ws')->name('ws.')->group(function () {
+    Route::post('/device/auth', [App\Http\Controllers\WebSocket\DeviceWebSocketController::class, 'authenticate'])->name('device.auth');
+    Route::post('/device/connect', [App\Http\Controllers\WebSocket\DeviceWebSocketController::class, 'connect'])->name('device.connect');
+    Route::post('/device/message', [App\Http\Controllers\WebSocket\DeviceWebSocketController::class, 'handleMessage'])->name('device.message');
+    Route::post('/device/disconnect', [App\Http\Controllers\WebSocket\DeviceWebSocketController::class, 'disconnect'])->name('device.disconnect');
+    Route::get('/info', [App\Http\Controllers\WebSocket\DeviceWebSocketController::class, 'info'])->name('info');
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

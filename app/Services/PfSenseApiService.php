@@ -101,6 +101,7 @@ class PfSenseApiService
         if ($method === 'DELETE' && !empty($data)) {
             $response = $client->send('DELETE', $url, ['json' => $data]);
         } elseif ($method === 'GET') {
+            $data['_t'] = time(); // Prevent caching on firewall side
             $queryString = http_build_query($data);
             $fullUrl = $queryString ? $url . '?' . $queryString : $url;
             $response = $client->get($fullUrl);
@@ -138,15 +139,28 @@ class PfSenseApiService
         return $this->get('/system/hostname');
     }
 
+
+
     public function updateSystemHostname(array $data)
     {
         return $this->patch('/system/hostname', $data);
+    }
+
+
+
+    public function getConfigHistory()
+    {
+        return $this->get('/api/v2/diagnostics/config_history/revisions');
     }
 
     public function getSystemTimezone()
     {
         return $this->get('/system/timezone');
     }
+
+
+
+
 
     public function updateSystemTimezone(array $data)
     {

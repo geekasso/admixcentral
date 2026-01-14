@@ -3,7 +3,8 @@
     $settings = \App\Models\SystemSetting::pluck('value', 'key')->toArray();
     $theme = $settings['theme'] ?? 'light';
 @endphp
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $theme === 'dark' ? 'dark' : '' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    class="{{ $theme === 'dark' ? 'dark' : '' }} h-full bg-gray-100 dark:bg-gray-900 overflow-hidden">
 
 <head>
     <meta charset="utf-8">
@@ -24,7 +25,7 @@
     @endif
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased h-full overflow-hidden bg-gray-100 dark:bg-gray-900">
     <div class="flex h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.sidebar')
 
@@ -38,7 +39,9 @@
                 </header>
             @endisset
 
-            @include('layouts.navigation')
+            @if(request()->route('firewall'))
+                @include('layouts.navigation')
+            @endif
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
 
@@ -49,28 +52,42 @@
                     </div>
                 @endisset
 
-                @if (session('success'))
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-                            role="alert">
-                            <strong class="font-bold">Success!</strong>
-                            <span class="block sm:inline">{{ session('success') }}</span>
-                        </div>
-                    </div>
-                @endif
 
-                @if (session('error'))
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                            <strong class="font-bold">Error!</strong>
-                            <span class="block sm:inline">{{ session('error') }}</span>
-                        </div>
-                    </div>
-                @endif
                 {{ $slot }}
             </main>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "{{ session('success') }}",
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    toast: true, // Set to false if you want a modal instead of a toast
+                    position: 'top-end', // Center if modal
+                    showConfirmButton: true,
+                    // timer: 5000 
+                });
+            @endif
+        });
+    </script>
+
+
 </body>
 
 </html>

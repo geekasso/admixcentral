@@ -38,6 +38,10 @@ class FirewallRuleController extends Controller
                 return $rule['interface'] === $selectedInterface;
             })->values();
 
+            if (request()->wantsJson()) {
+                return response()->json($filteredRules);
+            }
+
             return view('firewall.rules.index', compact('firewall', 'interfaces', 'filteredRules', 'selectedInterface'));
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to fetch firewall rules: ' . $e->getMessage());

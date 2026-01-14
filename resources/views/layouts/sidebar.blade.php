@@ -7,7 +7,7 @@
             @if(isset($settings['logo_path']))
                 <img src="{{ $settings['logo_path'] }}" class="block h-9 w-auto" alt="Logo">
             @else
-                <x-application-logo class="block h-9 w-auto fill-current text-gray-200" />
+                <img src="{{ asset('images/logo.png') }}" class="block h-9 w-auto" alt="Logo">
             @endif
         </a>
         <button @click="collapsed = !collapsed" class="text-gray-400 hover:text-white focus:outline-none">
@@ -115,5 +115,67 @@
             </div>
         </nav>
 
+    </div>
+
+    <div x-data="{ 
+            connected: false,
+            connecting: true,
+            init() {
+                const checkEcho = setInterval(() => {
+                    if (window.Echo && window.Echo.connector && window.Echo.connector.pusher) {
+                        clearInterval(checkEcho);
+                        
+                        // Bind events
+                        const connection = window.Echo.connector.pusher.connection;
+                        
+                        connection.bind('connected', () => { 
+                            this.connected = true; 
+                            this.connecting = false; 
+                        });
+                        connection.bind('unavailable', () => { 
+                            this.connected = false; 
+                            this.connecting = false; 
+                        });
+                        connection.bind('failed', () => { 
+                            this.connected = false; 
+                            this.connecting = false; 
+                        });
+                        connection.bind('disconnected', () => { 
+                            this.connected = false; 
+                            this.connecting = false; 
+                        });
+                        connection.bind('connecting', () => {
+                            this.connecting = true;
+                        });
+
+                        // Check initial state
+                        if (connection.state === 'connected') {
+                            this.connected = true;
+                            this.connecting = false;
+                        }
+                    }
+                }, 200);
+            }
+         }" class="p-4 border-t border-gray-700 bg-gray-900 shadow-inner">
+        <div class="flex items-center" :class="collapsed ? 'justify-center' : 'justify-start'">
+            <!-- Icon -->
+            <div class="relative flex h-3 w-3">
+                <span x-show="connected"
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span x-show="connecting && !connected"
+                    class="animate-pulse absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+
+                <span class="relative inline-flex rounded-full h-3 w-3 transition-colors duration-300" :class="{
+                          'bg-green-500': connected,
+                          'bg-red-500': !connected && !connecting,
+                          'bg-yellow-500': connecting && !connected
+                      }"></span>
+            </div>
+
+            <!-- Text -->
+            <span x-show="!collapsed"
+                class="ml-3 text-xs font-medium uppercase tracking-wider text-gray-300 transition-colors duration-300"
+                x-text="connected ? 'System Online' : (connecting ? 'Connecting...' : 'Disconnected')"></span>
+        </div>
     </div>
 </div>

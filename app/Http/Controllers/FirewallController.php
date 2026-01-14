@@ -77,7 +77,10 @@ class FirewallController extends Controller
                 $validated['netgate_id'] = $response['data']['netgate_id'];
             }
         } catch (\Exception $e) {
-            // Log or ignore
+            return back()
+                ->withInput()
+                ->with('error', 'Connection failed: ' . $e->getMessage())
+                ->withErrors(['url' => 'Connection failed: ' . $e->getMessage()]);
         }
 
         $firewall = Firewall::create($validated);

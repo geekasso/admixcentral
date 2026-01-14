@@ -40,111 +40,134 @@ class DashboardController extends Controller
 
     public function checkStatus(Firewall $firewall)
     {
-        try {
-            $api = new PfSenseApiService($firewall);
-            $status = $api->getSystemStatus();
+        // Strategy: Live-First, Cache-Fallback
+        // 1. Attempt to fetch Static Data (Version, BIOS) LIVE.
+        //    - Success: Update Cache.
+        //    - Fail: Read from Cache.
+        // 2. Attempt to fetch Dynamic Data (Status) LIVE.
+        //    - Success: Merge with Static and return.
+        //    - Fail: Return Offline (but include Static info if available so user sees device details).
 
-            // Try to get version info if online
-            try {
-                $versionInfo = $api->getSystemVersion();
-                if (isset($versionInfo['data'])) {
-                    $status['data'] = array_merge($status['data'] ?? [], $versionInfo['data']);
-                }
-            } catch (\Exception $e) {
-                // Ignore version fetch error
+        $staticCacheKey = 'firewall_static_info_' . $firewall->id;
+        $api = new PfSenseApiService($firewall);
+        $staticInfo = [];
+        $staticFetchSuccess = false;
+
+        // 1. Try Live Static Fetch
+        try {
+            $versionInfo = $api->getSystemVersion();
+            if (isset($versionInfo['data'])) {
+                $staticInfo = array_merge($staticInfo, $versionInfo['data']);
             }
 
-            // Fetch REST API Version
             try {
                 $apiVersionResponse = $api->getApiVersion();
                 $apiVersion = $apiVersionResponse['data']['output'] ?? 'Unknown';
-                // Clean up output if it contains newlines or extra text (pkg return can be verbose)
-                $status['api_version'] = trim($apiVersion);
+                $staticInfo['api_version'] = trim($apiVersion);
             } catch (\Exception $e) {
-                $status['api_version'] = 'N/A';
+                $staticInfo['api_version'] = 'N/A';
             }
+
+            // Success! Update Cache (valid for 24h as backup)
+            \Illuminate\Support\Facades\Cache::put($staticCacheKey, $staticInfo, now()->addDay());
+            $staticFetchSuccess = true;
+
+        } catch (\Exception $e) {
+            // Live Static Key fetch failed? Fallback to cache
+            $staticInfo = \Illuminate\Support\Facades\Cache::get($staticCacheKey, []);
+        }
+
+        // 2. Try Live Dynamic Fetch
+        try {
+            $dynamicStatus = $api->getSystemStatus();
+
+            // Fetch Interface Status (for Traffic Monitor & Status Indicators)
+            try {
+                $interfaces = $api->getInterfacesStatus();
+                // DEBUG: Log interfaces to check for name/label fields
+                // \Illuminate\Support\Facades\Log::info('Interfaces Status Structure:', ['data' => $interfaces['data'] ?? []]);
+                $dynamicStatus['interfaces'] = $interfaces['data'] ?? [];
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Interface Status Fetch Failed: ' . $e->getMessage());
+                $dynamicStatus['interfaces'] = [];
+            }
+
+            // Fetch DNS Servers
+            try {
+                $dns = $api->getSystemDns();
+                // Structure depends on API: usually data->dns or data->dnsserver
+                // Let's assume standardized response ['data' => ['dns' => [...]]] or similar
+                // If using pfSense-API (faucets), it returns ['data' => ['dns_server' => [...]]]
+                if (isset($dns['data']['dns'])) {
+                    $dynamicStatus['data']['dns_servers'] = $dns['data']['dns'];
+                } elseif (isset($dns['data']['dns_server'])) {
+                    $dynamicStatus['data']['dns_servers'] = $dns['data']['dns_server'];
+                } elseif (isset($dns['data']['dnsserver'])) {
+                    $dynamicStatus['data']['dns_servers'] = $dns['data']['dnsserver']; // legacy
+                } else {
+                    $dynamicStatus['data']['dns_servers'] = [];
+                }
+            } catch (\Exception $e) {
+                // Ignore missing DNS
+            }
+
+
+
+            // Fetch Config History (Last Change)
+            try {
+                $history = $api->getConfigHistory();
+
+                // Expecting data to be an array of revisions
+                $revisions = $history['data'] ?? $history ?? [];
+
+                if (!empty($revisions) && is_array($revisions)) {
+                    // Get first item
+                    $latest = reset($revisions);
+                    if (isset($latest['time'])) {
+                        // It's likely a unix timestamp
+                        $dynamicStatus['data']['last_config_change'] = date('Y-m-d H:i:s T', $latest['time']);
+                        $dynamicStatus['data']['last_config_change_ts'] = $latest['time'];
+                    } elseif (isset($latest['date'])) {
+                        $dynamicStatus['data']['last_config_change'] = $latest['date'];
+                    }
+                }
+            } catch (\Exception $e) {
+                // Ignore
+            }
+
+            // Merge Static Info into Dynamic Status
+            if (isset($dynamicStatus['data'])) {
+                $dynamicStatus['data'] = array_merge($dynamicStatus['data'], $staticInfo);
+                if (isset($staticInfo['api_version'])) {
+                    $dynamicStatus['api_version'] = $staticInfo['api_version'];
+                }
+            } else {
+                $dynamicStatus = array_merge($dynamicStatus ?? [], $staticInfo);
+            }
+
+            // Broadcast
+            event(new \App\Events\DeviceStatusUpdateEvent($firewall, $dynamicStatus));
 
             return response()->json([
                 'online' => true,
-                'status' => $status
+                'status' => $dynamicStatus,
+                'source' => $staticFetchSuccess ? 'live_full' : 'live_dynamic_cached_static'
             ]);
+
         } catch (\Exception $e) {
+            // Device is completely unreachable (or at least status check failed)
+            // Return OFFLINE status, but include the Cached Static Info so the dashboard isn't empty
             return response()->json([
                 'online' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'status' => ['data' => $staticInfo] // Pass static info even if offline
             ]);
         }
     }
 
     public function firewall(Request $request, Firewall $firewall)
     {
-        $api = new PfSenseApiService($firewall);
-        $systemStatus = [];
-        $interfaces = [];
-        $firewallRules = [];
-        $apiError = null;
-
-        try {
-            $systemStatus = $api->getSystemStatus();
-            $systemStatus['connected'] = true;
-
-            // Try to get version info
-            try {
-                $versionInfo = $api->getSystemVersion();
-                if (isset($versionInfo['data'])) {
-                    $systemStatus['data'] = array_merge($systemStatus['data'] ?? [], $versionInfo['data']);
-                }
-            } catch (\Exception $e) {
-                // Ignore version fetch error
-            }
-
-            // Fetch REST API Version
-            try {
-                $apiVersionResponse = $api->getApiVersion();
-                $apiVersion = $apiVersionResponse['data']['output'] ?? 'Unknown';
-                $systemStatus['api_version'] = trim($apiVersion);
-            } catch (\Exception $e) {
-                // Ignore
-            }
-        } catch (\Exception $e) {
-            $apiError = "System Status: " . $e->getMessage();
-            $systemStatus['connected'] = false;
-        }
-
-        try {
-            $interfacesResponse = $api->getInterfacesStatus();
-            $interfacesStatusData = $interfacesResponse['data'] ?? [];
-
-            // Get interfaces config (to check enabled state)
-            $interfacesConfigResponse = $api->getInterfaces();
-            $interfacesConfigData = $interfacesConfigResponse['data'] ?? [];
-
-            // Merge enabled status from config into status data
-            $interfaces = ['data' => []];
-            foreach ($interfacesStatusData as $statusItem) {
-                $configItem = collect($interfacesConfigData)->firstWhere('id', $statusItem['name']);
-                if ($configItem) {
-                    $statusItem['enable'] = $configItem['enable'] ?? false;
-                }
-                $interfaces['data'][] = $statusItem;
-            }
-        } catch (\Exception $e) {
-            $apiError .= " | Interfaces: " . $e->getMessage();
-        }
-
-        try {
-            $gatewaysResponse = $api->getGateways();
-            $gateways = $gatewaysResponse['data'] ?? [];
-        } catch (\Exception $e) {
-            $apiError .= " | Gateways: " . $e->getMessage();
-        }
-
-        try {
-            $firewallRules = $api->getFirewallRules();
-        } catch (\Exception $e) {
-            $apiError .= " | Rules: " . $e->getMessage();
-        }
-
-        return view('firewall.dashboard', compact('firewall', 'systemStatus', 'interfaces', 'gateways', 'firewallRules', 'apiError'));
+        // Data is now fetched asynchronously via AJAX to prevent page load delays/beeps
+        return view('firewall.dashboard', compact('firewall'));
     }
 }

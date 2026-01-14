@@ -19,6 +19,10 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @if(isset($settings['favicon_path']))
+        <link rel="icon" href="{{ $settings['favicon_path'] }}">
+    @endif
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
@@ -29,7 +33,8 @@
                     <img src="{{ $logo }}" class="fill-current text-gray-500"
                         style="width: 5rem; height: 5rem; object-fit: contain;" alt="Logo" />
                 @else
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" style="width: 5rem; height: 5rem;" />
+                    <img src="{{ asset('images/logo.png') }}" class="w-20 h-20 fill-current text-gray-500"
+                        style="width: 5rem; height: 5rem;" alt="Logo" />
                 @endif
             </a>
         </div>
