@@ -118,10 +118,29 @@ class StatusController extends Controller
         $api = new \App\Services\PfSenseApiService($firewall);
         $gateways = [];
         try {
-            $gateways = $api->getGateways()['data'] ?? [];
+            // Fetch gateway status (online, loss, delay, etc.)
+            $statusData = $api->getGateways()['data'] ?? [];
+
+            // Fetch gateway configuration (includes descr field)
+            $configData = $api->getRoutingGateways()['data'] ?? [];
+
+            // Merge descr field from config into status data by matching names
+            foreach ($statusData as &$gateway) {
+                $config = collect($configData)->firstWhere('name', $gateway['name']);
+                if ($config) {
+                    $gateway['descr'] = $config['descr'] ?? '';
+                }
+            }
+
+            $gateways = $statusData;
         } catch (\Exception $e) {
             // Log error
         }
+
+        if (request()->wantsJson()) {
+            return response()->json($gateways);
+        }
+
         return view('status.gateways', compact('firewall', 'gateways'));
     }
 
@@ -134,6 +153,11 @@ class StatusController extends Controller
         } catch (\Exception $e) {
             // Log error
         }
+
+        if (request()->wantsJson()) {
+            return response()->json($interfaces);
+        }
+
         return view('status.interfaces', compact('firewall', 'interfaces'));
     }
 

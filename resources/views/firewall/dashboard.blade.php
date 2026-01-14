@@ -11,129 +11,129 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12" x-data="firewallDashboard()">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-
-            @if(isset($apiError) && $apiError)
-                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
-                    <p class="font-bold">Warning</p>
-                    <p>Some data could not be retrieved: {{ $apiError }}</p>
-                </div>
-            @endif
 
             {{-- System Status --}}
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">System Information</h3>
-                        @if(isset($systemStatus['connected']) && $systemStatus['connected'])
-                            <span
-                                class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Online</span>
-                        @else
-                            <span
-                                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Offline</span>
-                        @endif
+                        <h3 class="text-xl font-semibold">System Information</h3>
+
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm text-gray-500 font-mono dark:text-gray-400">{{ $firewall->url }}</span>
+
+                            <template x-if="systemLoading">
+                                <div class="animate-pulse bg-gray-200 h-6 w-20 rounded"></div>
+                            </template>
+                            <template x-if="!systemLoading && systemConnected">
+                                <span
+                                    class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Online</span>
+                            </template>
+                            <template x-if="!systemLoading && !systemConnected">
+                                <span
+                                    class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Offline</span>
+                            </template>
+                        </div>
                     </div>
 
-                    @if(isset($systemStatus['connected']) && $systemStatus['connected'])
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {{-- Left Column: System Details --}}
+                    {{-- Skeleton Loading --}}
+                    <template x-if="systemLoading">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-pulse">
+                            <div class="space-y-4">
+                                <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                                <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                                <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="h-4 bg-gray-200 rounded w-full"></div>
+                                <div class="h-4 bg-gray-200 rounded w-full"></div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Real Content -->
+                    <div x-show="!systemLoading && systemConnected" style="display: none;">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Left Column: System Details Table -->
                             <div>
                                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                     <tbody>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Name</th>
-                                            <td class="py-2">{{ $systemStatus['data']['hostname'] ?? $firewall->name }}</td>
-                                        </tr>
-                                        <tr class="border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Netgate Device ID</th>
-                                            <td class="py-2 font-mono">{{ $systemStatus['data']['netgate_id'] ?? 'N/A' }}
-                                            </td>
-                                        </tr>
-                                        <tr class="border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">
                                                 Version</th>
-                                            <td class="py-2">
-                                                {{ $systemStatus['data']['version'] ?? '2.8.1-RELEASE' }}
-                                                <div class="text-xs text-gray-400">built on
-                                                    {{ $systemStatus['data']['built_on'] ?? 'Unknown' }}
-                                                </div>
+                                            <td class="py-1 text-sm" x-text="systemStatus?.data?.version"></td>
+                                        </tr>
+                                        <tr class="border-b dark:border-gray-700">
+                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">REST
+                                                API</th>
+                                            <td class="py-1 text-sm" x-text="systemStatus?.api_version || 'Unknown'">
                                             </td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                REST API Version</th>
-                                            <td class="py-2">{{ $systemStatus['api_version'] ?? 'Unknown' }}</td>
-                                        </tr>
-                                        <tr class="border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">
                                                 Platform</th>
-                                            <td class="py-2">{{ $systemStatus['data']['platform'] ?? 'N/A' }}</td>
+                                            <td class="py-1 text-sm" x-text="systemStatus?.data?.platform"></td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                BIOS</th>
-                                            <td class="py-2">
-                                                Vendor: {{ $systemStatus['data']['bios_vendor'] ?? 'N/A' }} <br>
-                                                Version: {{ $systemStatus['data']['bios_version'] ?? 'N/A' }} <br>
-                                                Date: {{ $systemStatus['data']['bios_date'] ?? 'N/A' }}
-                                            </td>
-                                        </tr>
-                                        <tr class="border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">CPU
-                                                System</th>
-                                            <td class="py-2">
+                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">BIOS
+                                            </th>
+                                            <td class="py-1 text-sm">
                                                 <div class="flex flex-col">
-                                                    <span>{{ $systemStatus['data']['cpu_model'] ?? 'N/A' }}</span>
-                                                    <span
-                                                        class="text-xs text-gray-500">{{ $systemStatus['data']['cpu_count'] ?? '1' }}
-                                                        CPUs</span>
+                                                    <span x-text="systemStatus?.data?.bios_vendor"></span>
+                                                    <span x-text="systemStatus?.data?.bios_version"></span>
+                                                    <span x-text="systemStatus?.data?.bios_date"></span>
                                                 </div>
-                                                <div class="mt-1 flex items-center space-x-2 text-xs">
-                                                    <span
-                                                        class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                                                        Load:
-                                                        {{ implode(', ', $systemStatus['data']['cpu_load_avg'] ?? ['-', '-', '-']) }}
+                                            </td>
+                                        </tr>
+                                        <tr class="border-b dark:border-gray-700">
+                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">CPU
+                                                System
+                                            </th>
+                                            <td class="py-1 text-sm">
+                                                <div class="flex flex-col">
+                                                    <span x-text="systemStatus?.data?.cpu_model"></span>
+                                                    <span class="text-gray-500"
+                                                        x-text="(systemStatus?.data?.cpu_count || '1') + ' CPUs'"></span>
+                                                    <span class="text-gray-400 mt-1"
+                                                        x-show="systemStatus?.data?.cpu_load_avg">
+                                                        Load: <span
+                                                            x-text="(systemStatus?.data?.cpu_load_avg || []).join(', ')"></span>
                                                     </span>
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Uptime</th>
-                                            <td class="py-2">{{ $systemStatus['data']['uptime'] ?? 'N/A' }}</td>
+                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">Uptime
+                                            </th>
+                                            <td class="py-1 text-sm" x-text="systemStatus?.data?.uptime"></td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Security</th>
-                                            <td class="py-2 space-y-1">
-                                                <div class="flex items-center">
-                                                    <span class="text-xs font-semibold w-24">Kernel PTI:</span>
-                                                    @if(isset($systemStatus['data']['kernel_pti']) && $systemStatus['data']['kernel_pti'] == '1')
-                                                        <span
-                                                            class="px-2 py-0.5 rounded text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Enabled</span>
-                                                    @else
-                                                        <span
-                                                            class="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">Disabled</span>
-                                                    @endif
+                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">DNS
+                                                Servers
+                                            </th>
+                                            <td class="py-1 text-sm">
+                                                <div class="flex flex-col">
+                                                    <template x-for="dns in (systemStatus?.data?.dns_servers || [])">
+                                                        <span x-text="dns"></span>
+                                                    </template>
+                                                    <span x-show="!systemStatus?.data?.dns_servers?.length">-</span>
                                                 </div>
-                                                <div class="flex items-center">
-                                                    <span class="text-xs font-semibold w-24">MDS Mitigation:</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="dark:border-gray-700">
+                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">Last
+                                                Modified
+                                            </th>
+                                            <td class="py-1 text-sm">
+                                                <div class="flex flex-col">
                                                     <span
-                                                        class="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                                                        {{ ucfirst($systemStatus['data']['mds_mitigation'] ?? 'Inactive') }}
-                                                    </span>
+                                                        x-text="systemStatus?.data?.last_config_change || 'Unknown'"></span>
+                                                    <template x-if="systemStatus?.data?.last_config_change_ts">
+                                                        <span
+                                                            x-text="new Date(systemStatus.data.last_config_change_ts * 1000).toLocaleString('sv-SE', { timeZoneName: 'short' })"
+                                                            class="text-gray-400 dark:text-gray-400"></span>
+                                                    </template>
                                                 </div>
                                             </td>
                                         </tr>
@@ -141,312 +141,669 @@
                                 </table>
                             </div>
 
-                            {{-- Right Column: Usage Micrographs --}}
-                            <div>
-                                {{-- CPU Usage --}}
-                                <div class="mb-4">
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">CPU Usage</span>
-                                        <span
-                                            class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $systemStatus['data']['cpu_usage'] ?? '0' }}%</span>
+                            <!-- Right Column: Mini Graphs & Status -->
+                            <div class="space-y-3">
+                                <!-- CPU -->
+                                <div>
+                                    <div class="flex justify-between mb-1 text-sm">
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">CPU Usage</span>
+                                        <span class="text-gray-700 dark:text-gray-300"
+                                            x-text="(systemStatus?.data?.cpu_usage || 0) + '%'"></span>
                                     </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                        <div class="bg-blue-600 h-2.5 rounded-full"
-                                            style="width: {{ $systemStatus['data']['cpu_usage'] ?? '0' }}%"></div>
-                                    </div>
-                                </div>
-
-                                {{-- Memory Usage --}}
-                                <div class="mb-4">
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Memory
-                                            Usage</span>
-                                        <span
-                                            class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $systemStatus['data']['mem_usage'] ?? '0' }}%</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                        <div class="bg-purple-600 h-2.5 rounded-full"
-                                            style="width: {{ $systemStatus['data']['mem_usage'] ?? '0' }}%"></div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-500"
+                                            :style="'width: ' + (systemStatus?.data?.cpu_usage || 0) + '%'"></div>
                                     </div>
                                 </div>
 
-                                {{-- Swap Usage --}}
-                                <div class="mb-4">
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Swap Usage</span>
-                                        <span
-                                            class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $systemStatus['data']['swap_usage'] ?? '0' }}%</span>
+                                <!-- Memory -->
+                                <div>
+                                    <div class="flex justify-between mb-1 text-sm">
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">Memory Usage</span>
+                                        <span class="text-gray-700 dark:text-gray-300"
+                                            x-text="(systemStatus?.data?.mem_usage || 0) + '%'"></span>
                                     </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                        <div class="bg-red-600 h-2.5 rounded-full"
-                                            style="width: {{ $systemStatus['data']['swap_usage'] ?? '0' }}%"></div>
-                                    </div>
-                                </div>
-
-                                {{-- Disk Usage --}}
-                                <div class="mb-4">
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Disk Usage
-                                            (/)</span>
-                                        <span
-                                            class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $systemStatus['data']['disk_usage'] ?? '0' }}%</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                        <div class="bg-yellow-600 h-2.5 rounded-full"
-                                            style="width: {{ $systemStatus['data']['disk_usage'] ?? '0' }}%"></div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                                        <div class="bg-purple-600 h-2 rounded-full transition-all duration-500"
+                                            :style="'width: ' + (systemStatus?.data?.mem_usage || 0) + '%'"></div>
                                     </div>
                                 </div>
 
-                                {{-- MBUF Usage --}}
-                                <div class="mb-4">
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">MBUF Usage</span>
-                                        <span
-                                            class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $systemStatus['data']['mbuf_usage'] ?? '0' }}%</span>
+                                <!-- Swap -->
+                                <div>
+                                    <div class="flex justify-between mb-1 text-sm">
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">Swap Usage</span>
+                                        <span class="text-gray-700 dark:text-gray-300"
+                                            x-text="(systemStatus?.data?.swap_usage || 0) + '%'"></span>
                                     </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                        <div class="bg-indigo-600 h-2.5 rounded-full"
-                                            style="width: {{ $systemStatus['data']['mbuf_usage'] ?? '0' }}%"></div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                                        <div class="bg-red-500 h-2 rounded-full transition-all duration-500"
+                                            :style="'width: ' + (systemStatus?.data?.swap_usage || 0) + '%'"></div>
                                     </div>
                                 </div>
 
-                                {{-- Temperature (if available) --}}
-                                @if(!empty($systemStatus['data']['temp_c']))
-                                    <div class="mb-4">
-                                        <div class="flex justify-between mb-1">
+                                <!-- Disk -->
+                                <div>
+                                    <div class="flex justify-between mb-1 text-sm">
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">Disk Usage (/)</span>
+                                        <span class="text-gray-700 dark:text-gray-300"
+                                            x-text="(systemStatus?.data?.disk_usage || 0) + '%'"></span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                                        <div class="bg-yellow-500 h-2 rounded-full transition-all duration-500"
+                                            :style="'width: ' + (systemStatus?.data?.disk_usage || 0) + '%'"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Temperature -->
+                                <template x-if="systemStatus?.data?.temp_c">
+                                    <div>
+                                        <div class="flex justify-between mb-1 text-sm">
                                             <span
-                                                class="text-sm font-medium text-gray-700 dark:text-gray-300">Temperature</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $systemStatus['data']['temp_c'] }}°C</span>
+                                                class="font-medium text-gray-700 dark:text-gray-300">Temperature</span>
+                                            <span class="text-gray-700 dark:text-gray-300"
+                                                x-text="systemStatus.data.temp_c + '°C'"></span>
                                         </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                            {{-- Assuming 100C is max for bar --}}
-                                            <div class="bg-orange-600 h-2.5 rounded-full"
-                                                style="width: {{ min($systemStatus['data']['temp_c'], 100) }}%"></div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                                            <div class="bg-orange-500 h-2 rounded-full transition-all duration-500"
+                                                :style="'width: ' + Math.min(systemStatus.data.temp_c, 100) + '%'">
+                                            </div>
                                         </div>
                                     </div>
-                                @endif
+                                </template>
+
+                                <!-- Interface Status Indicators -->
+                                <template x-if="systemStatus && systemStatus.interfaces">
+                                    <div>
+                                        <div class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                            Interfaces</div>
+                                        <div class="flex flex-wrap gap-2">
+                                            <template x-for="(iface, name) in systemStatus.interfaces" :key="name">
+                                                <div
+                                                    class="flex items-center gap-1.5 bg-gray-50 dark:bg-gray-700 px-2 py-1 rounded text-xs border border-gray-100 dark:border-gray-600">
+                                                    <div class="w-2 h-2 rounded-full" :class="{
+                                                                        'bg-green-500': iface.status === 'up' || iface.status === 'associated',
+                                                                        'bg-red-500': iface.status === 'down' || iface.status === 'no carrier',
+                                                                        'bg-yellow-500': !['up', 'down', 'associated', 'no carrier'].includes(iface.status)
+                                                                    }"></div>
+                                                    <span class="font-mono uppercase text-gray-600 dark:text-gray-300"
+                                                        x-text="iface.descr || name"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- Compact Traffic Monitor -->
+                                <div class="mt-4 text-sm">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Traffic
+                                            Monitor</span>
+                                        <div class="flex gap-4 text-xs">
+                                            <span class="text-green-600 dark:text-green-400 font-mono">In: <span
+                                                    x-text="currentTraffic.in"></span></span>
+                                            <span class="text-blue-600 dark:text-blue-400 font-mono">Out: <span
+                                                    x-text="currentTraffic.out"></span></span>
+                                        </div>
+                                    </div>
+                                    <!-- Compact Graph (30px height) -->
+                                    <div
+                                        class="h-8 w-full bg-gray-50 dark:bg-gray-900 rounded overflow-hidden relative border border-gray-100 dark:border-gray-700">
+                                        <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 40">
+                                            <polyline :points="getGraphPoints('in')" fill="none" stroke="#22c55e"
+                                                stroke-width="2" vector-effect="non-scaling-stroke" />
+                                            <polyline :points="getGraphPoints('out')" fill="none" stroke="#3b82f6"
+                                                stroke-width="2" vector-effect="non-scaling-stroke" />
+                                        </svg>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
-                    @else
+                    </div>
+
+
+
+
+                    <div x-show="!systemLoading && !systemConnected" style="display: none;">
                         <div class="bg-red-50 dark:bg-red-900 p-4 rounded-lg">
                             <p class="text-red-600 dark:text-red-400 font-semibold">Unable to connect to firewall.</p>
-                            <p class="text-sm text-red-500">{{ $apiError ?? 'Check connectivity and credentials.' }}</p>
+                            <p class="text-sm text-red-500"
+                                x-text="systemError || 'Check connectivity and credentials.'"></p>
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
 
             {{-- Quick Nav --}}
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-semibold mb-4">Management</h3>
+                    <h3 class="text-xl font-semibold mb-4">Management</h3>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <a href="{{ route('firewall.interfaces.index', $firewall) }}"
-                            class="bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-lg text-center transition">
-                            <p class="font-bold">Interfaces</p>
-                            <p class="text-sm">{{ isset($interfaces['data']) ? count($interfaces['data']) : 0 }}</p>
+                            class="bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-lg text-center transition flex flex-col items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-8 h-8">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25z" />
+                            </svg>
+                            <div>
+                                <p class="font-bold">Interfaces</p>
+                                <p class="text-sm" x-text="interfacesLoading ? '...' : (interfaces?.length || 0)"></p>
+                            </div>
                         </a>
                         <a href="{{ route('firewall.rules.index', $firewall) }}"
-                            class="bg-purple-500 hover:bg-purple-700 text-white p-4 rounded-lg text-center transition">
-                            <p class="font-bold">Firewall Rules</p>
-                            <p class="text-sm">{{ isset($firewallRules['data']) ? count($firewallRules['data']) : 0 }}
-                            </p>
+                            class="bg-purple-500 hover:bg-purple-700 text-white p-4 rounded-lg text-center transition flex flex-col items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-8 h-8">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                            </svg>
+                            <div>
+                                <p class="font-bold">Firewall Rules</p>
+                                <p class="text-sm" x-text="rulesLoading ? '...' : (rules?.length || 0)"></p>
+                            </div>
                         </a>
                         <a href="{{ route('status.services', $firewall) }}"
-                            class="bg-green-500 hover:bg-green-700 text-white p-4 rounded-lg text-center transition">
-                            <p class="font-bold">Services</p>
-                            <p class="text-sm">Status</p>
+                            class="bg-green-500 hover:bg-green-700 text-white p-4 rounded-lg text-center transition flex flex-col items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-8 h-8">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <div>
+                                <p class="font-bold">Services</p>
+                                <p class="text-sm">Status</p>
+                            </div>
                         </a>
                         <a href="{{ route('vpn.ipsec', $firewall) }}"
-                            class="bg-orange-500 hover:bg-orange-700 text-white p-4 rounded-lg text-center transition">
-                            <p class="font-bold">VPN</p>
-                            <p class="text-sm">Configure</p>
+                            class="bg-orange-500 hover:bg-orange-700 text-white p-4 rounded-lg text-center transition flex flex-col items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-8 h-8">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                            </svg>
+                            <div>
+                                <p class="font-bold">VPN</p>
+                                <p class="text-sm">Configure</p>
+                            </div>
                         </a>
                     </div>
                 </div>
             </div>
 
-            {{-- Interfaces Summary --}}
-            @if(isset($interfaces['data']) && count($interfaces['data']) > 0)
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-semibold mb-4">Interfaces</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Interface</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Description</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Status</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            IP Address</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach($interfaces['data'] as $interface)
+            {{-- Layout Flex: Traffic (1/3) | Tables (2/3) --}}
+            <style>
+                @media (min-width: 1024px) {
+                    #db-col-traffic {
+                        flex: 1 0 0% !important;
+                        width: auto !important;
+                    }
+
+                    #db-col-summary {
+                        flex: 2 0 0% !important;
+                        width: auto !important;
+                    }
+                }
+            </style>
+            <div class="flex flex-col lg:flex-row gap-6">
+                {{-- Left Column: Traffic Graphs --}}
+                <div id="db-col-traffic" class="w-full space-y-6">
+                    {{-- Interface Traffic --}}
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 text-gray-900 dark:text-gray-100">
+                            <h3 class="text-xl font-semibold mb-4">Interface Traffic</h3>
+
+                            <template x-if="!systemStatus || !systemStatus.interfaces">
+                                <div class="grid grid-cols-1 gap-6 animate-pulse">
+                                    <!-- Skeleton Card 1 -->
+                                    <div class="border border-gray-100 dark:border-gray-700 rounded-lg p-4">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-gray-200 dark:bg-gray-700">
+                                                </div>
+                                                <div class="h-4 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                            </div>
+                                            <div class="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                        </div>
+                                        <div class="flex justify-between text-xs mb-2">
+                                            <div class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                            <div class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                        </div>
+                                        <div class="h-10 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                    </div>
+                                    <!-- Skeleton Card 2 -->
+                                    <div class="border border-gray-100 dark:border-gray-700 rounded-lg p-4">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-gray-200 dark:bg-gray-700">
+                                                </div>
+                                                <div class="h-4 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                            </div>
+                                            <div class="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                        </div>
+                                        <div class="flex justify-between text-xs mb-2">
+                                            <div class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                            <div class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                        </div>
+                                        <div class="h-10 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                    </div>
+                                    <!-- Skeleton Card 3 -->
+                                    <div
+                                        class="border border-gray-100 dark:border-gray-700 rounded-lg p-4 hidden lg:block">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-gray-200 dark:bg-gray-700">
+                                                </div>
+                                                <div class="h-4 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                            </div>
+                                            <div class="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                        </div>
+                                        <div class="flex justify-between text-xs mb-2">
+                                            <div class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                            <div class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                        </div>
+                                        <div class="h-10 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div class="grid grid-cols-1 gap-6" x-show="systemStatus && systemStatus.interfaces">
+                                <template x-for="(iface, name) in systemStatus.interfaces" :key="name">
+                                    <div class="border border-gray-100 dark:border-gray-700 rounded-lg p-4">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-2.5 h-2.5 rounded-full" :class="{
+                                                'bg-green-500': iface.status === 'up' || iface.status === 'associated',
+                                                'bg-red-500': iface.status === 'down' || iface.status === 'no carrier',
+                                                'bg-yellow-500': !['up', 'down', 'associated', 'no carrier'].includes(iface.status)
+                                            }"></div>
+                                                <span class="font-bold text-sm"
+                                                    x-text="getInterfaceLabel(iface, name)"></span>
+                                            </div>
+                                            <span class="text-sm font-mono text-gray-500" x-text="iface.ip"></span>
+                                        </div>
+
+                                        <div class="flex justify-between text-sm mb-2">
+                                            <span class="text-green-600 dark:text-green-400">In: <span
+                                                    x-text="interfaceRates[name]?.in || '0 bps'"></span></span>
+                                            <span class="text-blue-600 dark:text-blue-400">Out: <span
+                                                    x-text="interfaceRates[name]?.out || '0 bps'"></span></span>
+                                        </div>
+
+                                        <div
+                                            class="h-10 w-full bg-gray-50 dark:bg-gray-900 rounded overflow-hidden relative border border-gray-100 dark:border-gray-700">
+                                            <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 40">
+                                                <polyline :points="getGraphPoints('in', name)" fill="none"
+                                                    stroke="#22c55e" stroke-width="2"
+                                                    vector-effect="non-scaling-stroke" />
+                                                <polyline :points="getGraphPoints('out', name)" fill="none"
+                                                    stroke="#3b82f6" stroke-width="2"
+                                                    vector-effect="non-scaling-stroke" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                {{-- Right Column: Summaries --}}
+                <div id="db-col-summary" class="w-full space-y-6">
+
+                    {{-- Interfaces Summary --}}
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 text-gray-900 dark:text-gray-100">
+                            <h3 class="text-xl font-semibold mb-4">Interfaces</h3>
+
+                            <template x-if="interfacesLoading">
+                                <div class="space-y-4 animate-pulse">
+                                    <div class="h-8 bg-gray-200 rounded w-full"></div>
+                                    <div class="h-8 bg-gray-200 rounded w-full"></div>
+                                    <div class="h-8 bg-gray-200 rounded w-full"></div>
+                                </div>
+                            </template>
+
+                            <div class="overflow-x-auto" x-show="!interfacesLoading && interfaces?.length > 0">
+                                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap font-mono">
-                                                {{ $interface['id'] ?? $interface['if'] ?? 'N/A' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                {{ $interface['descr'] ?? $interface['description'] ?? '-' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                @if(isset($interface['enable']) && $interface['enable'])
-                                                    <span
-                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
-                                                        Enabled
-                                                    </span>
-                                                @else
-                                                    <span
-                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
-                                                        Disabled
-                                                    </span>
-                                                @endif
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap font-mono text-sm">
-                                                {{ $interface['ipaddr'] ?? $interface['ipaddrv4'] ?? 'N/A' }}
-                                            </td>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium">ID</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium">Name</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium text-center">Status</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium">IP Address</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium">Speed</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <template x-for="iface in interfaces" :key="iface.id || iface.name">
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-3 py-2 font-mono" x-text="iface.id ?? iface.name"></td>
+                                                <td class="px-3 py-2 font-medium text-gray-900 dark:text-white"
+                                                    x-text="iface.descr || iface.name"></td>
+                                                <td class="px-3 py-2 text-center">
+                                                    <div class="h-2.5 w-2.5 rounded-full mx-auto" :class="{
+                                                        'bg-green-500': iface.status === 'up' || iface.status === 'associated',
+                                                        'bg-red-500': iface.status === 'down' || iface.status === 'no carrier',
+                                                        'bg-yellow-500': !['up', 'down', 'associated', 'no carrier'].includes(iface.status)
+                                                    }" :title="iface.status"></div>
+                                                </td>
+                                                <td class="px-3 py-2 font-mono text-xs" x-text="iface.ipaddr || 'N/A'"></td>
+                                                <td class="px-3 py-2 text-xs truncate max-w-[150px]" :title="iface.media" x-text="iface.media || 'Unknown'"></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Gateways Summary --}}
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 text-gray-900 dark:text-gray-100">
+                            <h3 class="text-xl font-semibold mb-4">Gateways</h3>
+
+                            <template x-if="gatewaysLoading">
+                                <div class="space-y-4 animate-pulse">
+                                    <div class="h-8 bg-gray-200 rounded w-full"></div>
+                                </div>
+                            </template>
+
+                            <div class="overflow-x-auto" x-show="!gatewaysLoading && gateways?.length > 0">
+                                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium">Name</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium">Gateway</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium">Loss</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium text-center">Status</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium">Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template x-for="gateway in gateways" :key="gateway.id || gateway.name">
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-3 py-2 font-medium text-gray-900 dark:text-white"
+                                                    x-text="gateway.name || 'N/A'"></td>
+                                                <td class="px-3 py-2 font-mono text-xs"
+                                                    x-text="gateway.monitorip || gateway.srcip || 'N/A'"></td>
+                                                <td class="px-3 py-2 text-xs" x-text="(gateway.loss || '0') + '%'"></td>
+                                                <td class="px-3 py-2 text-center">
+                                                    <div class="h-2.5 w-2.5 rounded-full mx-auto" :class="{
+                                                        'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                        'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                        'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                    }" :title="gateway.status"></div>
+                                                </td>
+                                                <td class="px-3 py-2 text-xs text-gray-500 dark:text-gray-400"
+                                                    x-text="gateway.descr || '-'"></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            @endif
 
-            {{-- Gateways Summary --}}
-            @if(isset($gateways) && count($gateways) > 0)
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-semibold mb-4">Gateways</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Name</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Interface</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Gateway</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Monitor IP</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach($gateways as $gateway)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap font-bold">
-                                                {{ $gateway['name'] ?? 'N/A' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap uppercase">
-                                                {{ $gateway['interface'] ?? 'N/A' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap font-mono text-sm">
-                                                {{ $gateway['gateway'] ?? $gateway['monitorip'] ?? 'Dynamic' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap font-mono text-sm">
-                                                {{ $gateway['monitorip'] ?? 'N/A' }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            @endif
 
-            {{-- Firewall Rules Summary --}}
-            @if(isset($firewallRules['data']) && count($firewallRules['data']) > 0)
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-semibold mb-4">Recent Firewall Rules</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Interface</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Action</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Protocol</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Source</th>
-                                        <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                            Destination</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach(array_slice($firewallRules['data'], 0, 5) as $rule)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                                @if(is_array($rule['interface']))
-                                                    {{ implode(', ', $rule['interface']) }}
-                                                @else
-                                                    {{ $rule['interface'] ?? 'N/A' }}
-                                                @endif
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                @if(isset($rule['type']) && $rule['type'] === 'pass')
-                                                    <span
-                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                        Pass
-                                                    </span>
-                                                @elseif(isset($rule['type']) && $rule['type'] === 'block')
-                                                    <span
-                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                                        Block
-                                                    </span>
-                                                @else
-                                                    <span
-                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                                        {{ $rule['type'] ?? 'N/A' }}
-                                                    </span>
-                                                @endif
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                                {{ $rule['protocol'] ?? 'any' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
-                                                {{ $rule['source']['address'] ?? $rule['src'] ?? 'any' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
-                                                {{ $rule['destination']['address'] ?? $rule['dst'] ?? 'any' }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        @if(count($firewallRules['data']) > 5)
-                            <p class="mt-4 text-sm text-gray-500">Showing 5 of {{ count($firewallRules['data']) }} rules...</p>
-                        @endif
-                    </div>
-                </div>
-            @endif
 
+            </div>
         </div>
-    </div>
+
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('firewallDashboard', () => ({
+                    systemLoading: true,
+                    systemConnected: false,
+                    systemStatus: null,
+                    systemError: null,
+
+                    interfaces: [],
+                    interfacesLoading: true,
+
+                    gateways: [],
+                    gatewaysLoading: true,
+
+                    rules: [],
+                    rulesLoading: true,
+                    lastUpdated: null,
+
+                    // Traffic Monitor & Rate Calculation
+                    bandwidthHistory: new Array(20).fill({ in: 0, out: 0 }),
+                    currentTraffic: { in: '0 Bps', out: '0 Bps' },
+                    // Traffic Monitor & Rate Calculation
+                    bandwidthHistory: new Array(20).fill({ in: 0, out: 0 }), // WAN/Primary
+                    currentTraffic: { in: '0 Bps', out: '0 Bps' },
+                    lastBytes: { in: 0, out: 0, time: 0 },
+
+                    // Multi-interface tracking
+                    interfaceHistory: {}, // { 'wan': [...], 'lan': [...] }
+                    lastInterfaceBytes: {}, // { 'wan': { in: 0, out: 0, time: 0 } }
+                    interfaceRates: {}, // { 'wan': { in: '0 bps', out: '0 bps' } }
+
+                    updateBandwidthFromInterfaces(interfaces) {
+                        const now = new Date().getTime();
+
+                        // 1. Process WAN for the main "System Info" card (Legacy compatibility)
+                        let wan = null;
+                        const wanKey = Object.keys(interfaces).find(key => key.toLowerCase() === 'wan');
+                        if (wanKey) wan = interfaces[wanKey];
+                        else {
+                            const firstKey = Object.keys(interfaces)[0];
+                            if (firstKey) wan = interfaces[firstKey];
+                        }
+
+                        if (wan) {
+                            const bytesIn = parseFloat(wan.inbytes || 0);
+                            const bytesOut = parseFloat(wan.outbytes || 0);
+                            let inRate = 0;
+                            let outRate = 0;
+
+                            if (this.lastBytes.time > 0) {
+                                const timeDiff = (now - this.lastBytes.time) / 1000;
+                                if (timeDiff > 0) {
+                                    if (bytesIn >= this.lastBytes.in) inRate = ((bytesIn - this.lastBytes.in) * 8) / timeDiff;
+                                    if (bytesOut >= this.lastBytes.out) outRate = ((bytesOut - this.lastBytes.out) * 8) / timeDiff;
+                                }
+                            }
+                            this.lastBytes = { in: bytesIn, out: bytesOut, time: now };
+                            this.bandwidthHistory.shift();
+                            this.bandwidthHistory.push({ in: inRate, out: outRate });
+                            this.currentTraffic = {
+                                in: this.formatBytes(inRate, true),
+                                out: this.formatBytes(outRate, true)
+                            };
+                        }
+
+                        // 2. Process ALL interfaces for the new "Interface Traffic" card
+                        Object.entries(interfaces).forEach(([name, iface]) => {
+                            // Initialize history if new
+                            if (!this.interfaceHistory[name]) {
+                                this.interfaceHistory[name] = new Array(20).fill({ in: 0, out: 0 });
+                                this.lastInterfaceBytes[name] = { in: 0, out: 0, time: 0 };
+                                this.interfaceRates[name] = { in: '0 bps', out: '0 bps' };
+                            }
+
+                            const iBytesIn = parseFloat(iface.inbytes || 0);
+                            const iBytesOut = parseFloat(iface.outbytes || 0);
+                            let iInRate = 0;
+                            let iOutRate = 0;
+                            const last = this.lastInterfaceBytes[name];
+
+                            if (last.time > 0) {
+                                const timeDiff = (now - last.time) / 1000;
+                                if (timeDiff > 0) {
+                                    if (iBytesIn >= last.in) iInRate = ((iBytesIn - last.in) * 8) / timeDiff;
+                                    if (iBytesOut >= last.out) iOutRate = ((iBytesOut - last.out) * 8) / timeDiff;
+                                }
+                            }
+
+                            this.lastInterfaceBytes[name] = { in: iBytesIn, out: iBytesOut, time: now };
+                            this.interfaceHistory[name].shift();
+                            this.interfaceHistory[name].push({ in: iInRate, out: iOutRate });
+                            this.interfaceRates[name] = {
+                                in: this.formatBytes(iInRate, true),
+                                out: this.formatBytes(iOutRate, true)
+                            };
+                        });
+                    },
+
+                    formatBytes(size, isBits = false) {
+                        if (!+size) return isBits ? '0 bps' : '0 B';
+                        const k = 1024;
+                        const decimals = 2;
+                        const dm = decimals < 0 ? 0 : decimals;
+                        const sizes = isBits
+                            ? ['bps', 'Kbps', 'Mbps', 'Gbps', 'Tbps']
+                            : ['B', 'KB', 'MB', 'GB', 'TB'];
+                        const i = Math.floor(Math.log(size) / Math.log(k));
+                        return `${parseFloat((size / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+                    },
+
+                    getInterfaceLabel(iface, name) {
+                        const n = (name !== null && name !== undefined) ? String(name).toUpperCase() : '';
+                        const d = iface.descr || '';
+                        const i = (iface.if || '').toUpperCase();
+
+                        if (!d) return n || i;
+                        if (d.toUpperCase() === n) return d;
+                        return `${d} (${n})`;
+                    },
+
+                    getGraphPoints(type, interfaceName = null) {
+                        let history = this.bandwidthHistory;
+                        if (interfaceName && this.interfaceHistory[interfaceName]) {
+                            history = this.interfaceHistory[interfaceName];
+                        }
+
+                        const max = Math.max(...history.map(d => Math.max(d.in, d.out))) || 100;
+                        const height = 40;
+                        const width = 100;
+                        const step = width / (history.length - 1);
+
+                        return history.map((d, i) => {
+                            const val = d[type];
+                            const y = height - ((val / max) * height);
+                            return `${i * step},${y}`;
+                        }).join(' ');
+                    },
+
+
+                    init() {
+                        console.log('Initializing Firewall Dashboard...');
+                        this.fetchSystemStatus();
+                        this.fetchInterfaces();
+                        this.fetchGateways();
+                        this.fetchRules();
+                        this.setupWebSocket();
+
+                        // Poll System Status every 5 seconds (TESTING)
+                        // This triggers the Smart Cache check on the backend.
+                        // If data is stale, it refreshes and broadcasts to all users.
+                        setInterval(() => {
+                            this.fetchSystemStatus();
+                        }, 5000);
+                    },
+
+                    fetchSystemStatus() {
+                        // Add timestamp to prevent browser caching
+                        fetch('{{ route('firewall.check-status', $firewall) }}?t=' + new Date().getTime())
+                            .then(res => res.json())
+                            .then(data => {
+                                this.systemLoading = false;
+                                this.systemConnected = data.online;
+                                if (data.online && data.status) {
+                                    // MERGE or REPLACE only if valid
+                                    this.systemStatus = data.status;
+                                    if (data.status.interfaces) {
+                                        this.updateBandwidthFromInterfaces(data.status.interfaces);
+                                    }
+                                    this.lastUpdated = new Date().toLocaleTimeString();
+                                    this.systemError = null;
+                                } else {
+                                    // If online=false, do NOT clear systemStatus immediately to prevent flicker
+                                    // Only set error
+                                    this.systemError = data.error || 'Firewall reported offline.';
+                                }
+                            })
+                            .catch(err => {
+                                this.systemLoading = false;
+                                // Do NOT set systemConnected=false immediately if it's just a transient network glitch?
+                                // Actually, keep it simple: just don't clear systemStatus
+                                // this.systemConnected = false; 
+                                // this.systemError = 'Failed to load system status.';
+                                console.error('Fetch error:', err);
+                            });
+                    },
+
+                    fetchInterfaces() {
+                        // Added Accept header to ensure JSON response from StatusController
+                        fetch('{{ route('status.interfaces.index', $firewall) }}', {
+                            headers: { 'Accept': 'application/json' }
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                this.interfaces = data; // Structure: ['data' => [...]]
+                                this.interfacesLoading = false;
+                            })
+                            .catch(err => {
+                                console.error('Failed to load interfaces:', err);
+                                this.interfacesLoading = false;
+                            });
+                    },
+
+                    fetchGateways() {
+                        fetch('{{ route('status.gateways', $firewall) }}', {
+                            headers: { 'Accept': 'application/json' }
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                this.gateways = data; // Structure: ['data' => [...]]
+                                this.gatewaysLoading = false;
+                            })
+                            .catch(err => {
+                                console.error('Failed to load gateways:', err);
+                                this.gatewaysLoading = false;
+                            });
+                    },
+
+                    fetchRules() {
+                        fetch('{{ route('firewall.rules.index', $firewall) }}', {
+                            headers: { 'Accept': 'application/json' }
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                this.rules = data; // Returns array directly based on Controller change
+                                this.rulesLoading = false;
+                            })
+                            .catch(err => {
+                                console.error('Failed to load rules:', err);
+                                this.rulesLoading = false;
+                            });
+                    },
+
+                    setupWebSocket() {
+                        const subscribe = () => {
+                            if (window.Echo) {
+                                console.log('Listening for Websocket updates...');
+                                window.Echo.private('firewall.{{ $firewall->id }}')
+                                    .listen('.firewall.status.update', (e) => {
+                                        console.log('WebSocket Update:', e);
+                                        this.systemLoading = false;
+                                        this.systemConnected = true;
+                                        this.systemStatus = e.status;
+                                    });
+                            } else {
+                                setTimeout(subscribe, 500);
+                            }
+                        };
+                        subscribe();
+                    }
+                }));
+            });
+        </script>
 </x-app-layout>
