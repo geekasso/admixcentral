@@ -1,3 +1,8 @@
+{{-- 
+    View: Captive Portal Status
+    Purpose: Displays the Captive Portal status page.
+    Note: Currently acts as a placeholder or error wrapper using the x-api-not-supported component if the API isn't ready.
+--}}
 <x-app-layout>
     <x-slot name="header">
         <x-firewall-header title="{{ __('Captive Portal Status') }}" :firewall="$firewall" />

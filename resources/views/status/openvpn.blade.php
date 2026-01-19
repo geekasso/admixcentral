@@ -1,3 +1,8 @@
+{{--
+    View: OpenVPN Status
+    Purpose: Displays a list of OpenVPN servers and their current status.
+    Data Source: $status array provided by the controller.
+--}}
 <x-app-layout>
     <x-slot name="header">
         <x-firewall-header title="{{ __('OpenVPN Status') }}" :firewall="$firewall" />
@@ -21,10 +26,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {{-- Loop through each server in the status array --}}
                                 @forelse ($status as $server)
                                     <tr
                                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td class="py-4 px-6">{{ $server['name'] ?? 'N/A' }}</td>
+                                        {{-- Display Status Badge (Green for Up, Red for Down) --}}
                                         <td class="py-4 px-6">
                                             <span
                                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ ($server['status'] ?? '') === 'up' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
@@ -37,6 +44,7 @@
                                             {{ $server['bytes_recv'] ?? 0 }}</td>
                                     </tr>
                                 @empty
+                                    {{-- Fallback row if no servers are found --}}
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <td colspan="5" class="py-4 px-6 text-center">No OpenVPN servers found.</td>
                                     </tr>

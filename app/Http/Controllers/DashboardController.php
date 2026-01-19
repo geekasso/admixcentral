@@ -10,19 +10,32 @@ use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
+    /**
+     * Display the main dashboard.
+     *
+     * This method gathers data for the dashboard view, including:
+     * - A list of firewalls (filtered by user role).
+     * - Aggregated statistics (total firewalls, companies, offline devices, etc.).
+     * - A system health score calculated from the cached CPU and Memory usage of all firewalls.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $user = $request->user();
 
         // Get firewalls based on user role
-        // Get firewalls based on user role
+        // Fetch firewalls based on User Role.
+        // Global Admins see all firewalls; other users see only their company's firewalls.
         if ($user->isGlobalAdmin()) {
             $firewalls = Firewall::with('company')->orderBy('name')->get();
         } else {
             $firewalls = Firewall::where('company_id', $user->company_id)->orderBy('name')->get();
         }
 
-        // Collect status for each firewall
+        // Attach cached status data to each firewall instance for display.
+        // This avoids N+1 API calls on the dashboard load.
         $firewalls->each(function ($firewall) {
             $cached = Cache::get('firewall_status_' . $firewall->id);
             if ($cached && isset($cached['data'])) {
@@ -52,7 +65,9 @@ class DashboardController extends Controller
         }
 
         // Total registered users
+        // Total registered users
         $totalUsers = User::count();
+        // Count Global Admins (users with role 'admin' and no specific company assignment)
         $totalAdmins = User::where('role', 'admin')->whereNull('company_id')->count();
 
         // Calculate System Health Score based on average CPU/Memory from cached status
@@ -77,6 +92,7 @@ class DashboardController extends Controller
             $cpuCount = 0;
             $memCount = 0;
 
+            // Iterate through firewalls to sum up CPU and Memory usage.
             foreach ($firewallsWithData as $firewall) {
                 $status = $firewall->cached_status;
 
@@ -91,12 +107,16 @@ class DashboardController extends Controller
                 }
             }
 
-            // Calculate averages
+            // Calculate averages if data exists
             if ($cpuCount > 0 || $memCount > 0) {
                 $avgCpu = $cpuCount > 0 ? round($totalCpu / $cpuCount, 1) : 0;
                 $avgMemory = $memCount > 0 ? round($totalMemory / $memCount, 1) : 0;
 
-                // Determine health based on both metrics if available, otherwise use what we have
+                // Determine health based on the worse of the two metrics.
+                // < 50% = Excellent (Green)
+                // < 70% = Good (Blue)
+                // < 85% = Fair (Yellow)
+                // >= 85% = Critical (Red)
                 $maxUsage = max($avgCpu, $avgMemory);
 
                 if ($maxUsage < 50) {
@@ -129,16 +149,23 @@ class DashboardController extends Controller
         ]);
     }
 
+    /**
+     * AJAX endpoint to fetch real-time status for a specific firewall.
+     *
+     * Strategy: Live-First, Cache-Fallback
+     * 1. Attempt to fetch Static Data (Version, BIOS) LIVE.
+     *    - Success: Update Cache.
+     *    - Fail: Read from Cache.
+     * 2. Attempt to fetch Dynamic Data (Status, Interfaces, Gateways) LIVE.
+     *    - Success: Merge with Static and return.
+     *    - Fail: Return Offline status (but include Static info if available so user sees device details).
+     *
+     * @param Firewall $firewall
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function checkStatus(Firewall $firewall)
     {
-        // Strategy: Live-First, Cache-Fallback
-        // 1. Attempt to fetch Static Data (Version, BIOS) LIVE.
-        //    - Success: Update Cache.
-        //    - Fail: Read from Cache.
-        // 2. Attempt to fetch Dynamic Data (Status) LIVE.
-        //    - Success: Merge with Static and return.
-        //    - Fail: Return Offline (but include Static info if available so user sees device details).
-
+        // 1. Setup Service and Keys
         $staticCacheKey = 'firewall_static_info_' . $firewall->id;
         $api = new PfSenseApiService($firewall);
         $staticInfo = [];

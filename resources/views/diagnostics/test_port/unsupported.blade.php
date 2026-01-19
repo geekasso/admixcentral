@@ -1,3 +1,8 @@
+{{-- 
+    View: Unsupported Test Port
+    Purpose: Display a friendly error message when the selected firewall does not support the Test Port API.
+    Usage: Returned by the controller when API capability check fails.
+--}}
 <x-app-layout>
     <x-slot name="header">
         <x-firewall-header title="{{ __('Test Port') }}" :firewall="$firewall" />
@@ -20,6 +25,7 @@
                             Please install the necessary API package or upgrade your firewall version.
                         </p>
                         <div class="mt-6">
+                            {{-- Back functionality --}}
                             <a href="{{ route('firewall.dashboard', $firewall) }}"
                                 class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Go Back

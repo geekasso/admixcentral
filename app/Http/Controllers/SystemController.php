@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class SystemController extends Controller
 {
+    /**
+     * Display the Advanced System Settings page.
+     *
+     * Fetches different data sets based on the selected 'tab' (admin, firewall, notifications, etc.).
+     *
+     * @param Firewall $firewall
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function advanced(Firewall $firewall, Request $request)
     {
         $api = new PfSenseApiService($firewall);
@@ -49,6 +58,12 @@ class SystemController extends Controller
         return view('system.advanced', compact('firewall', 'tab', 'data'));
     }
 
+    /**
+     * Update Advanced System Settings.
+     *
+     * Handles form submissions for various tabs (Admin Access, Firewall/NAT, Notifications).
+     * Delegates to specific API methods based on the tab.
+     */
     public function updateAdvanced(Firewall $firewall, Request $request)
     {
         $api = new PfSenseApiService($firewall);
@@ -209,6 +224,9 @@ class SystemController extends Controller
         return view('system.general', compact('firewall', 'hostname', 'timezone', 'dns', 'timezones'));
     }
 
+    /**
+     * Update General Setup (Hostname, Timezone, DNS).
+     */
     public function updateGeneralSetup(Request $request, Firewall $firewall)
     {
         try {

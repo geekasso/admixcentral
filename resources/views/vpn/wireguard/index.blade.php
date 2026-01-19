@@ -68,6 +68,8 @@
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $tunnel['descr'] ?? '' }}</td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                         @php
+                                                            // Determine address field: check standard 'addresses' array (XML/JSON often nests this under 'row'),
+                                                            // or fallback to legacy 'address' field.
                                                             $tunnelAddresses = $tunnel['addresses']['row'] ?? $tunnel['addresses'] ?? $tunnel['address'] ?? null;
                                                         @endphp
                                                         @if(!empty($tunnelAddresses) && is_array($tunnelAddresses))
@@ -130,6 +132,7 @@
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $peer['endpoint'] ?? '' }}:{{ $peer['port'] ?? $peer['endpointport'] ?? '' }}</td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                         @php
+                                                            // Similar to addresses, allowedips can be nested under 'row' or flat array/string
                                                             $allowedIps = $peer['allowedips']['row'] ?? $peer['allowedips'] ?? $peer['allowed_ips'] ?? '';
                                                         @endphp
                                                         @if(is_array($allowedIps))

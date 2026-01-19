@@ -1,3 +1,10 @@
+{{--
+    View: System Logs
+    Purpose: Display various types of logs (System, Firewall, DHCP, Auth, IPsec, OpenVPN, NTP).
+    Features:
+    - Tab navigation to switch between log categories.
+    - Table display of log entries (Time, Process, PID, Message).
+--}}
 <x-app-layout>
     <x-slot name="header">
         <x-firewall-header title="{{ __('System Logs') }}" :firewall="$firewall" />
@@ -7,6 +14,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+                    {{-- Log Type Navigation Tabs --}}
                     <div class="mb-4">
                         <div class="flex space-x-2 overflow-x-auto pb-2">
                             <a href="{{ route('status.system-logs', $firewall) }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request('type', 'system') === 'system' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">System</a>
@@ -25,6 +33,7 @@
                             No logs found.
                         </div>
                     @else
+                        {{-- Log Table --}}
                         <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700">

@@ -537,10 +537,15 @@
                                 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function() {
+                                        // Initialize Leaflet map centered on firewall coordinates
                                         var map = L.map('firewall-map').setView([{{ $firewall->latitude }}, {{ $firewall->longitude }}], 13);
+                                        
+                                        // Add OpenStreetMap tile layer
                                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                         }).addTo(map);
+                                        
+                                        // Add marker with popup showing firewall name and address
                                         L.marker([{{ $firewall->latitude }}, {{ $firewall->longitude }}]).addTo(map)
                                             .bindPopup("<b>{{ $firewall->name }}</b><br>{{ Str::limit($firewall->address, 30) }}").openPopup();
                                     });

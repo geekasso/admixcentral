@@ -1,3 +1,8 @@
+{{--
+    View: Services Status
+    Purpose: Lists all services on the firewall and indicates whether they are running or stopped.
+    Note: 'Actions' column is currently a placeholder for future functionality (Start/Stop/Restart).
+--}}
 <x-app-layout>
     <x-slot name="header">
         <x-firewall-header title="{{ __('Services Status') }}" :firewall="$firewall" />
@@ -28,6 +33,7 @@
                                         <td class="py-4 px-6">{{ $service['description'] ?? '' }}</td>
                                         <td class="py-4 px-6">
                                             @php
+                                                // Determine status: API may return '1'/ 'running' or other indicators.
                                                 $rawStatus = $service['status'] ?? '';
                                                 $isRunning = ($rawStatus == '1' || $rawStatus === 'running');
                                             @endphp

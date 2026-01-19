@@ -1,3 +1,8 @@
+{{--
+    View: OpenVPN Clients
+    Purpose: Lists connected OpenVPN clients.
+    Use Case: Monitoring active VPN connections.
+--}}
 <x-app-layout>
     <x-slot name="header">
         <x-firewall-header title="{{ __('OpenVPN Clients') }}" :firewall="$firewall" />

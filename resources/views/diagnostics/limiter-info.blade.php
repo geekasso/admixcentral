@@ -1,3 +1,8 @@
+{{--
+    View: Limiter Info
+    Purpose: Wrapper for the Limiter Info diagnostic tool.
+    Current State: Uses 'x-api-not-supported' component until the API endpoint is implemented.
+--}}
 <x-app-layout>
     <x-slot name="header">
         <x-firewall-header title="{{ __('Limiter Info') }}" :firewall="$firewall" />

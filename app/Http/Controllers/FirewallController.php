@@ -9,7 +9,12 @@ use Illuminate\Http\Request;
 class FirewallController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of firewalls.
+     *
+     * Global Admins see all firewalls.
+     * Company Admins see only firewalls belonging to their company.
+     *
+     * Status is enriched from Cache for performance.
      */
     public function index(Request $request)
     {
@@ -47,6 +52,12 @@ class FirewallController extends Controller
         return view('firewalls.create', compact('companies'));
     }
 
+    /**
+     * Store a newly created firewall in storage.
+     *
+     * Validates input, ensures company ownership permissions, and attempts
+     * an initial connection to fetch the Netgate ID if possible.
+     */
     public function store(Request $request)
     {
         $user = auth()->user();
@@ -132,6 +143,12 @@ class FirewallController extends Controller
         return view('firewalls.edit', compact('firewall', 'companies'));
     }
 
+    /**
+     * Update the specified firewall in storage.
+     *
+     * Handles authentication method switching (Token vs Basic) and
+     * clears unused credentials based on the selected method.
+     */
     public function update(Request $request, Firewall $firewall)
     {
         $user = auth()->user();
