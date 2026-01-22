@@ -25,6 +25,7 @@
     @endif
 
     <style>
+        [x-cloak] { display: none !important; }
         .form-input-reset {
             border: none !important;
             outline: none !important;

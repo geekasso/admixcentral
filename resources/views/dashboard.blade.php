@@ -259,7 +259,7 @@
                                     
                                     <div class="relative flex-1">
                                         {{-- Offline Overlay (Body Only) --}}
-                                        <div x-show="!online && !loading" class="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none" style="background-color: rgba(255,255,255,.80);">
+                                        <div x-cloak x-show="!online && !loading" class="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none" style="background-color: rgba(255,255,255,.80);">
                                             <div class="backdrop-blur-md p-6 rounded-lg shadow-xl text-center w-full max-w-sm mx-4 pointer-events-auto" style="background-color: rgba(255, 255, 255, 0.80);">
                                                 <svg class="w-10 h-10 mx-auto text-red-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                                 <h3 class="text-lg font-semibold text-red-600 dark:text-red-400">Firewall is unreachable</h3>
@@ -591,7 +591,7 @@
         }));
         Alpine.data('firewallCard', (initialStatus, staticInfo, checkUrl, firewallId, companyName) => ({
             loading: !initialStatus,
-            online: initialStatus ? initialStatus.online : false,
+            online: initialStatus ? (initialStatus.online !== false) : true,
             reportedOffline: false,
             status: initialStatus,
             error: null,
@@ -742,7 +742,7 @@
                 }
                 
                 this.status = status;
-                this.online = status.online;
+                this.online = status.online !== false;
                 this.loading = false;
                 this.error = status.error || null;
 

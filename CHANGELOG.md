@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-01-22
+
+### Added
+- **Flicker-Free Dashboard**: Implemented global `x-cloak` support and optimistic initialization logic to ensure a smooth, stable page load experience.
+
+### Fixed
+- **Overlay Flashing**: Resolved a race condition where offline overlays would briefly appear during Alpine.js initialization.
+- **Connection State Logic**: Refined the initial `online` state evaluation within the `firewallCard` component to prevent false-offline indicators during background data syncing.
+
 ## [0.3.1] - 2026-01-22
 
 ### Fixed
@@ -71,7 +80,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom logo and favicon support
 - Dark/light theme support
 
-[Unreleased]: https://github.com/geekasso/admixcentral/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/geekasso/admixcentral/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/geekasso/admixcentral/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/geekasso/admixcentral/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/geekasso/admixcentral/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/geekasso/admixcentral/compare/v0.1.0...v0.2.0
