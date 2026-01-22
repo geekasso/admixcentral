@@ -19,7 +19,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             @if(session('success'))
                 <div class="bg-green-500 text-white p-4 rounded-lg mb-4">
                     {{ session('success') }}
@@ -37,18 +37,95 @@
                 </div>
             @endif
 
+            <!-- Widgets Grid -->
+
+            <div x-data="firewallStats({{ $firewalls->pluck('id') }})" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <!-- Total Firewalls -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-500 dark:text-blue-300 mr-4">
+                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Firewalls</p>
+                        <p class="text-4xl font-bold text-gray-900 dark:text-gray-100" x-text="totalCount">{{ $totalFirewalls }}</p>
+                    </div>
+                </div>
+
+                <!-- Offline Firewalls -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 flex items-center">
+                    <div class="p-3 rounded-full bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 mr-4">
+                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Offline Firewalls</p>
+                        <template x-if="!hasData">
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mt-1"></div>
+                        </template>
+                        <template x-if="hasData">
+                            <p class="text-4xl font-bold text-gray-900 dark:text-gray-100" x-text="offlineCount"></p>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- System Updates -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 flex items-center">
+                    <div class="p-3 rounded-full bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-300 mr-4">
+                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">System Upgrades</p>
+                        <template x-if="!hasData">
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mt-1"></div>
+                        </template>
+                        <template x-if="hasData">
+                            <p class="text-4xl font-bold text-gray-900 dark:text-gray-100" x-text="sysCount"></p>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- REST API Updates -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 mr-4">
+                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">API Updates</p>
+                        <template x-if="!hasData">
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mt-1"></div>
+                        </template>
+                        <template x-if="hasData">
+                            <p class="text-4xl font-bold text-gray-900 dark:text-gray-100" x-text="apiCount"></p>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
             @php
                  $uniqueCustomers = $firewalls->pluck('company.name')->unique()->sort()->values();
             @endphp
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg" x-data="{
+                // Spread in the filterable mixin
+                ...window.filterableMixin({{ $firewalls->map(fn($f) => ['id' => $f->id, 'searchData' => strtolower($f->name . ' ' . $f->company->name . ' ' . $f->url . ' ' . $f->hostname), 'companyName' => $f->company->name])->values()->toJson() }}, 'firewall-updated'),
+                
+                // Page-specific properties
                 deleteModalOpen: false,
                 deleteAction: '',
                 firewallName: '',
                 confirmEmail: '',
-                search: '',
-                statusFilter: 'all',
-                customerFilter: 'all',
                 customers: {{ json_encode($uniqueCustomers) }},
+                
+                init() {
+                    // Initialize filterable functionality
+                    this.initFilterable();
+                },
                 
                 openDeleteModal(action, name) {
                     this.deleteAction = action;
@@ -69,8 +146,8 @@
                                 {{ __('Managed Firewalls') }}
                             </h3>
                             <a href="{{ route('firewalls.create') }}"
-                                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-medium text-sm text-white hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                 </svg>
                                 {{ __('Add Firewall') }}
@@ -133,6 +210,8 @@
                                         <option value="online">Online</option>
                                         <option value="offline">Offline</option>
                                     </select>
+                                    
+                                    <span class="text-xs text-gray-500 font-normal self-center whitespace-nowrap sm:ml-2 hidden sm:block" x-text="'Showing ' + filteredCount + ' of ' + items.length + ' firewalls'"></span>
                                 </div>
                             </div>
 
@@ -156,10 +235,9 @@
                                             <option value="create_ipsec">Add IPSec Tunnel</option>
                                         </optgroup>
                                     </select>
-                                    <button type="button" onclick="submitBulkAction()"
-                                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-150">
+                                    <x-secondary-button type="button" onclick="submitBulkAction()" class="rounded-lg">
                                         Apply
-                                    </button>
+                                    </x-secondary-button>
                                 </div>
                             </div>
                         </div>
@@ -186,6 +264,12 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                     Host
                                 </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    System
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    API
+                                </th>
                                 @if(auth()->user()->isGlobalAdmin())
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                         Company
@@ -201,7 +285,7 @@
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition" 
                                     x-data="firewallRow(
                                         {{ $firewall->id }}, 
-                                        {{ json_encode($firewall->cached_status) }}, 
+                                        null, 
                                         '{{ route('firewall.check-status', $firewall) }}',
                                         '{{ addslashes(strtolower($firewall->name . ' ' . $firewall->company->name . ' ' . $firewall->url . ' ' . $firewall->hostname)) }}',
                                         '{{ addslashes($firewall->company->name) }}'
@@ -216,28 +300,70 @@
                                         <div class="font-medium text-gray-900 dark:text-white">{{ $firewall->name }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
+                                        <!-- Skeleton placeholder while loading -->
+                                        <div x-show="loading" class="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                        
+                                        <!-- Status badge when loaded -->
+                                        <span x-show="!loading" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                              :class="{
+                                                  'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': isOnline,
+                                                  'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': !isOnline
+                                              }">
+                                            <svg class="-ml-0.5 mr-1.5 h-2 w-2" 
+                                                 :class="isOnline ? 'text-green-400' : 'text-red-400'" 
+                                                 fill="currentColor" viewBox="0 0 8 8">
+                                                <circle cx="4" cy="4" r="3" />
+                                            </svg>
+                                            <span x-text="isOnline ? 'Online' : 'Offline'"></span>
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                        <a href="{{ \Illuminate\Support\Str::startsWith($firewall->url, ['http://', 'https://']) ? $firewall->url : 'https://' . $firewall->url }}" 
+                                           target="_blank" 
+                                           rel="noopener noreferrer"
+                                           class="text-indigo-600 hover:text-indigo-900 hover:underline dark:text-indigo-400 dark:hover:text-indigo-300">
+                                            {{ preg_replace('#^https?://#', '', $firewall->url) }}
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                         <template x-if="loading">
-                                            <div class="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                            <div class="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
                                         </template>
-                                        <template x-if="!loading && isOnline">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                                <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
-                                                    <circle cx="4" cy="4" r="3" />
-                                                </svg>
-                                                Online
-                                            </span>
-                                        </template>
-                                        <template x-if="!loading && !isOnline">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                                                <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-gray-400" fill="currentColor" viewBox="0 0 8 8">
-                                                    <circle cx="4" cy="4" r="3" />
-                                                </svg>
-                                                Offline
-                                            </span>
+                                        <template x-if="!loading">
+                                            <div class="flex items-center space-x-2">
+                                                <span x-text="sysVersion"></span>
+                                                <template x-if="sysUpdateAvailable">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" title="Update Available">
+                                                        Update
+                                                    </span>
+                                                </template>
+                                                <template x-if="!sysUpdateAvailable && sysVersion !== '-'">
+                                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Up to Date">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                </template>
+                                            </div>
                                         </template>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $firewall->url }}
+                                        <template x-if="loading">
+                                            <div class="h-4 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                                        </template>
+                                        <template x-if="!loading">
+                                            <div class="flex items-center space-x-2">
+                                                <span x-text="apiVersion"></span>
+                                                <template x-if="apiUpdateAvailable">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" title="Update Available">
+                                                        Update
+                                                    </span>
+                                                </template>
+                                                <template x-if="!apiUpdateAvailable && apiVersion !== '-' && apiVersion !== 'N/A'">
+                                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Up to Date">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                </template>
+                                            </div>
+                                        </template>
                                     </td>
                                     @if(auth()->user()->isGlobalAdmin())
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
@@ -266,7 +392,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="{{ auth()->user()->isGlobalAdmin() ? '6' : '5' }}" class="px-6 py-4 text-center text-gray-500">
+                                    <td colspan="{{ auth()->user()->isGlobalAdmin() ? '8' : '7' }}" class="px-6 py-4 text-center text-gray-500">
                                         No firewalls found. <a href="{{ route('firewalls.create') }}"
                                             class="text-blue-600 hover:underline">Add one now</a>.
                                     </td>
@@ -333,10 +459,146 @@
 
     <script>
         document.addEventListener('alpine:init', () => {
+            Alpine.data('firewallStats', (allIds) => ({
+                stats: {},
+                loading: true,
+                search: '',
+                statusFilter: 'all',
+                customerFilter: 'all',
+                get totalCount() { return allIds.length; },
+                get offlineCount() { return Object.values(this.stats).filter(s => !s.online).length; },
+                get sysCount() { return Object.values(this.stats).filter(s => s.sys).length; },
+                get apiCount() { return Object.values(this.stats).filter(s => s.api).length; },
+                get hasData() { return Object.keys(this.stats).length > 0; },
+                
+                init() {
+                    // Smart Trigger: Wait for WS connection to avoid "Simultaneous Batch" (Sync Mode) 
+                    // and ensure we don't miss events (Race Condition).
+                    const checkAndTrigger = () => {
+                        if (window.Echo && window.Echo.connector && window.Echo.connector.pusher) {
+                            const state = window.Echo.connector.pusher.connection.state;
+                            
+                            // If connected, go!
+                            if (state === 'connected') {
+                                this.triggerUpdate();
+                                return;
+                            }
+                            
+                            // If connecting, wait for it...
+                            if (state === 'connecting' || state === 'initialized') {
+                                const onConnect = () => {
+                                    this.triggerUpdate();
+                                    window.Echo.connector.pusher.connection.unbind('connected', onConnect);
+                                };
+                                window.Echo.connector.pusher.connection.bind('connected', onConnect);
+                                // Fallback if connection takes too long
+                                setTimeout(() => { 
+                                    if (this.loading) this.triggerUpdate(); // Will force sync if still not connected
+                                }, 3000); 
+                                return;
+                            }
+                        }
+                        
+                        // If disconnected or no Echo, just trigger (will use Sync Fallback)
+                        this.triggerUpdate();
+                    };
+
+                    checkAndTrigger();
+                    
+                    // 2. Poll every X seconds to keep data fresh via Queue Workers
+                    const intervalMs = {{ ($settings['status_check_interval'] ?? 30) * 1000 }};
+                    setInterval(() => { this.triggerUpdate(); }, intervalMs);
+
+                    // 3. Listen for WebSocket updates from the jobs
+                    window.addEventListener('firewall-updated', (e) => {
+                        const { id, online, sys, api } = e.detail;
+                        this.stats[id] = { online, sys, api };
+                        if (Object.keys(this.stats).length >= this.totalCount) {
+                            this.loading = false;
+                        }
+                    });
+                    
+                    // Safety fallback
+                    setTimeout(() => { this.loading = false; }, 10000);
+                },
+
+                async triggerUpdate() {
+                    const tokenEl = document.querySelector('meta[name="csrf-token"]');
+                    const token = tokenEl ? tokenEl.getAttribute('content') : '';
+                    
+                    // Intelligent Failover:
+                    // If WebSocket is not connected, we force a synchronous check so the UI updates via HTTP response
+                    let url = '{{ route("firewalls.refresh-all") }}';
+                    let isWsConnected = false;
+                    
+                    if (window.Echo && window.Echo.connector && window.Echo.connector.pusher && window.Echo.connector.pusher.connection) {
+                        isWsConnected = (window.Echo.connector.pusher.connection.state === 'connected');
+                    }
+                    
+                    if (!isWsConnected) {
+                        console.warn('WebSocket disconnected. Forcing synchronous update.');
+                        url += '?sync=true';
+                    }
+
+                    try {
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': token
+                            },
+                            body: JSON.stringify({ ids: allIds })
+                        });
+                        const data = await res.json();
+                        
+                        // If we get immediate results (Sync Mode), use them to update UI
+                        if (data.results) {
+                             Object.entries(data.results).forEach(([id, r]) => {
+                                 // r is the Wrapper: { online: bool, data: ServiceResult, api_version: ... }
+                                 let serviceResult = r.data || {};
+                                 let realData = (serviceResult.data && typeof serviceResult.data === 'object') ? serviceResult.data : serviceResult;
+                                 
+                                 const sysUp = (realData.update_available === true);
+                                 const apiUp = (realData.api_update_available === true);
+                                 
+                                 window.dispatchEvent(new CustomEvent('firewall-updated', {
+                                         detail: { 
+                                             id: parseInt(id), 
+                                             online: r.online, 
+                                             sys: sysUp, 
+                                             api: apiUp, 
+                                             data: serviceResult,
+                                             apiVersion: r.api_version || realData.api_version || '-'
+                                         }
+                                 }));
+                             });
+                        }
+                    } catch (err) {
+                        console.error('Update trigger failed:', err);
+                    }
+                }
+            }));
+
             Alpine.data('firewallRow', (id, statusData, checkPath, searchData, companyName) => ({
                 id: id,
+                // statusData is the Wrapper { online: bool, data: ServiceResult }
                 isOnline: statusData && statusData.online,
-                loading: !statusData,
+                
+                // Helper to extract nested version
+                sysVersion: (function() {
+                     if (!statusData || !statusData.data || !statusData.data.data) return '-';
+                     return statusData.data.data.product_version || statusData.data.data.version || '-';
+                })(),
+                
+                apiVersion: (statusData && statusData.api_version) || 
+                            (statusData && statusData.data && statusData.data.api_version) || 
+                            '-',
+                            
+                sysUpdateAvailable: (statusData && statusData.data && statusData.data.data && statusData.data.data.update_available === true),
+                apiUpdateAvailable: (statusData && statusData.data && statusData.data.data && statusData.data.data.api_update_available === true),
+                
+                // Only show loading skeleton if we have NO data at all
+                loading: !statusData, 
                 searchData: searchData,
                 companyName: companyName,
 
@@ -354,38 +616,76 @@
                 },
 
                 init() {
-                    // Check status immediately (silent)
-                    this.checkStatus(checkPath);
+                    // 1. Universal Update Listener (Handles both HTTP/Sync and internal events)
+                    // This allows the row to update when the parent 'triggerUpdate' fetches data via HTTP
+                    window.addEventListener('firewall-updated', (e) => {
+                        if (e.detail.id === this.id) {
+                            this.isOnline = e.detail.online;
+                            this.loading = false;
+                            
+                            // Extract data for versions
+                            let serviceData = e.detail.data || {};
+                            let realData = (serviceData.data && typeof serviceData.data === 'object') ? serviceData.data : serviceData;
 
-                    // Poll every 10 seconds (silent)
-                    setInterval(() => this.checkStatus(checkPath), 10000);
+                            this.sysVersion = realData.product_version || realData.version || '-';
+                            this.apiVersion = e.detail.apiVersion || '-';
+                            
+                            this.sysUpdateAvailable = e.detail.sys;
+                            this.apiUpdateAvailable = e.detail.api;
+                        }
+                    });
 
-                    // Listen for real-time updates
+                    // 2. WebSocket Listener
                     if (window.Echo) {
                         window.Echo.private('firewall.' + this.id)
                             .listen('.firewall.status.update', (e) => {
-                                // console.log('Row Update ' + this.id, e);
-                                this.isOnline = true; 
+                                // e.status is the Wrapper
+                                this.isOnline = (e.status && e.status.online !== undefined) ? e.status.online : true; 
                                 this.loading = false;
+                                
+                                let s = e.status || {};
+                                let d = s.data || {};
+                                let rd = (d.data && typeof d.data === 'object') ? d.data : d;
+                                
+                                this.sysVersion = rd.product_version || rd.version || '-';
+                                this.apiVersion = s.api_version || rd.api_version || '-';
+                                this.sysUpdateAvailable = (rd.update_available === true);
+                                this.apiUpdateAvailable = (rd.api_update_available === true);
+
+                                // 3. Dispatch to Parent (firewallStats)
+                                window.dispatchEvent(new CustomEvent('firewall-updated', {
+                                    detail: {
+                                        id: this.id,
+                                        online: this.isOnline,
+                                        sys: this.sysUpdateAvailable,
+                                        api: this.apiUpdateAvailable,
+                                        data: s,
+                                        apiVersion: this.apiVersion
+                                    }
+                                }));
                             });
                     }
+
+                    // 4. Fallback Watchdog
+                    setTimeout(() => {
+                         if (this.loading) {
+                             // console.warn('Firewall ' + this.id + ' stuck loading.');
+                         }
+                    }, 15000);
                 },
 
                 checkStatus(url) {
-                    // Don't set this.loading = true here to avoid flickering "Checking..."
-                    // this.loading = true; 
+                    // Manual refresh fallback
                     
                     fetch(url + '?t=' + Date.now())
                         .then(res => res.json())
                         .then(data => {
                             this.isOnline = data.online;
-                            this.loading = false; // Just in case it was true
+                            // .. logic here is similar but likely unused if we rely on triggerUpdate()
+                            // keeping minimal fallback
+                            this.loading = false; 
                         })
-                        .catch(() => {
-                            // If request fails, likely network issue or offline.
-                            this.isOnline = false;
-                            this.loading = false;
-                        });
+                        .catch(() => { this.loading = false; });
                 }
             }));
         });

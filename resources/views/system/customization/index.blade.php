@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('System Customization') }}
+            {{ __('System Settings') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('system.customization.update') }}" enctype="multipart/form-data" class="space-y-6">
+                    <form method="POST" action="{{ route('system.settings.update') }}" enctype="multipart/form-data" class="space-y-6">
                         @csrf
                         @method('POST')
 
@@ -29,7 +29,14 @@
                                     dark:file:bg-gray-700 dark:file:text-gray-300
                                 ">
                             </div>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Maximum size: 2MB. Formats: JPEG, PNG, SVG.</p>
+                            <div class="mt-2 flex items-center gap-3">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Maximum size: 2MB. Formats: JPEG, PNG, SVG.</p>
+                                @if(isset($settings['logo_path']))
+                                    <button type="button" onclick="restoreDefault('logo')" class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium underline">
+                                        Restore to Default
+                                    </button>
+                                @endif
+                            </div>
                         </div>
 
                         <!-- Favicon Upload -->
@@ -48,7 +55,14 @@
                                     dark:file:bg-gray-700 dark:file:text-gray-300
                                 ">
                             </div>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Maximum size: 1MB. Formats: ICO, PNG.</p>
+                            <div class="mt-2 flex items-center gap-3">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Maximum size: 1MB. Formats: ICO, PNG.</p>
+                                @if(isset($settings['favicon_path']))
+                                    <button type="button" onclick="restoreDefault('favicon')" class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium underline">
+                                        Restore to Default
+                                    </button>
+                                @endif
+                            </div>
                         </div>
 
                         <!-- Theme Toggle -->
@@ -65,6 +79,17 @@
                                         {{ ($settings['theme'] ?? 'light') === 'dark' ? 'checked' : '' }}>
                                     <label for="theme_dark" class="ml-3 block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Dark</label>
                                 </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Status Check Interval -->
+                        <div>
+                            <label for="status_check_interval" class="block text-sm font-medium text-gray-700 dark:text-gray-300">System Status Check Interval (Seconds)</label>
+                            <div class="mt-2">
+                                <input type="number" name="status_check_interval" id="status_check_interval" min="5" max="300"
+                                    value="{{ $settings['status_check_interval'] ?? 30 }}"
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">How often the sidebar checks for backend status (Queue/DB). Default: 30s.</p>
                             </div>
                         </div>
 
@@ -84,4 +109,31 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        function restoreDefault(type) {
+            if (!confirm(`Are you sure you want to restore the default ${type}? This will remove your custom ${type}.`)) {
+                return;
+            }
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("system.settings.restore") }}';
+            
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = '{{ csrf_token() }}';
+            form.appendChild(csrfInput);
+            
+            const typeInput = document.createElement('input');
+            typeInput.type = 'hidden';
+            typeInput.name = 'type';
+            typeInput.value = type;
+            form.appendChild(typeInput);
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
 </x-app-layout>

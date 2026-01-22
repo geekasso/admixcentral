@@ -1,7 +1,7 @@
 <nav x-data="{ open: false, systemOpen: false, firewallOpen: false, servicesOpen: false, vpnOpen: false, statusOpen: false, diagnosticsOpen: false, systemActive: {{ request()->routeIs('system.*') || request()->routeIs('firewall.system.*') ? 'true' : 'false' }}, firewallActive: {{ request()->routeIs('firewall.aliases.*') || request()->routeIs('firewall.nat.*') || request()->routeIs('firewall.rules.*') || request()->routeIs('firewall.schedules.*') || request()->routeIs('firewall.limiters.*') || request()->routeIs('firewall.virtual_ips.*') ? 'true' : 'false' }}, servicesActive: {{ request()->routeIs('services.*') ? 'true' : 'false' }}, vpnActive: {{ request()->routeIs('vpn.*') ? 'true' : 'false' }}, statusActive: {{ request()->routeIs('status.*') ? 'true' : 'false' }}, diagnosticsActive: {{ request()->routeIs('diagnostics.*') ? 'true' : 'false' }} }"
     class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo - Removed as per user request -->
@@ -447,9 +447,9 @@
                 <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                     {{ __('Users') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('system.customization.index')"
-                    :active="request()->routeIs('system.customization.*')">
-                    {{ __('Customization') }}
+                <x-responsive-nav-link :href="route('system.settings.index')"
+                    :active="request()->routeIs('system.settings.*')">
+                    {{ __('Settings') }}
                 </x-responsive-nav-link>
             @elseif(Auth::user()->isCompanyAdmin())
                 <x-responsive-nav-link :href="route('companies.show', Auth::user()->company_id)"

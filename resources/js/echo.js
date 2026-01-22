@@ -21,21 +21,32 @@ window.Echo = new Echo({
     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
     disableStats: true,
+    // Tuning for faster reconnection
+    unavailable_timeout: 1000, 
+    pong_timeout: 1000,
+    activityTimeout: 1000,
 });
 
 // Log connection status (for debugging)
 // Connection Status Handling
 // Connection Status Handling
+// Log connection status (for debugging)
+// Connection Status Handling
 const updateStatus = (status, color, message) => {
+    // Legacy support (invisible div)
     const indicator = document.getElementById('websocket-status');
     if (indicator) {
-        indicator.style.display = 'block';
-        indicator.className = `fixed bottom-4 right-4 w-3 h-3 rounded-full ${color} z-50 transition-colors duration-300 shadow-md`;
-        indicator.title = `WebSocket: ${message}`;
+        // Just store for legacy debug if needed
+        indicator.dataset.status = status;
+    }
+    
+    // New Alpine hook
+    if (window.updateSystemStatus) {
+        window.updateSystemStatus(status);
     }
     
     if (import.meta.env.DEV) {
-        console.log(`[WebSocket] ${status}: ${message}`);
+        // console.log(`[WebSocket] ${status}: ${message}`);
     }
 };
 
@@ -44,11 +55,11 @@ window.Echo.connector.pusher.connection.bind('connected', () => {
 });
 
 window.Echo.connector.pusher.connection.bind('unavailable', () => {
-    updateStatus('unavailable', 'bg-red-500', 'Disconnected (Unavailable)');
+    updateStatus('disconnected', 'bg-red-500', 'Disconnected');
 });
 
 window.Echo.connector.pusher.connection.bind('failed', () => {
-    updateStatus('failed', 'bg-red-600', 'Connection Failed');
+    updateStatus('disconnected', 'bg-red-600', 'Connection Failed');
 });
 
 window.Echo.connector.pusher.connection.bind('disconnected', () => {

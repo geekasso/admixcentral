@@ -20,6 +20,7 @@ class SystemCustomizationController extends Controller
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'favicon' => 'nullable|mimes:ico,png|max:1024',
             'theme' => 'required|in:light,dark',
+            'status_check_interval' => 'nullable|integer|min:5|max:300',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -33,7 +34,26 @@ class SystemCustomizationController extends Controller
         }
 
         SystemSetting::updateOrCreate(['key' => 'theme'], ['value' => $request->theme]);
+        
+        // Save Status Check Interval (Default 30 if not present, though we handle null in view)
+        if ($request->filled('status_check_interval')) {
+            SystemSetting::updateOrCreate(['key' => 'status_check_interval'], ['value' => $request->status_check_interval]);
+        }
 
-        return redirect()->route('system.customization.index')->with('success', 'Customization settings updated successfully.');
+        return redirect()->route('system.settings.index')->with('success', 'Settings updated successfully.');
+    }
+
+    public function restore(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:logo,favicon',
+        ]);
+
+        $key = $request->type === 'logo' ? 'logo_path' : 'favicon_path';
+        
+        // Delete the setting to restore default
+        SystemSetting::where('key', $key)->delete();
+
+        return redirect()->route('system.settings.index')->with('success', ucfirst($request->type) . ' restored to default.');
     }
 }

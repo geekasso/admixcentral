@@ -201,6 +201,45 @@ sudo certbot --nginx -d dashboard.yourdomain.com
 ```
 Certbot will automatically update your Nginx configuration with the correct SSL paths.
 
+### 5. Configure Queue Workers (Supervisor)
+For optimal performance, AdmixCentral uses background workers to process firewall checks in parallel.
+
+1. **Install Supervisor**
+   ```bash
+   sudo apt-get install supervisor
+   ```
+
+2. **Create Configuration**
+   Create `/etc/supervisor/conf.d/admix-worker.conf`:
+   ```ini
+   [program:admix-worker]
+   process_name=%(program_name)s_%(process_num)02d
+   command=php /var/www/admixcentral/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+   autostart=true
+   autorestart=true
+   user=www-data
+   numprocs=20
+   redirect_stderr=true
+   stdout_logfile=/var/www/admixcentral/storage/logs/worker.log
+   stopwaitsecs=3600
+   ```
+   *Note: Ensure the path `/var/www/admixcentral` matches your installation directory.*
+
+3. **Fix Permissions**
+   Ensure the worker process can write to logs:
+   ```bash
+   sudo chown -R www-data:www-data /var/www/admixcentral/storage
+   sudo chown -R www-data:www-data /var/www/admixcentral/bootstrap/cache
+   sudo chmod -R 775 /var/www/admixcentral/storage
+   ```
+
+4. **Start Workers**
+   ```bash
+   sudo supervisorctl reread
+   sudo supervisorctl update
+   sudo supervisorctl start all
+   ```
+
 ---
 
 ## Initial Setup

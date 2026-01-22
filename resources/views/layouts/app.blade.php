@@ -51,14 +51,14 @@
         </button>
     </div>
 
-    <div class="flex h-screen bg-gray-100 dark:bg-gray-900 md:h-screen h-[calc(100vh-4rem)]">
+    <div class="flex h-dvh bg-gray-100 dark:bg-gray-900 md:h-dvh h-[calc(100dvh-4rem)]">
         @include('layouts.sidebar')
 
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white dark:bg-gray-800 shadow z-10">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
@@ -72,7 +72,7 @@
 
                 <!-- Page Content -->
                 @isset($firewall)
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                    <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 mt-4">
                         <x-apply-changes-banner :firewall="$firewall" />
                     </div>
                 @endisset
@@ -112,7 +112,103 @@
         });
     </script>
 
+    <!-- System Status Widget -->
+    <div id="websocket-status" style="display: none;"></div> {{-- Connector for echo.js default behavior --}}
+    
+    <!-- System Status Widget (Hidden/Legacy Hook) -->
+    <div id="websocket-status" style="display: none;"></div>
+    <script>
+        // Minimal hook to prevent errors if anything relies on it, though sidebar polls directly.
+        window.updateSystemStatus = function(s) { /* No-op or log */ };
+        
+        /**
+         * Shared Filterable List Mixin
+         * Provides URL-persisted filtering, search, and count functionality
+         * 
+         * Usage in Alpine components:
+         * Alpine.data('myComponent', (items) => ({
+         *     ...window.filterableMixin(items, 'my-update-event'),
+         *     // Your custom properties
+         *     myCustomProp: 'value',
+         *     
+         *     init() {
+         *         this.initFilterable();
+         *         // Your custom init code
+         *     }
+         * }))
+         */
+        window.filterableMixin = function(items, statusEventName = 'device-updated') {
+            return {
+                // Filter state (initialized from URL)
+                search: new URLSearchParams(window.location.search).get('search') || '',
+                statusFilter: new URLSearchParams(window.location.search).get('status') || 'all',
+                customerFilter: new URLSearchParams(window.location.search).get('customer') || 'all',
+                
+                // Data
+                items: items,
+                itemStatuses: {},
+                
+                /**
+                 * Initialize filterable functionality
+                 * Call this from your component's init() method
+                 */
+                initFilterable() {
+                    // Watch for filter changes and sync to URL
+                    this.$watch('search', (val) => this.updateUrl('search', val));
+                    this.$watch('statusFilter', (val) => this.updateUrl('status', val));
+                    this.$watch('customerFilter', (val) => this.updateUrl('customer', val));
+                    
+                    // Listen for status updates to track online/offline state
+                    window.addEventListener(statusEventName, (e) => {
+                        if (e.detail && e.detail.id) {
+                            this.itemStatuses[e.detail.id] = { online: e.detail.online };
+                        }
+                    });
+                },
+                
+                /**
+                 * Update URL query parameters
+                 */
+                updateUrl(key, value) {
+                    const url = new URL(window.location);
+                    if (value && value !== 'all') {
+                        url.searchParams.set(key, value);
+                    } else {
+                        url.searchParams.delete(key);
+                    }
+                    window.history.replaceState(null, '', url);
+                },
+                
+                /**
+                 * Get count of items matching current filters
+                 */
+                get filteredCount() {
+                    return this.items.filter(item => {
+                        // Search filter
+                        const q = this.search.toLowerCase();
+                        const matchesSearch = !q || (item.searchData && item.searchData.includes(q)) || (item.staticInfo && item.staticInfo.includes(q));
+                        
+                        // Status filter
+                        let matchesStatus = true;
+                        if (this.statusFilter !== 'all') {
+                            const status = this.itemStatuses[item.id];
+                            const isOnline = status ? status.online : (item.online || false);
+                            if (this.statusFilter === 'online' && !isOnline) matchesStatus = false;
+                            if (this.statusFilter === 'offline' && isOnline) matchesStatus = false;
+                        }
 
+                        // Customer/Company filter
+                        let matchesCustomer = true;
+                        if (this.customerFilter !== 'all') {
+                            if (item.companyName !== this.customerFilter) matchesCustomer = false;
+                        }
+
+                        return matchesSearch && matchesStatus && matchesCustomer;
+                    }).length;
+                }
+            };
+        };
+    </script>
 </body>
 
 </html>

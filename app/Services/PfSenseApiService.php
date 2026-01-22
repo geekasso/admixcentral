@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Firewall;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class PfSenseApiService
 {
@@ -90,7 +91,7 @@ class PfSenseApiService
 
         $client = Http::withOptions(['verify' => false])
             ->acceptJson()
-            ->timeout(30);
+            ->timeout(10);
 
         if ($this->authMethod === 'token') {
             $client->withToken($this->apiToken);
@@ -1481,5 +1482,154 @@ class PfSenseApiService
         }
 
         return $response;
+    }
+
+    /**
+     * Refreshes the full system status by querying multiple endpoints.
+     */
+    public function refreshSystemStatus()
+    {
+        $staticCacheKey = 'firewall_static_info_' . $this->firewall->id;
+        $staticInfo = [];
+
+        // 1. Try Live Static Fetch
+        try {
+            $versionInfo = $this->getSystemVersion();
+            if (isset($versionInfo['data'])) {
+                $staticInfo = array_merge($staticInfo, $versionInfo['data']);
+            }
+
+            try {
+                $apiVersionResponse = $this->getApiVersion();
+                $apiVersion = $apiVersionResponse['data']['output'] ?? 'Unknown';
+                $staticInfo['api_version'] = trim($apiVersion);
+            } catch (\Exception $e) {
+                $staticInfo['api_version'] = 'N/A';
+            }
+
+            // Version Comparison Logic
+            $latestVersion = '2.7.2-RELEASE';
+            $currentVersion = $staticInfo['product_version'] ?? $staticInfo['version'] ?? null;
+            
+            if ($currentVersion) {
+                $vCurrent = preg_replace('/[^0-9.]/', '', $currentVersion);
+                $vLatest = preg_replace('/[^0-9.]/', '', $latestVersion);
+                
+                if (version_compare($vCurrent, $vLatest, '<')) {
+                    $staticInfo['update_available'] = true;
+                    $staticInfo['latest_available_version'] = $latestVersion;
+                } else {
+                     $staticInfo['update_available'] = false;
+                }
+            }
+
+            // API Version Check
+            $latestApiVersion = '2.6.9';
+            if (isset($staticInfo['api_version']) && $staticInfo['api_version'] !== 'N/A' && $staticInfo['api_version'] !== 'Unknown') {
+                 $vApiCurrent = preg_replace('/[^0-9.]/', '', $staticInfo['api_version']);
+                 $vApiLatest = preg_replace('/[^0-9.]/', '', $latestApiVersion);
+                 
+                 if ($vApiCurrent) {
+                     if (version_compare($vApiCurrent, $vApiLatest, '<')) {
+                         $staticInfo['api_update_available'] = true;
+                     } else {
+                         $staticInfo['api_update_available'] = false;
+                     }
+                 }
+            }
+
+            Cache::put($staticCacheKey, $staticInfo, now()->addDay());
+
+        } catch (\Exception $e) {
+            $staticInfo = Cache::get($staticCacheKey, []);
+        }
+
+        // 2. Try Live Dynamic Fetch
+        $dynamicStatus = $this->getSystemStatus(); // Throws exception if fails, which is handled by caller
+
+        try {
+            $interfaces = $this->getInterfacesStatus();
+            $dynamicStatus['interfaces'] = $interfaces['data'] ?? [];
+        } catch (\Exception $e) {
+            $dynamicStatus['interfaces'] = [];
+        }
+
+        try {
+            $dns = $this->getSystemDns();
+            if (isset($dns['data']['dns'])) {
+                $dynamicStatus['data']['dns_servers'] = $dns['data']['dns'];
+            } elseif (isset($dns['data']['dns_server'])) {
+                $dynamicStatus['data']['dns_servers'] = $dns['data']['dns_server'];
+            } elseif (isset($dns['data']['dnsserver'])) {
+                $dynamicStatus['data']['dns_servers'] = $dns['data']['dnsserver']; 
+            } else {
+                $dynamicStatus['data']['dns_servers'] = [];
+            }
+        } catch (\Exception $e) { }
+
+        try {
+            $history = $this->getConfigHistory();
+            $revisions = $history['data'] ?? $history ?? [];
+            if (!empty($revisions) && is_array($revisions)) {
+                $latest = reset($revisions);
+                if (isset($latest['time'])) {
+                    $dynamicStatus['data']['last_config_change'] = date('Y-m-d H:i:s T', $latest['time']);
+                    $dynamicStatus['data']['last_config_change_ts'] = $latest['time'];
+                } elseif (isset($latest['date'])) {
+                    $dynamicStatus['data']['last_config_change'] = $latest['date'];
+                }
+            }
+        } catch (\Exception $e) { }
+
+        try {
+            // Optimization: Skip packages for status checks to improve performance
+            // $packages = $this->getSystemPackages();
+            // ...
+            $dynamicStatus['data']['installed_packages_count'] = 'N/A';
+        } catch (\Exception $e) {
+            $dynamicStatus['data']['installed_packages_count'] = 'N/A';
+        }
+
+        try {
+            $statusData = [];
+            $rawStatus = $this->getGateways();
+            if (isset($rawStatus['data']['gateway']) && is_array($rawStatus['data']['gateway'])) {
+                $statusData = $rawStatus['data']['gateway'];
+            } elseif (isset($rawStatus['data']) && is_array($rawStatus['data'])) {
+                $statusData = $rawStatus['data'];
+            }
+
+            $configData = [];
+            $rawConfig = $this->getRoutingGateways();
+            if (isset($rawConfig['data']['gateway']) && is_array($rawConfig['data']['gateway'])) {
+                $configData = $rawConfig['data']['gateway'];
+            } elseif (isset($rawConfig['data']) && is_array($rawConfig['data'])) {
+                $configData = $rawConfig['data'];
+            }
+
+            foreach ($statusData as &$gateway) {
+                $config = collect($configData)->firstWhere('name', $gateway['name']);
+                if ($config) {
+                    $gateway['descr'] = $config['descr'] ?? '';
+                }
+            }
+            unset($gateway);
+
+            $dynamicStatus['gateways'] = $statusData;
+
+        } catch (\Exception $e) {
+            $dynamicStatus['gateways'] = [];
+        }
+
+        if (isset($dynamicStatus['data'])) {
+            $dynamicStatus['data'] = array_merge($dynamicStatus['data'], $staticInfo);
+            if (isset($staticInfo['api_version'])) {
+                $dynamicStatus['api_version'] = $staticInfo['api_version'];
+            }
+        } else {
+            $dynamicStatus = array_merge($dynamicStatus ?? [], $staticInfo);
+        }
+
+        return $dynamicStatus;
     }
 }

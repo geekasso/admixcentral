@@ -13,7 +13,7 @@
             this.showDeleteModal = true;
         }
     }">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <x-card>
                 <x-card-header title="VLAN Interfaces">
                     <x-link-button-add href="{{ route('firewall.vlans.create', $firewall->id) }}">

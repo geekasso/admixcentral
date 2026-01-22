@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="py-12" x-data="firewallDashboard()">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">
 
             {{-- System Status --}}
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -83,25 +83,25 @@
                                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                     <tbody>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">
                                                 Version</th>
-                                            <td class="py-1 text-sm" x-text="systemStatus?.data?.version"></td>
+                                            <td class="py-2 text-sm" x-text="systemStatus?.data?.version"></td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">REST
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">REST
                                                 API</th>
-                                            <td class="py-1 text-sm" x-text="systemStatus?.api_version || 'Unknown'">
+                                            <td class="py-2 text-sm" x-text="systemStatus?.api_version || 'Unknown'">
                                             </td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">
                                                 Platform</th>
-                                            <td class="py-1 text-sm" x-text="systemStatus?.data?.platform"></td>
+                                            <td class="py-2 text-sm" x-text="systemStatus?.data?.platform"></td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">BIOS
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">BIOS
                                             </th>
-                                            <td class="py-1 text-sm">
+                                            <td class="py-2 text-sm">
                                                 <div class="flex flex-col">
                                                     <span x-text="systemStatus?.data?.bios_vendor"></span>
                                                     <span x-text="systemStatus?.data?.bios_version"></span>
@@ -110,10 +110,10 @@
                                             </td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">CPU
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">CPU
                                                 System
                                             </th>
-                                            <td class="py-1 text-sm">
+                                            <td class="py-2 text-sm">
                                                 <div class="flex flex-col">
                                                     <span x-text="systemStatus?.data?.cpu_model"></span>
                                                     <span class="text-gray-500"
@@ -127,19 +127,19 @@
                                             </td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">Uptime
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">Uptime
                                             </th>
-                                            <td class="py-1 text-sm" x-text="systemStatus?.data?.uptime"></td>
+                                            <td class="py-2 text-sm" x-text="systemStatus?.data?.uptime"></td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">Packages</th>
-                                            <td class="py-1 text-sm" x-text="(systemStatus?.data?.installed_packages_count !== undefined) ? systemStatus.data.installed_packages_count : 'Unknown'"></td>
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">Packages</th>
+                                            <td class="py-2 text-sm" x-text="(systemStatus?.data?.installed_packages_count !== undefined) ? systemStatus.data.installed_packages_count : 'Unknown'"></td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">DNS
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">DNS
                                                 Servers
                                             </th>
-                                            <td class="py-1 text-sm">
+                                            <td class="py-2 text-sm">
                                                 <div class="flex flex-col">
                                                     <template x-for="dns in (systemStatus?.data?.dns_servers || [])">
                                                         <span x-text="dns"></span>
@@ -149,10 +149,10 @@
                                             </td>
                                         </tr>
                                         <tr class="dark:border-gray-700">
-                                            <th class="py-1 font-medium text-gray-900 dark:text-gray-300 text-sm">Last
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">Last
                                                 Modified
                                             </th>
-                                            <td class="py-1 text-sm">
+                                            <td class="py-2 text-sm">
                                                 <div class="flex flex-col">
                                                     <span
                                                         x-text="systemStatus?.data?.last_config_change || 'Unknown'"></span>
@@ -174,21 +174,16 @@
                                 <template x-if="gateways && gateways.length > 0">
                                     <div class="mb-3">
                                         <div class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">Gateways</div>
-                                        <div class="flex flex-col gap-1.5">
+                                        <div class="grid gap-1">
                                             <template x-for="gateway in gateways" :key="gateway.name">
-                                                <div class="flex items-center justify-between gap-2 text-xs px-2 py-1 rounded" 
+                                                <div class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1 border-l-2" 
                                                     :class="{
-                                                        'bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800': gateway.status === 'online' || gateway.status === 'none',
-                                                        'bg-red-100 dark:bg-red-900 border border-red-200 dark:border-red-800': gateway.status === 'offline' || gateway.status === 'down',
-                                                        'bg-yellow-100 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-800': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                        'border-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                        'border-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                        'border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
                                                     }"
                                                     :title="gateway.monitorip || gateway.srcip">
-                                                    <span class="font-mono font-semibold" 
-                                                        :class="{
-                                                            'text-green-800 dark:text-green-200': gateway.status === 'online' || gateway.status === 'none',
-                                                            'text-red-800 dark:text-red-200': gateway.status === 'offline' || gateway.status === 'down',
-                                                            'text-yellow-800 dark:text-yellow-200': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                        }"
+                                                    <span class="text-sm font-mono font-medium text-gray-700 dark:text-gray-300" 
                                                         x-text="gateway.descr || gateway.name || 'Unknown'"></span>
                                                     <div class="flex items-center gap-1.5">
                                                         <div class="w-2 h-2 rounded-full" :class="{
@@ -196,16 +191,26 @@
                                                             'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
                                                             'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
                                                         }"></div>
-                                                        <span class="capitalize"
-                                                            :class="{
-                                                                'text-green-700 dark:text-green-300': gateway.status === 'online' || gateway.status === 'none',
-                                                                'text-red-700 dark:text-red-300': gateway.status === 'offline' || gateway.status === 'down',
-                                                                'text-yellow-700 dark:text-yellow-300': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                            }"
+                                                        <span class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400"
                                                             x-text="gateway.status"></span>
                                                     </div>
                                                 </div>
                                             </template>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <template x-if="!gateways || gateways.length === 0">
+                                    <div class="mb-3">
+                                        <div class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">Gateways</div>
+                                        <div class="grid gap-1">
+                                            <div class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1 border-l-2 border-gray-300 dark:border-gray-600">
+                                                <span class="text-sm font-mono font-medium text-gray-500 dark:text-gray-400">WAN</span>
+                                                <div class="flex items-center gap-1.5">
+                                                    <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                                                    <span class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400">Unknown</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </template>

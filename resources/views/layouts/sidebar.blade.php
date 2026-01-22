@@ -82,14 +82,14 @@
                     </svg>
                     <span :class="collapsed ? 'md:hidden' : 'block'" class="transition-opacity duration-300">{{ __('Users') }}</span>
                 </a>
-                <a href="{{ route('system.customization.index') }}"
-                    class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('system.customization.*') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
-                    <svg class="mr-3 h-6 w-6 flex-shrink-0 {{ request()->routeIs('system.customization.*') ? 'text-white' : 'text-gray-400 group-hover:text-gray-300' }}"
+                <a href="{{ route('system.settings.index') }}"
+                    class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('system.settings.*') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                    <svg class="mr-3 h-6 w-6 flex-shrink-0 {{ request()->routeIs('system.settings.*') ? 'text-white' : 'text-gray-400 group-hover:text-gray-300' }}"
                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                     </svg>
-                    <span :class="collapsed ? 'md:hidden' : 'block'" class="transition-opacity duration-300">{{ __('Customization') }}</span>
+                    <span :class="collapsed ? 'md:hidden' : 'block'" class="transition-opacity duration-300">{{ __('Settings') }}</span>
                 </a>
             @endif
 
@@ -140,64 +140,182 @@
     </div>
 
     <div x-data="{ 
-            connected: false,
-            connecting: true,
-            init() {
-                const checkEcho = setInterval(() => {
-                    if (window.Echo && window.Echo.connector && window.Echo.connector.pusher) {
-                        clearInterval(checkEcho);
-                        
-                        // Bind events
-                        const connection = window.Echo.connector.pusher.connection;
-                        
-                        connection.bind('connected', () => { 
-                            this.connected = true; 
-                            this.connecting = false; 
-                        });
-                        connection.bind('unavailable', () => { 
-                            this.connected = false; 
-                            this.connecting = false; 
-                        });
-                        connection.bind('failed', () => { 
-                            this.connected = false; 
-                            this.connecting = false; 
-                        });
-                        connection.bind('disconnected', () => { 
-                            this.connected = false; 
-                            this.connecting = false; 
-                        });
-                        connection.bind('connecting', () => {
-                            this.connecting = true;
-                        });
+            wsStatus: 'checking', 
+            systemStatus: { queue: true, database: true },
+            backendChecked: false,
+            wsChecked: false,
+            _loading: true,
 
-                        // Check initial state
-                        if (connection.state === 'connected') {
-                            this.connected = true;
-                            this.connecting = false;
+            get loading() {
+                return this._loading;
+            },
+            
+            get isCritical() {
+                return !this.systemStatus.database || !this.systemStatus.queue;
+            },
+
+            get isDegraded() {
+                // Only degraded if we are confirmed disconnected/unavailable
+                return !this.isCritical && (this.wsStatus === 'disconnected' || this.wsStatus === 'unavailable' || this.wsStatus === 'failed');
+            },
+
+            get isHealthy() {
+                return !this.isCritical && !this.isDegraded && this.wsStatus === 'connected';
+            },
+
+            get statusText() {
+                if (this.loading || this.wsStatus === 'checking') return 'Checking...';
+                
+                if (this.isCritical) {
+                    if (!this.systemStatus.database) return 'Database Error';
+                    return 'Queue Error';
+                }
+                
+                if (this.wsStatus === 'connecting') return 'Connecting...';
+                if (this.isHealthy) return 'System Online';
+                return 'System Degraded';
+            },
+            
+            tryFinishLoading() {
+                // Only stop loading if both checks have reported in at least once
+                if (this.backendChecked && this.wsChecked) {
+                    // unexpected aesthetic delay to prevent flash if it happens too fast (optional, but requested)
+                    // actually user wants skeleton, so immediate is fine if accurate.
+                    this._loading = false;
+                }
+            },
+
+            checkBackend() {
+                fetch('{{ route('system.status') }}')
+                    .then(res => res.json())
+                    .then(data => {
+                        this.systemStatus = data;
+                        this.backendChecked = true;
+                        this.tryFinishLoading();
+                    })
+                    .catch(() => {
+                        this.systemStatus = { queue: false, database: false };
+                        this.backendChecked = true;
+                        this.tryFinishLoading();
+                    });
+            },
+
+            init() {
+                const intervalSeconds = {{ $settings['status_check_interval'] ?? 30 }};
+                const intervalMs = intervalSeconds * 1000;
+                
+                // 1. Start Backend Check
+                this.checkBackend();
+                setInterval(() => { this.checkBackend() }, 1000);
+
+                // 2. Real-time Push Update (Instant Feedback)
+                window.updateSystemStatus = (status) => {
+                    this.wsStatus = status;
+                    this.wsChecked = true;
+                    this.tryFinishLoading();
+                };
+
+                // 2. Start WebSocket Check
+                const bindEcho = () => {
+                    if (window.Echo && window.Echo.connector && window.Echo.connector.pusher) {
+                        const connection = window.Echo.connector.pusher.connection;
+                        let rawState = connection.state;
+                        this.wsStatus = (rawState === 'unavailable' || rawState === 'failed') ? 'disconnected' : rawState;
+                        
+                        // Mark WS as checked if it's in a definitive state or if it's connected
+                        this.wsChecked = true; 
+                        this.tryFinishLoading();
+
+                        // Aggressive Reconnection Logic:
+                        // If we are stuck in 'disconnected' or 'unavailable', force a reconnection attempt.
+                        // This overrides Pusher's default backoff strategy to ensure we pick up the server ASAP.
+                        if (this.wsStatus === 'disconnected' || this.wsStatus === 'unavailable') {
+                            // Only force if we haven't just tried (simple throttle handled by the interval)
+                             connection.connect();
                         }
                     }
-                }, 200);
+                };
+
+                // Poll WS state
+                setInterval(() => { bindEcho(); }, 1000);
+                
+                // Initial quick check for WS (give it 500ms to initialize Echo)
+                setTimeout(() => { bindEcho(); }, 500);
+
+                // 3. Safety Timeout (max 4s)
+                setTimeout(() => { 
+                    this.backendChecked = true;
+                    this.wsChecked = true;
+                    this._loading = false; 
+                }, 4000);
             }
-         }" class="p-4 border-t border-gray-700 bg-gray-900 shadow-inner">
+         }" class="p-4 border-t border-gray-700 bg-gray-900 shadow-inner group relative">
+        
+        <!-- Tooltip -->
+        <div x-show="!loading && !isHealthy && !collapsed" 
+             style="display: none;"
+             class="absolute bottom-full left-0 w-full bg-gray-800 p-2 text-[10px] text-gray-400 border-t border-gray-700 space-y-1">
+             <div class="flex justify-between">
+                 <span>Websocket:</span> 
+                 <span class="uppercase" 
+                       :class="{
+                           'text-green-400': wsStatus === 'connected',
+                           'text-gray-200': wsStatus === 'connecting',
+                           'text-yellow-400': wsStatus !== 'connected' && wsStatus !== 'connecting'
+                       }" 
+                       x-text="wsStatus"></span>
+             </div>
+             <div class="flex justify-between"><span>Database:</span> <span :class="systemStatus.database ? 'text-green-400' : 'text-red-400'" x-text="systemStatus.database ? 'OK' : 'Error'"></span></div>
+             <div class="flex justify-between"><span>Queue:</span> <span :class="systemStatus.queue ? 'text-green-400' : 'text-red-400'" x-text="systemStatus.queue ? 'OK' : 'Error'"></span></div>
+        </div>
+
         <div class="flex items-center" :class="collapsed ? 'justify-center' : 'justify-start'">
-            <!-- Icon -->
-            <div class="relative flex h-3 w-3">
-                <span x-show="connected"
-                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span x-show="connecting && !connected"
-                    class="animate-pulse absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+            
+            <!-- Skeleton Loader -->
+            <template x-if="loading">
+                <div class="flex items-center w-full">
+                    <div class="h-3 w-3 bg-gray-600 rounded-full animate-pulse"></div>
+                    <div :class="collapsed ? 'md:hidden' : 'block'" class="ml-3 flex flex-col space-y-1 w-28">
+                        <div class="h-2 bg-gray-600 rounded animate-pulse w-full"></div>
+                    </div>
+                </div>
+            </template>
 
-                <span class="relative inline-flex rounded-full h-3 w-3 transition-colors duration-300" :class="{
-                          'bg-green-500': connected,
-                          'bg-red-500': !connected && !connecting,
-                          'bg-yellow-500': connecting && !connected
-                      }"></span>
-            </div>
+            <!-- Actual Content -->
+            <template x-if="!loading">
+                <div class="flex items-center">
+                    <!-- Icon -->
+                    <div class="relative flex h-3 w-3">
+                        <span x-show="isHealthy"
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span x-show="isDegraded"
+                            class="animate-pulse absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                        <span x-show="wsStatus === 'connecting'"
+                            class="animate-pulse absolute inline-flex h-full w-full rounded-full bg-gray-200 opacity-75"></span>
+                        <span x-show="isCritical"
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
 
-            <!-- Text -->
-            <span :class="collapsed ? 'md:hidden' : 'block'"
-                class="ml-3 text-xs font-medium uppercase tracking-wider text-gray-300 transition-colors duration-300"
-                x-text="connected ? 'System Online' : (connecting ? 'Connecting...' : 'Disconnected')"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 transition-colors duration-300" :class="{
+                                'bg-green-500': isHealthy,
+                                'bg-red-500': isCritical,
+                                'bg-yellow-500': isDegraded,
+                                'bg-gray-200': wsStatus === 'connecting'
+                            }"></span>
+                    </div>
+
+                    <!-- Text -->
+                    <div :class="collapsed ? 'md:hidden' : 'block'" class="ml-3 flex flex-col">
+                        <span class="text-xs font-medium uppercase tracking-wider transition-colors duration-300"
+                            :class="{
+                                'text-green-400': isHealthy,
+                                'text-red-400': isCritical,
+                                'text-yellow-400': isDegraded && wsStatus !== 'connecting',
+                                'text-gray-200': wsStatus === 'connecting'
+                            }"
+                            x-text="statusText"></span>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 </div>

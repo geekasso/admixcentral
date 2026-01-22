@@ -29,23 +29,126 @@ class FirewallController extends Controller
         // Collect status for each firewall
         $firewalls->each(function ($firewall) {
             $cached = \Illuminate\Support\Facades\Cache::get('firewall_status_' . $firewall->id);
-            if ($cached && isset($cached['data'])) {
-                $firewall->cached_status = $cached['data'];
-                $firewall->is_online = true; // Simplified for index overview
+            if ($cached) {
+                // Determine if cached structure is new (with 'data' key) or old/raw
+                // We standardized on: ['online' => bool, 'data' => [...], 'updated_at' => ...]
+                
+                $firewall->cached_status = $cached; 
+                $firewall->is_online = (bool)($cached['online'] ?? false);
             } else {
                 $firewall->cached_status = null;
                 $firewall->is_online = false;
             }
         });
 
-        return view('firewalls.index', compact('firewalls'));
+        $totalFirewalls = $firewalls->count();
+        $offlineFirewalls = $firewalls->where('is_online', false)->count();
+        $systemUpdates = $firewalls->filter(function ($fw) {
+            return $fw->cached_status['update_available'] ?? false;
+        })->count();
+        $apiUpdates = $firewalls->filter(function ($fw) {
+            return $fw->cached_status['api_update_available'] ?? false;
+        })->count();
+
+        return view('firewalls.index', compact('firewalls', 'totalFirewalls', 'offlineFirewalls', 'systemUpdates', 'apiUpdates'));
     }
 
+    /**
+     * Refresh a batch of firewalls synchronously (formerly refreshAll).
+     */
+    /**
+     * Dispatch status check jobs for firewalls.
+     */
+    public function refreshAll(Request $request)
+    {
+        set_time_limit(300); // Allow more time for sync processing
+
+        $ids = $request->input('ids', []);
+        // Also support GET param for ids
+        if (empty($ids) && $request->has('ids')) {
+             $ids = explode(',', $request->input('ids'));
+        }
+
+        if (!empty($ids)) {
+            $firewalls = Firewall::whereIn('id', $ids)->get();
+        } else {
+            $user = $request->user();
+            if ($user->isGlobalAdmin()) {
+                $firewalls = Firewall::all();
+            } else {
+                $firewalls = Firewall::where('company_id', $user->company_id)->get();
+            }
+        }
+
+        if ($request->boolean('sync')) {
+            $results = [];
+            foreach ($firewalls as $firewall) {
+                 try {
+                     $api = new \App\Services\PfSenseApiService($firewall);
+                     $data = $api->refreshSystemStatus();
+
+                     // Match Event structure
+                     $status = [
+                        'online' => true,
+                        'data' => $data,
+                        'api_version' => $data['api_version'] ?? null,
+                        'updated_at' => now()->toIso8601String(),
+                     ];
+
+                     // Update Cache
+                     \Illuminate\Support\Facades\Cache::put('firewall_status_' . $firewall->id, $status, now()->addDay());
+                     
+                     // Fire Event
+                     event(new \App\Events\DeviceStatusUpdateEvent($firewall, $status));
+
+                     $results[$firewall->id] = $status;
+                 } catch (\Exception $e) {
+                     $offlineStatus = [
+                         'online' => false,
+                         'error' => $e->getMessage(),
+                         'data' => null,
+                         'updated_at' => now()->toIso8601String()
+                     ];
+                     \Illuminate\Support\Facades\Cache::put('firewall_status_' . $firewall->id, $offlineStatus, now()->addDay());
+                     event(new \App\Events\DeviceStatusUpdateEvent($firewall, $offlineStatus));
+                     
+                     $results[$firewall->id] = $offlineStatus;
+                 }
+            }
+            return response()->json(['results' => $results]);
+        }
+
+        // Default: Queue Mode
+        $firewalls->each(function ($firewall) {
+            \App\Jobs\CheckFirewallStatusJob::dispatch($firewall);
+        });
+
+        // Return current cached data immediately
+        $results = [];
+        foreach ($firewalls as $firewall) {
+            $cached = \Illuminate\Support\Facades\Cache::get('firewall_status_' . $firewall->id);
+            if ($cached) {
+                $results[$firewall->id] = [
+                    'online' => (bool)($cached['online'] ?? false), 
+                    'data' => $cached['data'] ?? null,
+                    'api_version' => $cached['api_version'] ?? null
+                ];
+            } else {
+                $results[$firewall->id] = ['online' => false, 'data' => null];
+            }
+        }
+
+        return response()->json([
+            'results' => $results,
+            'queued' => $firewalls->count()
+        ]);
+    }
+    
     public function create()
     {
         $user = auth()->user();
         if ($user->isGlobalAdmin()) {
-            $companies = Company::all();
+            $companies = Company::orderBy('name')->get();
         } else {
             $companies = collect([$user->company]);
         }
@@ -136,7 +239,7 @@ class FirewallController extends Controller
         }
 
         if ($user->isGlobalAdmin()) {
-            $companies = Company::all();
+            $companies = Company::orderBy('name')->get();
         } else {
             $companies = collect([$user->company]);
         }
@@ -208,5 +311,32 @@ class FirewallController extends Controller
         $firewall->delete();
 
         return redirect()->route('firewalls.index')->with('success', 'Firewall deleted successfully.');
+    }
+
+    /**
+     * Get cached status for firewalls (Polling fallback).
+     */
+    public function getCachedStatus(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $firewalls = Firewall::whereIn('id', $ids)->get();
+
+        $results = [];
+        foreach ($firewalls as $firewall) {
+            $cached = \Illuminate\Support\Facades\Cache::get('firewall_status_' . $firewall->id);
+            if ($cached) {
+                // Determine online status
+                $isOnline = $cached['online'] ?? true;
+                if (isset($cached['error'])) {
+                    $isOnline = false;
+                }
+                
+                $results[$firewall->id] = [
+                    'online' => $isOnline,
+                    'data' => $cached // Contains 'data' key with full info
+                ];
+            }
+        }
+        return response()->json(['results' => $results]);
     }
 }

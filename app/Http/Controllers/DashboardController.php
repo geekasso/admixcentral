@@ -151,194 +151,54 @@ class DashboardController extends Controller
 
     /**
      * AJAX endpoint to fetch real-time status for a specific firewall.
-     *
-     * Strategy: Live-First, Cache-Fallback
-     * 1. Attempt to fetch Static Data (Version, BIOS) LIVE.
-     *    - Success: Update Cache.
-     *    - Fail: Read from Cache.
-     * 2. Attempt to fetch Dynamic Data (Status, Interfaces, Gateways) LIVE.
-     *    - Success: Merge with Static and return.
-     *    - Fail: Return Offline status (but include Static info if available so user sees device details).
+     * Use shared logic with Background Jobs.
      *
      * @param Firewall $firewall
      * @return \Illuminate\Http\JsonResponse
      */
     public function checkStatus(Firewall $firewall)
     {
-        // 1. Setup Service and Keys
-        $staticCacheKey = 'firewall_static_info_' . $firewall->id;
-        $api = new PfSenseApiService($firewall);
-        $staticInfo = [];
-        $staticFetchSuccess = false;
+        // Close session write lock to allow concurrent requests
+        session_write_close();
 
-        // 1. Try Live Static Fetch
         try {
-            $versionInfo = $api->getSystemVersion();
-            if (isset($versionInfo['data'])) {
-                $staticInfo = array_merge($staticInfo, $versionInfo['data']);
-            }
+            $api = new PfSenseApiService($firewall);
+            
+            // Use the shared service method (Same as Job)
+            $dynamicStatus = $api->refreshSystemStatus();
 
-            try {
-                $apiVersionResponse = $api->getApiVersion();
-                $apiVersion = $apiVersionResponse['data']['output'] ?? 'Unknown';
-                $staticInfo['api_version'] = trim($apiVersion);
-            } catch (\Exception $e) {
-                $staticInfo['api_version'] = 'N/A';
-            }
+            // Broadcast so WebSocket listeners get it too
+            $statusEventData = [
+                'online' => true,
+                'data' => $dynamicStatus,
+                'api_version' => $dynamicStatus['api_version'] ?? null,
+                'updated_at' => now()->toIso8601String()
+            ];
 
-            // Success! Update Cache (valid for 24h as backup)
-            \Illuminate\Support\Facades\Cache::put($staticCacheKey, $staticInfo, now()->addDay());
-            $staticFetchSuccess = true;
-
-        } catch (\Exception $e) {
-            // Live Static Key fetch failed? Fallback to cache
-            $staticInfo = \Illuminate\Support\Facades\Cache::get($staticCacheKey, []);
-        }
-
-        // 2. Try Live Dynamic Fetch
-        try {
-            $dynamicStatus = $api->getSystemStatus();
-
-            // Fetch Interface Status (for Traffic Monitor & Status Indicators)
-            try {
-                $interfaces = $api->getInterfacesStatus();
-                // DEBUG: Log interfaces to check for name/label fields
-                // \Illuminate\Support\Facades\Log::info('Interfaces Status Structure:', ['data' => $interfaces['data'] ?? []]);
-                $dynamicStatus['interfaces'] = $interfaces['data'] ?? [];
-            } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Interface Status Fetch Failed: ' . $e->getMessage());
-                $dynamicStatus['interfaces'] = [];
-            }
-
-            // Fetch DNS Servers
-            try {
-                $dns = $api->getSystemDns();
-                // Structure depends on API: usually data->dns or data->dnsserver
-                // Let's assume standardized response ['data' => ['dns' => [...]]] or similar
-                // If using pfSense-API (faucets), it returns ['data' => ['dns_server' => [...]]]
-                if (isset($dns['data']['dns'])) {
-                    $dynamicStatus['data']['dns_servers'] = $dns['data']['dns'];
-                } elseif (isset($dns['data']['dns_server'])) {
-                    $dynamicStatus['data']['dns_servers'] = $dns['data']['dns_server'];
-                } elseif (isset($dns['data']['dnsserver'])) {
-                    $dynamicStatus['data']['dns_servers'] = $dns['data']['dnsserver']; // legacy
-                } else {
-                    $dynamicStatus['data']['dns_servers'] = [];
-                }
-            } catch (\Exception $e) {
-                // Ignore missing DNS
-            }
-
-
-
-            // Fetch Config History (Last Change)
-            try {
-                $history = $api->getConfigHistory();
-
-                // Expecting data to be an array of revisions
-                $revisions = $history['data'] ?? $history ?? [];
-
-                if (!empty($revisions) && is_array($revisions)) {
-                    // Get first item
-                    $latest = reset($revisions);
-                    if (isset($latest['time'])) {
-                        // It's likely a unix timestamp
-                        $dynamicStatus['data']['last_config_change'] = date('Y-m-d H:i:s T', $latest['time']);
-                        $dynamicStatus['data']['last_config_change_ts'] = $latest['time'];
-                    } elseif (isset($latest['date'])) {
-                        $dynamicStatus['data']['last_config_change'] = $latest['date'];
-                    }
-                }
-            } catch (\Exception $e) {
-                // Ignore
-            }
-
-            // Fetch Installed Packages Count
-            try {
-                $packages = $api->getSystemPackages();
-                // Expecting structure: ['data' => ['package' => [...]]] or just array of packages
-                // pfSense API usually returns ['data' => ['package' => [ ... list of packages ... ]]]
-                
-                $pkgCount = 0;
-                if (isset($packages['data']['package']) && is_array($packages['data']['package'])) {
-                    $pkgCount = count($packages['data']['package']);
-                } elseif (isset($packages['data']) && is_array($packages['data'])) {
-                    // Fallback for some versions/endpoints
-                    $pkgCount = count($packages['data']);
-                }
-                
-                $dynamicStatus['data']['installed_packages_count'] = $pkgCount;
-
-            } catch (\Exception $e) {
-                $dynamicStatus['data']['installed_packages_count'] = 'N/A';
-            }
-
-            // Fetch Gateways Status (for Dashboard Cards)
-            try {
-                // We need gateway status (online/offline/latency) AND description (from config)
-                // This logic mirrors StatusController::gateways()
-                
-                // 1. Fetch Status (runtime info like 'status', 'monitorip', 'delay')
-                $statusData = [];
-                $rawStatus = $api->getGateways(); // This maps to /status/gateways
-                if (isset($rawStatus['data']['gateway']) && is_array($rawStatus['data']['gateway'])) {
-                    $statusData = $rawStatus['data']['gateway'];
-                } elseif (isset($rawStatus['data']) && is_array($rawStatus['data'])) {
-                    $statusData = $rawStatus['data'];
-                }
-
-                // 2. Fetch Config (static info like 'descr')
-                $configData = [];
-                $rawConfig = $api->getRoutingGateways(); // This maps to /routing/gateways
-                if (isset($rawConfig['data']['gateway']) && is_array($rawConfig['data']['gateway'])) {
-                    $configData = $rawConfig['data']['gateway'];
-                } elseif (isset($rawConfig['data']) && is_array($rawConfig['data'])) {
-                    $configData = $rawConfig['data'];
-                }
-
-                // 3. Merge Description from Config into Status
-                // If status is empty (e.g. API fail), we might want to fallback to config-only, but status is critical for the badge.
-                // Prioritize Status data.
-                foreach ($statusData as &$gateway) {
-                    $config = collect($configData)->firstWhere('name', $gateway['name']);
-                    if ($config) {
-                        $gateway['descr'] = $config['descr'] ?? '';
-                    }
-                }
-                unset($gateway); // break reference
-
-                $dynamicStatus['gateways'] = $statusData;
-
-            } catch (\Exception $e) {
-                $dynamicStatus['gateways'] = [];
-            }
-
-            // Merge Static Info into Dynamic Status
-            if (isset($dynamicStatus['data'])) {
-                $dynamicStatus['data'] = array_merge($dynamicStatus['data'], $staticInfo);
-                if (isset($staticInfo['api_version'])) {
-                    $dynamicStatus['api_version'] = $staticInfo['api_version'];
-                }
-            } else {
-                $dynamicStatus = array_merge($dynamicStatus ?? [], $staticInfo);
-            }
-
-            // Broadcast
-            event(new \App\Events\DeviceStatusUpdateEvent($firewall, $dynamicStatus));
+            event(new \App\Events\DeviceStatusUpdateEvent($firewall, $statusEventData));
 
             return response()->json([
                 'online' => true,
                 'status' => $dynamicStatus,
-                'source' => $staticFetchSuccess ? 'live_full' : 'live_dynamic_cached_static'
+                'source' => 'live_sync'
             ]);
 
         } catch (\Exception $e) {
-            // Device is completely unreachable (or at least status check failed)
-            // Return OFFLINE status, but include the Cached Static Info so the dashboard isn't empty
+            $staticCacheKey = 'firewall_static_info_' . $firewall->id;
+            $staticInfo = Cache::get($staticCacheKey, []);
+
+            // Broadcast offline event
+            event(new \App\Events\DeviceStatusUpdateEvent($firewall, [
+                'online' => false, 
+                'error' => $e->getMessage(),
+                'updated_at' => now()->toIso8601String(),
+                'data' => null // Consistent with Job
+            ]));
+
             return response()->json([
                 'online' => false,
                 'error' => $e->getMessage(),
-                'status' => ['data' => $staticInfo] // Pass static info even if offline
+                'status' => ['data' => $staticInfo] 
             ]);
         }
     }

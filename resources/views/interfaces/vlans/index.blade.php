@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <x-card>
                 <x-card-header title="VLAN Interfaces">
                     <x-link-button-add href="{{ route('interfaces.vlans.create', $firewall) }}">

@@ -60,6 +60,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/firewall/{firewall}/system/routing/gateway-groups/{id}', [RoutingController::class, 'updateGatewayGroup'])->name('firewall.system.routing.gateway-groups.update');
     Route::delete('/firewall/{firewall}/system/routing/gateway-groups/{id}', [RoutingController::class, 'destroyGatewayGroup'])->name('firewall.system.routing.gateway-groups.destroy');
 
+    // System Status (Global)
+    Route::get('/system/status', [App\Http\Controllers\SystemStatusController::class, 'check'])->name('system.status');
+
     // Main Dashboard
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/firewall/{firewall}/check-status', [App\Http\Controllers\DashboardController::class, 'checkStatus'])->name('firewall.check-status');
@@ -72,6 +75,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Companies (admin only)
     Route::resource('companies', App\Http\Controllers\CompanyController::class)
         ->middleware('can:admin');
+
+    Route::post('/firewalls/refresh-all', [App\Http\Controllers\FirewallController::class, 'refreshAll'])->name('firewalls.refresh-all');
+    Route::post('/firewalls/status', [App\Http\Controllers\FirewallController::class, 'getCachedStatus'])->name('firewalls.status');
 
     // Firewalls CRUD - Place BEFORE the specific firewall routes
     // Exclude 'show' because we use a custom dashboard instead
@@ -230,13 +236,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('users', App\Http\Controllers\UserController::class)
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin']);
 
-    // System Customization (Global Admin)
-    Route::get('/system/customization', [App\Http\Controllers\SystemCustomizationController::class, 'index'])
+    // System Settings (Global Admin)
+    Route::get('/system/settings', [App\Http\Controllers\SystemCustomizationController::class, 'index'])
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
-        ->name('system.customization.index');
-    Route::post('/system/customization', [App\Http\Controllers\SystemCustomizationController::class, 'update'])
+        ->name('system.settings.index');
+    Route::post('/system/settings', [App\Http\Controllers\SystemCustomizationController::class, 'update'])
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
-        ->name('system.customization.update');
+        ->name('system.settings.update');
+    Route::post('/system/settings/restore', [App\Http\Controllers\SystemCustomizationController::class, 'restore'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.settings.restore');
 
     Route::get('/firewall/{firewall}/system/rest-api', [App\Http\Controllers\SystemRestApiController::class, 'index'])
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])

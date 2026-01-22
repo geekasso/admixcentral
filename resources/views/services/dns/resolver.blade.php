@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             @if(session('success'))
                 <div class="pf-alert pf-alert-success mb-4">
                     {{ session('success') }}

@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <x-card x-data="limiterHandler()" @open-create-modal.window="openModal()">
                 <x-card-header title="Limiters">
                     <x-button-add @click="$dispatch('open-create-modal')">
