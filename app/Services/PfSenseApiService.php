@@ -1510,32 +1510,32 @@ class PfSenseApiService
             // Version Comparison Logic
             $latestVersion = '2.7.2-RELEASE';
             $currentVersion = $staticInfo['product_version'] ?? $staticInfo['version'] ?? null;
-            
+
             if ($currentVersion) {
                 $vCurrent = preg_replace('/[^0-9.]/', '', $currentVersion);
                 $vLatest = preg_replace('/[^0-9.]/', '', $latestVersion);
-                
+
                 if (version_compare($vCurrent, $vLatest, '<')) {
                     $staticInfo['update_available'] = true;
                     $staticInfo['latest_available_version'] = $latestVersion;
                 } else {
-                     $staticInfo['update_available'] = false;
+                    $staticInfo['update_available'] = false;
                 }
             }
 
             // API Version Check
             $latestApiVersion = '2.6.9';
             if (isset($staticInfo['api_version']) && $staticInfo['api_version'] !== 'N/A' && $staticInfo['api_version'] !== 'Unknown') {
-                 $vApiCurrent = preg_replace('/[^0-9.]/', '', $staticInfo['api_version']);
-                 $vApiLatest = preg_replace('/[^0-9.]/', '', $latestApiVersion);
-                 
-                 if ($vApiCurrent) {
-                     if (version_compare($vApiCurrent, $vApiLatest, '<')) {
-                         $staticInfo['api_update_available'] = true;
-                     } else {
-                         $staticInfo['api_update_available'] = false;
-                     }
-                 }
+                $vApiCurrent = preg_replace('/[^0-9.]/', '', $staticInfo['api_version']);
+                $vApiLatest = preg_replace('/[^0-9.]/', '', $latestApiVersion);
+
+                if ($vApiCurrent) {
+                    if (version_compare($vApiCurrent, $vApiLatest, '<')) {
+                        $staticInfo['api_update_available'] = true;
+                    } else {
+                        $staticInfo['api_update_available'] = false;
+                    }
+                }
             }
 
             Cache::put($staticCacheKey, $staticInfo, now()->addDay());
@@ -1561,11 +1561,12 @@ class PfSenseApiService
             } elseif (isset($dns['data']['dns_server'])) {
                 $dynamicStatus['data']['dns_servers'] = $dns['data']['dns_server'];
             } elseif (isset($dns['data']['dnsserver'])) {
-                $dynamicStatus['data']['dns_servers'] = $dns['data']['dnsserver']; 
+                $dynamicStatus['data']['dns_servers'] = $dns['data']['dnsserver'];
             } else {
                 $dynamicStatus['data']['dns_servers'] = [];
             }
-        } catch (\Exception $e) { }
+        } catch (\Exception $e) {
+        }
 
         try {
             $history = $this->getConfigHistory();
@@ -1579,7 +1580,8 @@ class PfSenseApiService
                     $dynamicStatus['data']['last_config_change'] = $latest['date'];
                 }
             }
-        } catch (\Exception $e) { }
+        } catch (\Exception $e) {
+        }
 
         try {
             // Optimization: Skip packages for status checks to improve performance
@@ -1643,18 +1645,19 @@ class PfSenseApiService
 
         // Standardize common metrics if they exist under different names or nested forms
         $mappings = [
-            'cpu_usage'  => ['cpu', 'cpu_load', 'load', 'cpu_used_percent'],
-            'mem_usage'  => ['memory', 'mem_used_percent', 'memory_usage', 'mem_usage_percent'],
+            'cpu_usage' => ['cpu', 'cpu_load', 'load', 'cpu_used_percent'],
+            'mem_usage' => ['memory', 'mem_used_percent', 'memory_usage', 'mem_usage_percent'],
             'swap_usage' => ['swap', 'swap_used_percent', 'swap_percentage', 'memory_swap_percentage', 'swap_percent', 'swap_p', 'swapused_percent'],
             'disk_usage' => ['disk', 'disk_used_percent', 'disk_usage_percent', 'disk_used']
         ];
-        
+
         foreach ($mappings as $target => $sources) {
             if (!isset($dynamicStatus[$target]) || $dynamicStatus[$target] === null || $dynamicStatus[$target] === 0 || $dynamicStatus[$target] === '0') {
                 foreach ($sources as $source) {
                     if (isset($dynamicStatus[$source]) && $dynamicStatus[$source] !== null && $dynamicStatus[$source] !== '') {
                         $dynamicStatus[$target] = $dynamicStatus[$source];
-                        if ($dynamicStatus[$target] != 0) break; // If we found a non-zero value, move to next target
+                        if ($dynamicStatus[$target] != 0)
+                            break; // If we found a non-zero value, move to next target
                     }
                 }
             }
@@ -1678,7 +1681,7 @@ class PfSenseApiService
         }
 
         if (isset($dynamicStatus['api_version'])) {
-             // Already set from staticInfo or flattened data
+            // Already set from staticInfo or flattened data
         } elseif (isset($staticInfo['api_version'])) {
             $dynamicStatus['api_version'] = $staticInfo['api_version'];
         }

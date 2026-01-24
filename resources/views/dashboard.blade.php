@@ -525,9 +525,54 @@
                 
                 checkAndTrigger();
                 
-                // Real-time polling interval (configurable, default 30s)
-                const intervalMs = {{ ($settings['status_check_interval'] ?? 30) * 1000 }};
-                setInterval(() => { this.triggerBatchUpdate(); }, intervalMs);
+                // Dynamic Intervals from Settings
+                this.realtimeMs = {{ ($settings['realtime_interval'] ?? 10) * 1000 }};
+                this.fallbackMs = {{ ($settings['fallback_interval'] ?? 30) * 1000 }};
+                console.log('Dashboard Intervals Loaded:', { 
+                    realtime: this.realtimeMs, 
+                    fallback: this.fallbackMs,
+                    rawSettings: @json($settings)
+                });
+                this.timer = null;
+                
+                this.startIntervalManager();
+            },
+
+            startIntervalManager() {
+                if (this.timer) clearInterval(this.timer);
+                
+                // Monitor WebSocket state to adjust interval speed
+                const getDelay = () => {
+                    // Default to fast (Real-time) unless explicitly disconnected
+                    // This ensures 'connecting' or 'initialized' states don't slow us down
+                    const state = window.Echo?.connector?.pusher?.connection?.state;
+                    const isExplicitlyDisconnected = (state === 'disconnected' || state === 'failed' || state === 'unavailable');
+                    
+                    if (isExplicitlyDisconnected) {
+                        return this.fallbackMs;
+                    }
+                    return this.realtimeMs;
+                };
+
+                let lastState = (window.Echo?.connector?.pusher?.connection?.state === 'connected');
+                
+                const run = () => {
+                    this.triggerBatchUpdate();
+                    
+                    // Recursive timeout allows us to adjust speed based on connection state in real-time
+                    const delay = getDelay();
+                    this.timer = setTimeout(run, delay);
+                    
+                    // If state changed, log it
+                    let currentState = (delay === this.realtimeMs);
+                    if (currentState !== lastState) {
+                        console.log(`Switching dashboard refresh speed: ${currentState ? 'Real-time' : 'Fallback'} (${delay/1000}s)`);
+                        lastState = currentState;
+                    }
+                };
+                
+                // Initial kick-off (after the immediate checkAndTrigger)
+                this.timer = setTimeout(run, getDelay());
             },
             
             async triggerBatchUpdate() {
@@ -535,12 +580,16 @@
                 let url = '{{ route("firewalls.refresh-all") }}';
                 let isWsConnected = false;
                 
-                if (window.Echo && window.Echo.connector && window.Echo.connector.pusher && window.Echo.connector.pusher.connection) {
-                    isWsConnected = (window.Echo.connector.pusher.connection.state === 'connected');
-                }
+                // Only force sync fallback if explicitly disconnected
+                const state = window.Echo?.connector?.pusher?.connection?.state;
+                let isExplicitlyDisconnected = (state === 'disconnected' || state === 'failed' || state === 'unavailable');
                 
-                if (!isWsConnected) {
-                    url += '?sync=true';  // Force sync response if WS down (failover)
+                // Also treat missing Echo as disconnected
+                if (!window.Echo) isExplicitlyDisconnected = true;
+                
+                if (isExplicitlyDisconnected) {
+                    // console.warn('WS Disconnected/Failed. Forcing sync update.');
+                    url += '?sync=true';
                 }
                 
                 try {
@@ -742,7 +791,15 @@
                 }
                 
                 this.status = status;
-                this.online = status.online !== false;
+                
+                // Explicitly check for boolean/string truthiness to ensure we catch recovery
+                const prevOnline = this.online;
+                this.online = (status.online === true || status.online === 'true' || status.online === 1);
+                
+                if (prevOnline !== this.online) {
+                     console.log(`[Firewall ${this.firewallId}] Status changed: ${prevOnline ? 'Online' : 'Offline'} -> ${this.online ? 'Online' : 'Offline'}`, status);
+                }
+                
                 this.loading = false;
                 this.error = status.error || null;
 
@@ -793,10 +850,12 @@
             },
 
             setupWebSocket() {
+                if (this.wsListener) return; // Prevent double binding
+
                 if (window.Echo) {
-                    window.Echo.private('firewall.' + this.firewallId)
+                    this.wsListener = window.Echo.private('firewall.' + this.firewallId)
                         .listen('.firewall.status.update', (e) => {
-                            console.log('Real-time update received via WebSocket for device ' + this.firewallId, e);
+                            // console.log('Real-time update received via WebSocket for device ' + this.firewallId, e);
                             if (e && e.status) {
                                 this.updateFromStatus(e.status);
                             }

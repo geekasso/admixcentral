@@ -9,8 +9,7 @@
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{ route('users.store') }}" method="POST"
-                          x-data="{
+                    <form action="{{ route('users.store') }}" method="POST" x-data="{
                               companyId: '{{ old('company_id', request('company_id', '')) }}',
                               role: '{{ old('role', '') }}',
                               email: '{{ old('email', '') }}',
@@ -86,9 +85,9 @@
                         <!-- Name -->
                         <div class="mb-4">
                             <label for="name"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
                             <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                class="w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                             @error('name')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -97,21 +96,25 @@
                         <!-- Email -->
                         <div class="mb-4">
                             <label for="email"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
                             <div class="relative">
                                 <input type="email" name="email" id="email" value="{{ old('email') }}" required
-                                    x-model="email"
-                                    @blur="checkEmail()"
-                                    class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                    x-model="email" @blur="checkEmail()"
+                                    class="w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                                     :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': emailError}">
                                 <div x-show="isCheckingEmail" class="absolute right-3 top-3">
-                                    <svg class="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    <svg class="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
                                     </svg>
                                 </div>
                             </div>
-                            <p x-show="emailError" class="text-red-500 text-xs mt-1" style="display: none;">This email is already taken.</p>
+                            <p x-show="emailError" class="text-red-500 text-xs mt-1" style="display: none;">This email
+                                is already taken.</p>
                             @error('email')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -120,30 +123,28 @@
                         <!-- Password -->
                         <div class="mb-4">
                             <label for="password"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
-                            <input type="password" name="password" id="password" required
-                                x-model="password"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                            <input type="password" name="password" id="password" required x-model="password"
                                 @input="checkPassword()"
-                                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-                            
+                                class="w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+
                             <!-- Strength Meter -->
                             <div class="mt-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-md border border-gray-100 dark:border-gray-700"
-                                 x-show="password.length > 0"
-                                 x-transition.opacity>
+                                x-show="password.length > 0" x-transition.opacity>
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Strength</span>
-                                    <span class="text-xs font-bold"
-                                          :class="{
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Strength</span>
+                                    <span class="text-xs font-bold" :class="{
                                               'text-red-500': passwordScore <= 1,
                                               'text-yellow-500': passwordScore === 2,
                                               'text-blue-500': passwordScore === 3,
                                               'text-green-500': passwordScore === 4
                                           }"
-                                          x-text="['Weak', 'Fair', 'Good', 'Strong'][Math.max(0, passwordScore - 1)] || 'Weak'"></span>
+                                        x-text="['Weak', 'Fair', 'Good', 'Strong'][Math.max(0, passwordScore - 1)] || 'Weak'"></span>
                                 </div>
-                                <div class="h-1.5 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-3">
-                                    <div class="h-full transition-all duration-500 ease-out"
-                                         :class="{
+                                <div
+                                    class="h-1.5 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-3">
+                                    <div class="h-full transition-all duration-500 ease-out" :class="{
                                              'w-1/4 bg-red-500': passwordScore <= 1,
                                              'w-2/4 bg-yellow-500': passwordScore === 2,
                                              'w-3/4 bg-blue-500': passwordScore === 3,
@@ -160,8 +161,13 @@
                                         <li class="flex items-center gap-2 transition-colors duration-200"
                                             :class="met ? 'text-green-600 dark:text-green-400 font-medium' : 'text-gray-400 dark:text-gray-500'">
                                             <div class="w-4 h-4 rounded-full flex items-center justify-center border transition-colors duration-200"
-                                                 :class="met ? 'bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-800' : 'border-gray-300 dark:border-gray-600'">
-                                                <svg x-show="met" class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                                :class="met ? 'bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-800' : 'border-gray-300 dark:border-gray-600'">
+                                                <svg x-show="met" class="w-2.5 h-2.5" fill="currentColor"
+                                                    viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
                                             </div>
                                             <span x-text="name"></span>
                                         </li>
@@ -177,14 +183,15 @@
                         <!-- Confirm Password -->
                         <div class="mb-4">
                             <label for="password_confirmation"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm
                                 Password</label>
                             <input type="password" name="password_confirmation" id="password_confirmation" required
                                 x-model="passwordConfirm"
-                                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                                 :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': passwordConfirm && password !== passwordConfirm, 'border-green-500 focus:border-green-500 focus:ring-green-500': passwordConfirm && password === passwordConfirm}">
-                            
-                            <p x-show="passwordConfirm && password !== passwordConfirm" class="text-red-500 text-xs mt-1 transition-opacity duration-200">
+
+                            <p x-show="passwordConfirm && password !== passwordConfirm"
+                                class="text-red-500 text-xs mt-1 transition-opacity duration-200">
                                 Passwords do not match.
                             </p>
                         </div>
@@ -192,26 +199,35 @@
                         <!-- Company -->
                         <div class="mb-4">
                             <label for="company_id"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Company</label>
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company</label>
                             @if($companies->count() > 1 || auth()->user()->isGlobalAdmin())
                                 <input type="hidden" name="company_id" :value="companyId === 'global' ? '' : companyId">
                                 <input type="hidden" name="company_id" :value="companyId === 'global' ? '' : companyId">
 
-                                <div class="relative" @click.outside="companyOpen = false" @keydown.escape="companyOpen = false">
+                                <div class="relative" @click.outside="companyOpen = false"
+                                    @keydown.escape="companyOpen = false">
                                     <!-- Trigger Button -->
                                     <button @click="companyOpen = !companyOpen" type="button"
                                         class="flex items-center justify-between w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm px-3 py-2 text-left focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition ease-in-out duration-150">
-                                        <span x-text="selectedCompanyName" :class="{'text-gray-500': companyId === '' || companyId === 'global' && false, 'text-gray-900 dark:text-gray-300': companyId !== ''}"></span>
-                                        <svg class="h-4 w-4 ml-2 text-gray-500 transform transition-transform duration-200" :class="{'rotate-180': companyOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        <span x-text="selectedCompanyName"
+                                            :class="{'text-gray-500': companyId === '' || companyId === 'global' && false, 'text-gray-900 dark:text-gray-300': companyId !== ''}"></span>
+                                        <svg class="h-4 w-4 ml-2 text-gray-500 transform transition-transform duration-200"
+                                            :class="{'rotate-180': companyOpen}" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
                                     </button>
 
                                     <!-- Dropdown Menu -->
                                     <div x-show="companyOpen" x-transition.opacity.duration.200ms style="display: none;"
-                                         class="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg overflow-hidden">
+                                        class="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg overflow-hidden">
 
                                         <!-- Search Input -->
-                                        <div class="p-2 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-                                            <input x-model="companySearch" x-ref="companySearchInput" type="text" placeholder="Search..."
+                                        <div
+                                            class="p-2 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                                            <input x-model="companySearch" x-ref="companySearchInput" type="text"
+                                                placeholder="Search..."
                                                 class="w-full text-sm rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500">
                                         </div>
 
@@ -232,14 +248,16 @@
                                                 </li>
                                             </template>
 
-                                            <li x-show="filteredCompanies.length === 0" class="px-4 py-2 text-sm text-gray-400 italic text-center">No matches</li>
+                                            <li x-show="filteredCompanies.length === 0"
+                                                class="px-4 py-2 text-sm text-gray-400 italic text-center">No matches</li>
                                         </ul>
                                     </div>
                                 </div>
 
                             @else
                                 <!-- Single company available (Company Admin) -->
-                                <input type="hidden" name="company_id" value="{{ $companies->first()->id }}" x-init="companyId = '{{ $companies->first()->id }}'">
+                                <input type="hidden" name="company_id" value="{{ $companies->first()->id }}"
+                                    x-init="companyId = '{{ $companies->first()->id }}'">
                                 <input type="text" disabled value="{{ $companies->first()->name }}"
                                     class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-400">
                             @endif
@@ -251,9 +269,10 @@
                         <!-- Role -->
                         <div class="mb-4">
                             <label for="role"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Role</label>
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Role</label>
                             <input type="hidden" name="role" :value="role">
-                            <div class="relative" x-data="{ roleOpen: false }" @click.outside="roleOpen = false" @keydown.escape="roleOpen = false">
+                            <div class="relative" x-data="{ roleOpen: false }" @click.outside="roleOpen = false"
+                                @keydown.escape="roleOpen = false">
                                 <button @click="if(companyId !== '') roleOpen = !roleOpen" type="button"
                                     :class="{'opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800': companyId === '', 'bg-white dark:bg-gray-900': companyId !== ''}"
                                     :disabled="companyId === ''"
@@ -263,32 +282,34 @@
                                         (role === 'admin' && companyId !== 'global' ? 'Company Admin (Full Company Access)' :
                                         (role === 'user' ? 'End User (Standard Access)' : 'Select a user role...'))
                                     "
-                                    :class="{'text-gray-500': role === '', 'text-gray-900 dark:text-gray-300': role !== ''}"></span>
-                                    <svg class="h-4 w-4 ml-2 text-gray-500 transform transition-transform duration-200" :class="{'rotate-180': roleOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        :class="{'text-gray-500': role === '', 'text-gray-900 dark:text-gray-300': role !== ''}"></span>
+                                    <svg class="h-4 w-4 ml-2 text-gray-500 transform transition-transform duration-200"
+                                        :class="{'rotate-180': roleOpen}" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
                                 </button>
 
                                 <div x-show="roleOpen" x-transition.opacity.duration.200ms style="display: none;"
-                                     class="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg overflow-hidden">
+                                    class="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg overflow-hidden">
                                     <ul class="py-1">
                                         <!-- Global Admin (Only visible if All Companies selected) -->
-                                        <li x-show="companyId === 'global'"
-                                            @click="role = 'admin'; roleOpen = false;"
+                                        <li x-show="companyId === 'global'" @click="role = 'admin'; roleOpen = false;"
                                             class="px-4 py-2 cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
                                             :class="{'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700': role === 'admin'}">
                                             Global Admin (Full System Access)
                                         </li>
 
                                         <!-- Customer Admin (Only visible if Specific Company selected) -->
-                                        <li x-show="companyId !== 'global'"
-                                            @click="role = 'admin'; roleOpen = false;"
+                                        <li x-show="companyId !== 'global'" @click="role = 'admin'; roleOpen = false;"
                                             class="px-4 py-2 cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
                                             :class="{'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700': role === 'admin'}">
                                             Company Admin (Full Company Access)
                                         </li>
 
                                         <!-- End User (Only visible if Specific Company selected) -->
-                                        <li x-show="companyId !== 'global'"
-                                            @click="role = 'user'; roleOpen = false;"
+                                        <li x-show="companyId !== 'global'" @click="role = 'user'; roleOpen = false;"
                                             class="px-4 py-2 cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
                                             :class="{'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700': role === 'user'}">
                                             End User (Standard Access)
@@ -302,14 +323,16 @@
                         </div>
 
                         <div class="flex items-center gap-4">
-                            <button type="submit"
-                                :disabled="emailError || role === '' || companyId === '' || isCheckingEmail || passwordScore < 3 || password !== passwordConfirm"
-                                :class="{'opacity-50 cursor-not-allowed': emailError || role === '' || companyId === '' || isCheckingEmail || passwordScore < 3 || password !== passwordConfirm}"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-opacity duration-200">
-                                Create User
-                            </button>
-                            <a href="{{ route('users.index') }}"
-                                class="text-gray-600 dark:text-gray-400 hover:underline">Cancel</a>
+                            <x-primary-button type="submit"
+                                x-bind:disabled="emailError || role === '' || companyId === '' || isCheckingEmail || passwordScore < 3 || password !== passwordConfirm"
+                                x-bind:class="{'opacity-50 cursor-not-allowed': emailError || role === '' || companyId === '' || isCheckingEmail || passwordScore < 3 || password !== passwordConfirm}">
+                                {{ __('Create User') }}
+                            </x-primary-button>
+                            <a href="{{ route('users.index') }}">
+                                <x-secondary-button>
+                                    {{ __('Cancel') }}
+                                </x-secondary-button>
+                            </a>
                         </div>
                     </form>
                 </div>

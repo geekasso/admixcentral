@@ -21,6 +21,10 @@ class SystemCustomizationController extends Controller
             'favicon' => 'nullable|mimes:ico,png|max:1024',
             'theme' => 'required|in:light,dark',
             'status_check_interval' => 'nullable|integer|min:5|max:300',
+            'realtime_interval' => 'nullable|integer|min:2|max:300',
+            'fallback_interval' => 'nullable|integer|min:5|max:600',
+            'sidebar_bg' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'sidebar_text' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -34,10 +38,27 @@ class SystemCustomizationController extends Controller
         }
 
         SystemSetting::updateOrCreate(['key' => 'theme'], ['value' => $request->theme]);
-        
-        // Save Status Check Interval (Default 30 if not present, though we handle null in view)
+
+        // Polling Intervals
         if ($request->filled('status_check_interval')) {
             SystemSetting::updateOrCreate(['key' => 'status_check_interval'], ['value' => $request->status_check_interval]);
+        }
+
+        if ($request->filled('realtime_interval')) {
+            SystemSetting::updateOrCreate(['key' => 'realtime_interval'], ['value' => $request->realtime_interval]);
+        }
+
+        if ($request->filled('fallback_interval')) {
+            SystemSetting::updateOrCreate(['key' => 'fallback_interval'], ['value' => $request->fallback_interval]);
+        }
+
+        // Sidebar Appearance
+        if ($request->filled('sidebar_bg')) {
+            SystemSetting::updateOrCreate(['key' => 'sidebar_bg'], ['value' => $request->sidebar_bg]);
+        }
+
+        if ($request->filled('sidebar_text')) {
+            SystemSetting::updateOrCreate(['key' => 'sidebar_text'], ['value' => $request->sidebar_text]);
         }
 
         return redirect()->route('system.settings.index')->with('success', 'Settings updated successfully.');
@@ -50,7 +71,7 @@ class SystemCustomizationController extends Controller
         ]);
 
         $key = $request->type === 'logo' ? 'logo_path' : 'favicon_path';
-        
+
         // Delete the setting to restore default
         SystemSetting::where('key', $key)->delete();
 

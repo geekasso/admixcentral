@@ -4,6 +4,7 @@
     </x-slot>
 
     <div class="py-12" x-data="firewallDashboard()">
+
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">
 
             {{-- System Status --}}
@@ -45,7 +46,8 @@
                                     </x-dropdown-link>
 
                                     <!-- Authentication -->
-                                    <form method="POST" action="{{ route('firewalls.destroy', $firewall) }}" id="delete-firewall-form">
+                                    <form method="POST" action="{{ route('firewalls.destroy', $firewall) }}"
+                                        id="delete-firewall-form">
                                         @csrf
                                         @method('DELETE')
 
@@ -129,11 +131,16 @@
                                         <tr class="border-b dark:border-gray-700">
                                             <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">Uptime
                                             </th>
-                                            <td class="py-2 text-sm" x-text="systemStatus?.data?.uptime || systemStatus?.data?.uptime_text || systemStatus?.data?.uptime_string || 'Updating...'"></td>
+                                            <td class="py-2 text-sm"
+                                                x-text="systemStatus?.data?.uptime || systemStatus?.data?.uptime_text || systemStatus?.data?.uptime_string || 'Updating...'">
+                                            </td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
-                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">Packages</th>
-                                            <td class="py-2 text-sm" x-text="(systemStatus?.data?.installed_packages_count !== undefined) ? systemStatus.data.installed_packages_count : 'N/A'"></td>
+                                            <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">
+                                                Packages</th>
+                                            <td class="py-2 text-sm"
+                                                x-text="(systemStatus?.data?.installed_packages_count !== undefined) ? systemStatus.data.installed_packages_count : 'N/A'">
+                                            </td>
                                         </tr>
                                         <tr class="border-b dark:border-gray-700">
                                             <th class="py-2 font-medium text-gray-900 dark:text-gray-300 text-sm">DNS
@@ -173,17 +180,18 @@
                                 <!-- Gateways Status -->
                                 <template x-if="gateways && gateways.length > 0">
                                     <div class="mb-3">
-                                        <div class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">Gateways</div>
+                                        <div class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">Gateways
+                                        </div>
                                         <div class="grid gap-1">
                                             <template x-for="gateway in gateways" :key="gateway.name">
-                                                <div class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1 border-l-2" 
+                                                <div class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1 border-l-2"
                                                     :class="{
                                                         'border-green-500': gateway.status === 'online' || gateway.status === 'none',
                                                         'border-red-500': gateway.status === 'offline' || gateway.status === 'down',
                                                         'border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                    }"
-                                                    :title="gateway.monitorip || gateway.srcip">
-                                                    <span class="text-sm font-mono font-medium text-gray-700 dark:text-gray-300" 
+                                                    }" :title="gateway.monitorip || gateway.srcip">
+                                                    <span
+                                                        class="text-sm font-mono font-medium text-gray-700 dark:text-gray-300"
                                                         x-text="gateway.descr || gateway.name || 'Unknown'"></span>
                                                     <div class="flex items-center gap-1.5">
                                                         <div class="w-2 h-2 rounded-full" :class="{
@@ -191,7 +199,8 @@
                                                             'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
                                                             'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
                                                         }"></div>
-                                                        <span class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400"
+                                                        <span
+                                                            class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400"
                                                             x-text="gateway.status"></span>
                                                     </div>
                                                 </div>
@@ -202,13 +211,17 @@
 
                                 <template x-if="!gateways || gateways.length === 0">
                                     <div class="mb-3">
-                                        <div class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">Gateways</div>
+                                        <div class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">Gateways
+                                        </div>
                                         <div class="grid gap-1">
-                                            <div class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1 border-l-2 border-gray-300 dark:border-gray-600">
-                                                <span class="text-sm font-mono font-medium text-gray-500 dark:text-gray-400">WAN</span>
+                                            <div
+                                                class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1 border-l-2 border-gray-300 dark:border-gray-600">
+                                                <span
+                                                    class="text-sm font-mono font-medium text-gray-500 dark:text-gray-400">WAN</span>
                                                 <div class="flex items-center gap-1.5">
                                                     <div class="w-2 h-2 rounded-full bg-gray-400"></div>
-                                                    <span class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400">Unknown</span>
+                                                    <span
+                                                        class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400">Unknown</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,8 +283,7 @@
                                 <!-- Temperature -->
                                 <div>
                                     <div class="flex justify-between mb-1 text-sm">
-                                        <span
-                                            class="font-medium text-gray-700 dark:text-gray-300">Temperature</span>
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">Temperature</span>
                                         <span class="text-gray-700 dark:text-gray-300"
                                             x-text="(systemStatus?.data?.temp_c && systemStatus.data.temp_c > 1) ? systemStatus.data.temp_c + '°C' : 'N/A'"></span>
                                     </div>
@@ -283,12 +295,14 @@
                                 </div>
 
                                 <!-- Interface Status Indicators -->
-                                <template x-if="systemStatus && systemStatus.interfaces">
+                                <template
+                                    x-if="(systemStatus && systemStatus.interfaces) || (interfaces && interfaces.length > 0)">
                                     <div>
                                         <div class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                                             Interfaces</div>
                                         <div class="flex flex-wrap gap-2">
-                                            <template x-for="(iface, name) in systemStatus.interfaces" :key="name">
+                                            <template x-for="(iface, name) in (systemStatus?.interfaces || interfaces)"
+                                                :key="name">
                                                 <div
                                                     class="flex items-center gap-1.5 bg-gray-50 dark:bg-gray-700 px-2 py-1 rounded text-xs border border-gray-100 dark:border-gray-600">
                                                     <div class="w-2 h-2 rounded-full" :class="{
@@ -421,12 +435,15 @@
             <div class="flex flex-col lg:flex-row gap-6">
                 {{-- Left Column: Traffic Graphs --}}
                 <div id="db-col-traffic" class="w-full space-y-6">
+
+
                     {{-- Interface Traffic --}}
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 text-gray-900 dark:text-gray-100">
                             <h3 class="text-xl font-semibold mb-4">Interface Traffic</h3>
 
-                            <template x-if="!systemStatus || !systemStatus.interfaces">
+                            <template
+                                x-if="(!systemStatus || !systemStatus.interfaces) && (!interfaces || interfaces.length === 0)">
                                 <div class="grid grid-cols-1 gap-6 animate-pulse">
                                     <!-- Skeleton Card 1 -->
                                     <div class="border border-gray-100 dark:border-gray-700 rounded-lg p-4">
@@ -480,8 +497,9 @@
                                 </div>
                             </template>
 
-                            <div class="grid grid-cols-1 gap-6" x-show="systemStatus && systemStatus.interfaces">
-                                <template x-for="(iface, name) in systemStatus.interfaces" :key="name">
+                            <div class="grid grid-cols-1 gap-6"
+                                x-show="(systemStatus && systemStatus.interfaces) || (interfaces && interfaces.length > 0)">
+                                <template x-for="(iface, name) in (systemStatus?.interfaces || interfaces)" :key="name">
                                     <div class="border border-gray-100 dark:border-gray-700 rounded-lg p-4">
                                         <div class="flex justify-between items-center mb-3">
                                             <div class="flex items-center gap-2">
@@ -531,25 +549,37 @@
                             <div class="p-6 text-gray-900 dark:text-gray-100">
                                 <h3 class="text-xl font-semibold mb-4">Location</h3>
                                 <div class="text-sm text-gray-500 dark:text-gray-400 mb-4 flex items-start">
-                                    <svg class="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                    <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($firewall->address) }}" target="_blank" class="text-indigo-600 dark:text-indigo-400 hover:underline transition-colors">
+                                    <svg class="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                        </path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($firewall->address) }}"
+                                        target="_blank"
+                                        class="text-indigo-600 dark:text-indigo-400 hover:underline transition-colors">
                                         {{ $firewall->address }}
                                     </a>
                                 </div>
-                                <div id="firewall-map" class="w-full h-48 rounded-lg border border-gray-200 dark:border-gray-600 z-0"></div>
-                                
-                                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-                                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                                <div id="firewall-map"
+                                    class="w-full h-48 rounded-lg border border-gray-200 dark:border-gray-600 z-0"></div>
+
+                                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+                                    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+                                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                                    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                                 <script>
-                                    document.addEventListener('DOMContentLoaded', function() {
+                                    document.addEventListener('DOMContentLoaded', function () {
                                         // Initialize Leaflet map centered on firewall coordinates
                                         var map = L.map('firewall-map').setView([{{ $firewall->latitude }}, {{ $firewall->longitude }}], 13);
-                                        
+
                                         // Add OpenStreetMap tile layer
                                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                         }).addTo(map);
-                                        
+
                                         // Add marker with popup showing firewall name and address
                                         L.marker([{{ $firewall->latitude }}, {{ $firewall->longitude }}]).addTo(map)
                                             .bindPopup("<b>{{ $firewall->name }}</b><br>{{ Str::limit($firewall->address, 30) }}").openPopup();
@@ -665,7 +695,7 @@
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-xl font-semibold">Packages</h3>
                             </div>
-                            
+
                             <template x-if="packagesLoading">
                                 <div class="space-y-4 animate-pulse">
                                     <div class="h-8 bg-gray-200 rounded w-full"></div>
@@ -674,35 +704,45 @@
                             </template>
 
                             <div class="overflow-x-auto" x-show="!packagesLoading">
-                                 <template x-if="packages.length === 0">
+                                <template x-if="packages.length === 0">
                                     <div class="text-gray-500 text-sm italic">No packages installed.</div>
                                 </template>
-                                
-                                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400" x-show="packages.length > 0">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+
+                                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+                                    x-show="packages.length > 0">
+                                    <thead
+                                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" class="px-3 py-2 text-sm font-medium">Name</th>
-                                            <th scope="col" class="px-3 py-2 text-sm font-medium min-w-[200px]">Description</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium min-w-[200px]">
+                                                Description</th>
                                             <th scope="col" class="px-3 py-2 text-sm font-medium">Installed</th>
                                             <th scope="col" class="px-3 py-2 text-sm font-medium">Latest</th>
-                                            <th scope="col" class="px-3 py-2 text-sm font-medium text-center">Status</th>
+                                            <th scope="col" class="px-3 py-2 text-sm font-medium text-center">Status
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <template x-for="pkg in packages" :key="pkg.name">
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                                <td class="px-3 py-2 font-medium text-gray-900 dark:text-white" x-text="pkg.shortname || '-'"></td>
-                                                <td class="px-3 py-2 text-xs whitespace-normal break-words" x-text="pkg.descr || '-'"></td>
-                                                <td class="px-3 py-2 font-mono text-xs" 
-                                                    :class="{'text-red-600 font-bold': pkg.update_available, 'text-gray-900 dark:text-gray-300': !pkg.update_available}" 
+                                            <tr
+                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-3 py-2 font-medium text-gray-900 dark:text-white"
+                                                    x-text="pkg.shortname || '-'"></td>
+                                                <td class="px-3 py-2 text-xs whitespace-normal break-words"
+                                                    x-text="pkg.descr || '-'"></td>
+                                                <td class="px-3 py-2 font-mono text-xs"
+                                                    :class="{'text-red-600 font-bold': pkg.update_available, 'text-gray-900 dark:text-gray-300': !pkg.update_available}"
                                                     x-text="pkg.installed_version"></td>
-                                                <td class="px-3 py-2 font-mono text-xs" x-text="pkg.latest_version || '-'"></td>
+                                                <td class="px-3 py-2 font-mono text-xs"
+                                                    x-text="pkg.latest_version || '-'"></td>
                                                 <td class="px-3 py-2 text-center">
                                                     <template x-if="pkg.update_available">
-                                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Update</span>
+                                                        <span
+                                                            class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Update</span>
                                                     </template>
                                                     <template x-if="!pkg.update_available">
-                                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">OK</span>
+                                                        <span
+                                                            class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">OK</span>
                                                     </template>
                                                 </td>
                                             </tr>
@@ -740,35 +780,94 @@
 
                     packages: [],
                     packagesLoading: true,
-                    
+
                     // Traffic Monitor
-                    bandwidthHistory: new Array(20).fill({ in: 0, out: 0 }),
+                    bandwidthHistory: new Array(20).fill(0).map(() => ({ in: 0, out: 0 })),
                     currentTraffic: { in: '0 Bps', out: '0 Bps' },
                     lastBytes: { in: 0, out: 0, time: 0 },
-                    
+
                     // Interface Monitor (Multi-Interface)
                     interfaceHistory: {},  // Map of interface name -> Array of history
                     lastInterfaceBytes: {}, // Map of interface name -> {in, out, time}
                     interfaceRates: {},     // Map of interface name -> {in, out}
-                    
+
                     // Load Monitor
                     loadHistory: new Array(20).fill(0),
+
+                    extractBytes(iface, type) {
+                        // type: 'in' or 'out'
+
+                        // Helper to check an object and parse units with loose key matching
+                        const check = (o) => {
+                            if (!o || typeof o !== 'object') return null;
+
+                            for (const [key, rawValue] of Object.entries(o)) {
+                                if (rawValue === null || rawValue === undefined) continue;
+
+                                const cleanKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+                                let isMatch = false;
+                                if (type === 'in') {
+                                    isMatch = ['inbytes', 'bytesin', 'rxbytes', 'inputbytes', 'in'].includes(cleanKey);
+                                } else {
+                                    isMatch = ['outbytes', 'bytesout', 'txbytes', 'outputbytes', 'out'].includes(cleanKey);
+                                }
+
+                                if (isMatch) {
+                                    const s = String(rawValue).replace(/,/g, '').trim();
+                                    const val = parseFloat(s);
+                                    if (isNaN(val)) continue;
+
+                                    const upper = s.toUpperCase();
+                                    // Handle Units (PB, TB, GB, MB, KB)
+                                    // Assume Base 1024 for data sizes
+                                    if (upper.includes('P')) return val * 1024 * 1024 * 1024 * 1024 * 1024;
+                                    if (upper.includes('T')) return val * 1024 * 1024 * 1024 * 1024;
+                                    if (upper.includes('G')) return val * 1024 * 1024 * 1024;
+                                    if (upper.includes('M')) return val * 1024 * 1024;
+                                    if (upper.includes('K')) return val * 1024;
+
+                                    return val;
+                                }
+                            }
+                            return null;
+                        };
+
+                        // 1. Check root
+                        let val = check(iface);
+                        if (val !== null) return val;
+
+                        // 2. Check 'stats'
+                        val = check(iface.stats);
+                        if (val !== null) return val;
+
+                        // 3. Check 'statistics'
+                        val = check(iface.statistics);
+                        if (val !== null) return val;
+
+                        return 0;
+                    },
 
                     updateBandwidthFromInterfaces(interfaces) {
                         const now = new Date().getTime();
 
-                        // 1. Process WAN for the Main "Current Traffic" card (Legacy/Summary)
-                        let wan = null;
-                        const wanKey = Object.keys(interfaces).find(key => key.toLowerCase() === 'wan');
-                        if (wanKey) wan = interfaces[wanKey];
-                        else {
-                            const firstKey = Object.keys(interfaces)[0];
-                            if (firstKey) wan = interfaces[firstKey];
+                        // 1. Process WAN
+                        // Robust find: Check keys AND descr/name properties
+                        const ifaceList = Object.values(interfaces);
+                        let wan = ifaceList.find(i => (i.name && i.name.toLowerCase() === 'wan') || (i.descr && i.descr.toLowerCase() === 'wan'));
+
+                        // Fallback: Check Keys if object (standard object structure)
+                        if (!wan && !Array.isArray(interfaces)) {
+                            const wanKey = Object.keys(interfaces).find(key => key.toLowerCase() === 'wan');
+                            if (wanKey) wan = interfaces[wanKey];
                         }
 
+                        // Fallback: First interface if nothing else found
+                        if (!wan && ifaceList.length > 0) wan = ifaceList[0];
+
                         if (wan) {
-                            const bytesIn = parseFloat(wan.inbytes || 0);
-                            const bytesOut = parseFloat(wan.outbytes || 0);
+                            const bytesIn = this.extractBytes(wan, 'in');
+                            const bytesOut = this.extractBytes(wan, 'out');
                             let inRate = 0;
                             let outRate = 0;
 
@@ -788,17 +887,17 @@
                             };
                         }
 
-                        // 2. Process ALL interfaces for the new "Interface Traffic" card
+                        // 2. Process ALL interfaces
                         Object.entries(interfaces).forEach(([name, iface]) => {
                             // Initialize history if new
                             if (!this.interfaceHistory[name]) {
-                                this.interfaceHistory[name] = new Array(20).fill({ in: 0, out: 0 });
+                                this.interfaceHistory[name] = new Array(20).fill(0).map(() => ({ in: 0, out: 0 }));
                                 this.lastInterfaceBytes[name] = { in: 0, out: 0, time: 0 };
                                 this.interfaceRates[name] = { in: '0 bps', out: '0 bps' };
                             }
 
-                            const iBytesIn = parseFloat(iface.inbytes || 0);
-                            const iBytesOut = parseFloat(iface.outbytes || 0);
+                            const iBytesIn = this.extractBytes(iface, 'in');
+                            const iBytesOut = this.extractBytes(iface, 'out');
                             let iInRate = 0;
                             let iOutRate = 0;
                             const last = this.lastInterfaceBytes[name];
@@ -819,7 +918,11 @@
                                 out: this.formatBytes(iOutRate, true)
                             };
                         });
+
+                        // Force strict reactivity update for deep object changes
+                        this.interfaceRates = { ...this.interfaceRates };
                     },
+
 
                     formatBytes(size, isBits = false) {
                         if (!+size) return isBits ? '0 bps' : '0 B';
@@ -849,22 +952,23 @@
                             history = this.interfaceHistory[interfaceName];
                         }
 
-                        const max = Math.max(...history.map(d => Math.max(d.in, d.out))) || 100;
+                        const safeMax = Math.max(...history.map(d => Math.max(Number(d.in) || 0, Number(d.out) || 0))) || 100;
                         const height = 40;
                         const width = 100;
-                        const step = width / (history.length - 1);
+                        const step = width / Math.max(history.length - 1, 1);
 
                         return history.map((d, i) => {
-                            const val = d[type];
-                            const y = height - ((val / max) * height);
-                            return `${i * step},${y}`;
+                            const val = Number(d[type]) || 0;
+                            const y = height - ((val / safeMax) * height);
+                            const safeY = isFinite(y) ? y : height;
+                            return `${i * step},${safeY}`;
                         }).join(' ');
                     },
 
                     getLoadGraphPoints() {
-                        const max = Math.max(...this.loadHistory, 1); 
-                        const height = 20; 
-                        const width = 100; 
+                        const max = Math.max(...this.loadHistory, 1);
+                        const height = 20;
+                        const width = 100;
                         const step = width / (this.loadHistory.length - 1);
                         return this.loadHistory.map((val, i) => {
                             const y = height - ((val / max) * height);
@@ -873,21 +977,45 @@
                     },
 
 
+
+                    // Polling Configuration
+                    realtimeMs: {{ ($settings['realtime_interval'] ?? 10) * 1000 }},
+                    fallbackMs: {{ ($settings['fallback_interval'] ?? 30) * 1000 }},
+                    timer: null,
+
                     init() {
                         console.log('Initializing Firewall Dashboard...');
-                        this.fetchSystemStatus();
+                        this.fetchSystemStatus(); // Initial fetch
                         this.fetchInterfaces();
                         this.fetchGateways();
                         this.fetchRules();
                         this.fetchPackages();
                         this.setupWebSocket();
 
-                        // Poll System Status every 5 seconds (TESTING)
-                        // This triggers the Smart Cache check on the backend.
-                        // If data is stale, it refreshes and broadcasts to all users.
-                        setInterval(() => {
+                        this.startIntervalManager();
+                    },
+
+                    startIntervalManager() {
+                        if (this.timer) clearTimeout(this.timer);
+
+                        const getDelay = () => {
+                            // Default to fast (Real-time) unless explicitly disconnected
+                            const state = window.Echo?.connector?.pusher?.connection?.state;
+                            const isExplicitlyDisconnected = (state === 'disconnected' || state === 'failed' || state === 'unavailable');
+
+                            if (isExplicitlyDisconnected) {
+                                return this.fallbackMs;
+                            }
+                            return this.realtimeMs;
+                        };
+
+                        const run = () => {
                             this.fetchSystemStatus();
-                        }, 5000);
+                            this.timer = setTimeout(run, getDelay());
+                        };
+
+                        // Start the loop
+                        this.timer = setTimeout(run, getDelay());
                     },
 
                     fetchSystemStatus() {
@@ -900,15 +1028,21 @@
                                 if (data.online && data.status) {
                                     // MERGE or REPLACE only if valid
                                     this.systemStatus = data.status;
-                                    if (data.status.interfaces) {
-                                        this.updateBandwidthFromInterfaces(data.status.interfaces);
+
+                                    // Normalize interfaces (Consistency with WebSocket)
+                                    if (!this.systemStatus.interfaces && this.systemStatus.data && this.systemStatus.data.interfaces) {
+                                        this.systemStatus.interfaces = this.systemStatus.data.interfaces;
+                                    }
+
+                                    if (this.systemStatus.interfaces) {
+                                        this.updateBandwidthFromInterfaces(this.systemStatus.interfaces);
                                     }
 
                                     // Update Load History
                                     if (data.status.data && data.status.data.cpu_load_avg && data.status.data.cpu_load_avg.length > 0) {
-                                         const oneMinLoad = parseFloat(data.status.data.cpu_load_avg[0]) || 0;
-                                         this.loadHistory.shift();
-                                         this.loadHistory.push(oneMinLoad);
+                                        const oneMinLoad = parseFloat(data.status.data.cpu_load_avg[0]) || 0;
+                                        this.loadHistory.shift();
+                                        this.loadHistory.push(oneMinLoad);
                                     }
                                     this.lastUpdated = new Date().toLocaleTimeString();
                                     this.systemError = null;
@@ -935,8 +1069,15 @@
                         })
                             .then(res => res.json())
                             .then(data => {
-                                this.interfaces = data; // Structure: ['data' => [...]]
+                                // Handle data wrapper if present
+                                const ifaces = data.data || data;
+                                this.interfaces = ifaces;
                                 this.interfacesLoading = false;
+
+                                // Fallback: Update bandwidth if systemStatus didn't provide interfaces
+                                if (ifaces && (!this.systemStatus || !this.systemStatus.interfaces)) {
+                                    this.updateBandwidthFromInterfaces(ifaces);
+                                }
                             })
                             .catch(err => {
                                 console.error('Failed to load interfaces:', err);
@@ -965,7 +1106,7 @@
                         })
                             .then(res => res.json())
                             .then(data => {
-                                this.packages = Array.isArray(data) ? data : []; 
+                                this.packages = Array.isArray(data) ? data : [];
                                 this.packagesLoading = false;
                             })
                             .catch(err => {
@@ -999,6 +1140,25 @@
                                         this.systemLoading = false;
                                         this.systemConnected = true;
                                         this.systemStatus = e.status;
+
+                                        // Normalize interfaces
+                                        if (!this.systemStatus.interfaces && this.systemStatus.data && this.systemStatus.data.interfaces) {
+                                            this.systemStatus.interfaces = this.systemStatus.data.interfaces;
+                                        }
+
+                                        if (this.systemStatus.interfaces) {
+                                            this.updateBandwidthFromInterfaces(this.systemStatus.interfaces);
+                                        }
+
+                                        // Update Load History
+                                        const loadData = this.systemStatus.data || this.systemStatus;
+                                        if (loadData.cpu_load_avg && loadData.cpu_load_avg.length > 0) {
+                                            const oneMinLoad = parseFloat(loadData.cpu_load_avg[0]) || 0;
+                                            this.loadHistory.shift();
+                                            this.loadHistory.push(oneMinLoad);
+                                        }
+
+                                        this.lastUpdated = new Date().toLocaleTimeString();
                                     });
                             } else {
                                 setTimeout(subscribe, 500);
@@ -1013,7 +1173,8 @@
         <!-- Delete Confirmation Modal -->
         <!-- Delete Confirmation Modal -->
         <x-modal name="delete-firewall-modal" :show="false" focusable>
-            <div class="p-6" x-data="{ confirmEmail: '' }" x-on:open-modal.window="if ($event.detail === 'delete-firewall-modal') confirmEmail = ''">
+            <div class="p-6" x-data="{ confirmEmail: '' }"
+                x-on:open-modal.window="if ($event.detail === 'delete-firewall-modal') confirmEmail = ''">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     {{ __('Delete Firewall') }}
                 </h2>
@@ -1022,21 +1183,16 @@
                     {{ __('Are you sure you want to delete this firewall? This action cannot be undone.') }}
                 </p>
                 <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                    {{ __('Please type your email address to confirm:') }} <span class="font-mono font-bold">{{ auth()->user()->email }}</span>
+                    {{ __('Please type your email address to confirm:') }} <span
+                        class="font-mono font-bold">{{ auth()->user()->email }}</span>
                 </p>
 
                 <div class="mt-6">
                     <x-input-label for="confirm_email" value="{{ __('Email Address') }}" class="sr-only" />
 
-                    <x-text-input
-                        id="confirm_email"
-                        name="confirm_email"
-                        type="email"
-                        class="mt-1 block w-3/4"
-                        placeholder="{{ __('Email Address') }}"
-                        x-model="confirmEmail"
-                        @keyup.enter="if(confirmEmail === '{{ auth()->user()->email }}') document.getElementById('delete-firewall-form').submit()"
-                    />
+                    <x-text-input id="confirm_email" name="confirm_email" type="email" class="mt-1 block w-3/4"
+                        placeholder="{{ __('Email Address') }}" x-model="confirmEmail"
+                        @keyup.enter="if(confirmEmail === '{{ auth()->user()->email }}') document.getElementById('delete-firewall-form').submit()" />
                 </div>
 
                 <div class="mt-6 flex justify-end">
@@ -1044,8 +1200,7 @@
                         {{ __('Cancel') }}
                     </x-secondary-button>
 
-                    <x-danger-button class="ml-3"
-                        x-bind:disabled="confirmEmail !== '{{ auth()->user()->email }}'"
+                    <x-danger-button class="ml-3" x-bind:disabled="confirmEmail !== '{{ auth()->user()->email }}'"
                         x-bind:class="{ 'opacity-50 cursor-not-allowed': confirmEmail !== '{{ auth()->user()->email }}' }"
                         @click="document.getElementById('delete-firewall-form').submit()">
                         {{ __('Delete Firewall') }}

@@ -32,9 +32,9 @@ class FirewallController extends Controller
             if ($cached) {
                 // Determine if cached structure is new (with 'data' key) or old/raw
                 // We standardized on: ['online' => bool, 'data' => [...], 'updated_at' => ...]
-                
-                $firewall->cached_status = $cached; 
-                $firewall->is_online = (bool)($cached['online'] ?? false);
+
+                $firewall->cached_status = $cached;
+                $firewall->is_online = (bool) ($cached['online'] ?? false);
             } else {
                 $firewall->cached_status = null;
                 $firewall->is_online = false;
@@ -50,7 +50,9 @@ class FirewallController extends Controller
             return $fw->cached_status['api_update_available'] ?? false;
         })->count();
 
-        return view('firewalls.index', compact('firewalls', 'totalFirewalls', 'offlineFirewalls', 'systemUpdates', 'apiUpdates'));
+        $missingAddresses = $firewalls->whereNull('address')->count();
+
+        return view('firewalls.index', compact('firewalls', 'totalFirewalls', 'offlineFirewalls', 'systemUpdates', 'apiUpdates', 'missingAddresses'));
     }
 
     /**
@@ -66,7 +68,7 @@ class FirewallController extends Controller
         $ids = $request->input('ids', []);
         // Also support GET param for ids
         if (empty($ids) && $request->has('ids')) {
-             $ids = explode(',', $request->input('ids'));
+            $ids = explode(',', $request->input('ids'));
         }
 
         if (!empty($ids)) {
@@ -83,37 +85,37 @@ class FirewallController extends Controller
         if ($request->boolean('sync')) {
             $results = [];
             foreach ($firewalls as $firewall) {
-                 try {
-                     $api = new \App\Services\PfSenseApiService($firewall);
-                     $data = $api->refreshSystemStatus();
+                try {
+                    $api = new \App\Services\PfSenseApiService($firewall);
+                    $data = $api->refreshSystemStatus();
 
-                     // Match Event structure
-                     $status = [
+                    // Match Event structure
+                    $status = [
                         'online' => true,
                         'data' => $data,
                         'api_version' => $data['api_version'] ?? null,
                         'updated_at' => now()->toIso8601String(),
-                     ];
+                    ];
 
-                     // Update Cache
-                     \Illuminate\Support\Facades\Cache::put('firewall_status_' . $firewall->id, $status, now()->addDay());
-                     
-                     // Fire Event
-                     event(new \App\Events\DeviceStatusUpdateEvent($firewall, $status));
+                    // Update Cache
+                    \Illuminate\Support\Facades\Cache::put('firewall_status_' . $firewall->id, $status, now()->addDay());
 
-                     $results[$firewall->id] = $status;
-                 } catch (\Exception $e) {
-                     $offlineStatus = [
-                         'online' => false,
-                         'error' => $e->getMessage(),
-                         'data' => null,
-                         'updated_at' => now()->toIso8601String()
-                     ];
-                     \Illuminate\Support\Facades\Cache::put('firewall_status_' . $firewall->id, $offlineStatus, now()->addDay());
-                     event(new \App\Events\DeviceStatusUpdateEvent($firewall, $offlineStatus));
-                     
-                     $results[$firewall->id] = $offlineStatus;
-                 }
+                    // Fire Event
+                    event(new \App\Events\DeviceStatusUpdateEvent($firewall, $status));
+
+                    $results[$firewall->id] = $status;
+                } catch (\Exception $e) {
+                    $offlineStatus = [
+                        'online' => false,
+                        'error' => $e->getMessage(),
+                        'data' => null,
+                        'updated_at' => now()->toIso8601String()
+                    ];
+                    \Illuminate\Support\Facades\Cache::put('firewall_status_' . $firewall->id, $offlineStatus, now()->addDay());
+                    event(new \App\Events\DeviceStatusUpdateEvent($firewall, $offlineStatus));
+
+                    $results[$firewall->id] = $offlineStatus;
+                }
             }
             return response()->json(['results' => $results]);
         }
@@ -129,7 +131,7 @@ class FirewallController extends Controller
             $cached = \Illuminate\Support\Facades\Cache::get('firewall_status_' . $firewall->id);
             if ($cached) {
                 $results[$firewall->id] = [
-                    'online' => (bool)($cached['online'] ?? false), 
+                    'online' => (bool) ($cached['online'] ?? false),
                     'data' => $cached['data'] ?? null,
                     'api_version' => $cached['api_version'] ?? null
                 ];
@@ -143,7 +145,7 @@ class FirewallController extends Controller
             'queued' => $firewalls->count()
         ]);
     }
-    
+
     public function create()
     {
         $user = auth()->user();
@@ -330,7 +332,7 @@ class FirewallController extends Controller
                 if (isset($cached['error'])) {
                     $isOnline = false;
                 }
-                
+
                 $results[$firewall->id] = [
                     'online' => $isOnline,
                     'data' => $cached // Contains 'data' key with full info

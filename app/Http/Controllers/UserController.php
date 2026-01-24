@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
@@ -23,7 +24,15 @@ class UserController extends Controller
             abort(403);
         }
 
-        return view('users.index', compact('users'));
+
+        $stats = [
+            'total' => $users->count(),
+            'users' => $users->where('role', 'user')->count(),
+            'admins' => $users->filter(fn($u) => $u->isCompanyAdmin())->count(),
+            'global_admins' => $users->filter(fn($u) => $u->isGlobalAdmin())->count(),
+        ];
+
+        return view('users.index', compact('users', 'stats'));
     }
 
     public function create()
@@ -185,5 +194,70 @@ class UserController extends Controller
         $exists = $query->exists();
 
         return response()->json(['exists' => $exists]);
+    }
+
+    public function bulkAction(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:users,id',
+            'action' => 'required|string|in:delete',
+        ]);
+
+        $currentUser = Auth::user();
+        $ids = $request->input('ids');
+        $action = $request->input('action');
+
+        $users = User::whereIn('id', $ids)->get();
+
+        $count = 0;
+
+        foreach ($users as $user) {
+            // Permission check
+            if ($currentUser->id === $user->id) {
+                continue; // Skip self
+            }
+
+            if ($currentUser->isCompanyAdmin()) {
+                if ($user->company_id !== $currentUser->company_id) {
+                    continue; // Skip users from other companies
+                }
+            } elseif (!$currentUser->isGlobalAdmin()) {
+                abort(403);
+            }
+
+            if ($action === 'delete') {
+                $user->delete();
+                $count++;
+            }
+        }
+
+        return redirect()->route('users.index')->with('success', "$count user(s) processed successfully.");
+    }
+    public function geocode(Request $request)
+    {
+        $address = $request->input('address');
+        if (!$address) {
+            return response()->json(['error' => 'Address required'], 400);
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'User-Agent' => 'AdmixCentral-Dashboard/1.0'
+            ])->get('https://nominatim.openstreetmap.org/search', [
+                        'format' => 'json',
+                        'q' => $address,
+                        'limit' => 1
+                    ]);
+
+            if ($response->failed()) {
+                return response()->json(['error' => 'Geocoding upstream failed'], 502);
+            }
+
+            return response($response->body())
+                ->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Geocoding internal error: ' . $e->getMessage()], 500);
+        }
     }
 }

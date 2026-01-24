@@ -21,8 +21,22 @@ class CompanyController extends Controller
             abort(403);
         }
 
-        $companies = \App\Models\Company::withCount(['users', 'firewalls'])->get();
-        return view('companies.index', compact('companies'));
+        $companies = \App\Models\Company::withCount([
+            'users',
+            'firewalls',
+            'users as admins_count' => function ($query) {
+                $query->where('role', 'admin');
+            }
+        ])->get();
+
+        $stats = [
+            'total' => $companies->count(),
+            'no_users' => $companies->where('users_count', 0)->count(),
+            'no_firewalls' => $companies->where('firewalls_count', 0)->count(),
+            'no_address' => $companies->whereNull('address')->count(),
+        ];
+
+        return view('companies.index', compact('companies', 'stats'));
     }
 
     public function create()

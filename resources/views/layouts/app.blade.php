@@ -25,7 +25,10 @@
     @endif
 
     <style>
-        [x-cloak] { display: none !important; }
+        [x-cloak] {
+            display: none !important;
+        }
+
         .form-input-reset {
             border: none !important;
             outline: none !important;
@@ -35,18 +38,21 @@
     </style>
 </head>
 
-<body class="font-sans antialiased h-full overflow-hidden bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: false, collapsed: false }">
+<body class="font-sans antialiased h-full overflow-hidden bg-gray-100 dark:bg-gray-900"
+    x-data="{ sidebarOpen: false, collapsed: false }">
     <!-- Mobile Header -->
-    <div class="md:hidden flex items-center justify-between h-16 bg-gray-900 border-b border-gray-700 px-4 z-40 relative">
+    <div
+        class="md:hidden flex items-center justify-between h-16 bg-gray-900 border-b border-gray-700 px-4 z-40 relative">
         <a href="{{ route('dashboard') }}">
-             @if(isset($settings['logo_path']))
+            @if(isset($settings['logo_path']))
                 <img src="{{ $settings['logo_path'] }}" class="block h-8 w-auto" alt="Logo">
             @else
                 <img src="{{ asset('images/logo.png') }}" class="block h-8 w-auto" alt="Logo">
             @endif
         </a>
         <button @click="sidebarOpen = !sidebarOpen" class="text-gray-400 hover:text-white focus:outline-none">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
@@ -115,13 +121,13 @@
 
     <!-- System Status Widget -->
     <div id="websocket-status" style="display: none;"></div> {{-- Connector for echo.js default behavior --}}
-    
+
     <!-- System Status Widget (Hidden/Legacy Hook) -->
     <div id="websocket-status" style="display: none;"></div>
     <script>
         // Minimal hook to prevent errors if anything relies on it, though sidebar polls directly.
-        window.updateSystemStatus = function(s) { /* No-op or log */ };
-        
+        window.updateSystemStatus = function (s) { /* No-op or log */ };
+
         /**
          * Shared Filterable List Mixin
          * Provides URL-persisted filtering, search, and count functionality
@@ -138,17 +144,17 @@
          *     }
          * }))
          */
-        window.filterableMixin = function(items, statusEventName = 'device-updated') {
+        window.filterableMixin = function (items, statusEventName = 'device-updated') {
             return {
                 // Filter state (initialized from URL)
                 search: new URLSearchParams(window.location.search).get('search') || '',
                 statusFilter: new URLSearchParams(window.location.search).get('status') || 'all',
                 customerFilter: new URLSearchParams(window.location.search).get('customer') || 'all',
-                
+
                 // Data
                 items: items,
                 itemStatuses: {},
-                
+
                 /**
                  * Initialize filterable functionality
                  * Call this from your component's init() method
@@ -158,7 +164,7 @@
                     this.$watch('search', (val) => this.updateUrl('search', val));
                     this.$watch('statusFilter', (val) => this.updateUrl('status', val));
                     this.$watch('customerFilter', (val) => this.updateUrl('customer', val));
-                    
+
                     // Listen for status updates to track online/offline state
                     window.addEventListener(statusEventName, (e) => {
                         if (e.detail && e.detail.id) {
@@ -166,7 +172,7 @@
                         }
                     });
                 },
-                
+
                 /**
                  * Update URL query parameters
                  */
@@ -179,7 +185,7 @@
                     }
                     window.history.replaceState(null, '', url);
                 },
-                
+
                 /**
                  * Get count of items matching current filters
                  */
@@ -188,7 +194,7 @@
                         // Search filter
                         const q = this.search.toLowerCase();
                         const matchesSearch = !q || (item.searchData && item.searchData.includes(q)) || (item.staticInfo && item.staticInfo.includes(q));
-                        
+
                         // Status filter
                         let matchesStatus = true;
                         if (this.statusFilter !== 'all') {
