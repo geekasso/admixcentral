@@ -23,23 +23,7 @@ class CacheDeviceStatus
      */
     public function handle(DeviceStatusUpdateEvent $event): void
     {
-        try {
-            Log::info("Caching status update for firewall: " . $event->firewall->id);
-
-            $statusData = $event->statusData;
-
-            // Store payload with timestamp for freshness checks
-            $payload = [
-                'data' => $statusData,
-                'ts' => now()->timestamp,
-                'received_at' => now()->toIso8601String(),
-            ];
-
-            // Cache for 24 hours - Controller decides if it's "fresh" enough
-            Cache::put('firewall_status_' . $event->firewall->id, $payload, now()->addDay());
-
-        } catch (\Exception $e) {
-            Log::error("Failed to cache device status: " . $e->getMessage());
-        }
+        // Logic moved to CheckFirewallStatusJob to prevent cache structure conflicts.
+        // Keeping this listener empty/disabled for now.
     }
 }

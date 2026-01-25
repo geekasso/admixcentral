@@ -26,18 +26,24 @@ class FirewallController extends Controller
             $firewalls = Firewall::where('company_id', $user->company_id)->orderBy('name')->get();
         }
 
-        // Collect status for each firewall
-        $firewalls->each(function ($firewall) {
-            $cached = \Illuminate\Support\Facades\Cache::get('firewall_status_' . $firewall->id);
-            if ($cached) {
-                // Determine if cached structure is new (with 'data' key) or old/raw
-                // We standardized on: ['online' => bool, 'data' => [...], 'updated_at' => ...]
+        // Check if status caching is enabled (Default to true)
+        $cacheSetting = \App\Models\SystemSetting::where('key', 'enable_status_cache')->value('value');
+        // Use filter_var to correctly handle "0", "false", "off" as false.
+        $useCache = $cacheSetting !== null ? filter_var($cacheSetting, FILTER_VALIDATE_BOOLEAN) : true;
 
+        // Collect status for each firewall
+        $firewalls->each(function ($firewall) use ($useCache) {
+            $cached = $useCache ? \Illuminate\Support\Facades\Cache::get('firewall_status_' . $firewall->id) : null;
+
+            // If caching is disabled, we force a "null" state which UI handles as "Checking..." or "Unknown"
+            // This prevents "Waterfall" delay of checking live, but also prevents showing stale data.
+
+            if ($cached) {
                 $firewall->cached_status = $cached;
                 $firewall->is_online = (bool) ($cached['online'] ?? false);
             } else {
                 $firewall->cached_status = null;
-                $firewall->is_online = false;
+                $firewall->is_online = null; // UI should treat null as "Unknown/Pending"
             }
         });
 

@@ -234,7 +234,7 @@
                                             <h4 class="font-bold text-xl whitespace-nowrap">{{ $firewall->name }}</h4>
                                             
                                             <template x-if="loading">
-                                                <span class="bg-gray-200 text-gray-800 text-xs px-2.5 py-0.5 rounded animate-pulse">Loading...</span>
+                                                <span class="bg-gray-200 dark:bg-gray-700 w-14 h-5 rounded-full animate-pulse block"></span>
                                             </template>
                                             <template x-if="!loading && online">
                                                 <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-300">Online</span>
@@ -279,6 +279,13 @@
                                                 </div>
                                             </div>
                                         </template>
+                                        
+                                        <!-- ... (rest of template) .. -->
+                                        <!-- Note: I am truncating context to keep edit safe -->
+
+                                        <!-- I need to jump to the JS section separately or include enough context? -->
+                                        <!-- The JS is way down. I should use MultiReplace? Or separate Replace calls? -->
+                                        <!-- I will do separate calls. -->
 
                                         <template x-if="!loading">
                                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -640,7 +647,7 @@
         }));
         Alpine.data('firewallCard', (initialStatus, staticInfo, checkUrl, firewallId, companyName) => ({
             loading: !initialStatus,
-            online: initialStatus ? (initialStatus.online !== false) : true,
+            online: initialStatus ? (initialStatus.online !== false) : null,
             reportedOffline: false,
             status: initialStatus,
             error: null,

@@ -338,8 +338,8 @@
                     this.firewalls = {{ json_encode($firewalls->map(fn($f) => [
     'id' => $f->id,
     'name' => $f->name,
-    'status' => $f->is_online ? 'online' : 'offline',
-    'isOnline' => (bool) $f->is_online,
+    'status' => $f->is_online === true ? 'online' : ($f->is_online === false ? 'offline' : 'unknown'),
+    'isOnline' => $f->is_online,
     'url' => $f->url,
     'displayUrl' => preg_replace('#^https?://#', '', $f->url),
     'linkUrl' => \Illuminate\Support\Str::startsWith($f->url, ['http://', 'https://']) ? $f->url : 'https://' . $f->url,
@@ -374,6 +374,21 @@
                             // Trigger reactivity if needed (Vue/Alpine 3 usually handles deep watch if array mutated, but specific property updates work)
                         }
                     });
+
+                    // If we have unknown statuses (Cache Disabled), trigger a background refresh
+                    if (this.firewalls.some(f => f.isOnline === null)) {
+                        fetch('{{ route("firewalls.refresh-all") }}', {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ sync: false }) // Async Mode
+                        }).then(r => r.json()).then(data => {
+                            console.log('Background Refresh Triggered', data);
+                        }).catch(e => console.error(e));
+                    }
                 },
                 
                 get filteredRows() {
@@ -381,8 +396,8 @@
                          const matchesSearch = this.search === '' || f.searchData.includes(this.search.toLowerCase());
                          
                          const matchesStatus = this.statusFilter === 'all' 
-                              || (this.statusFilter === 'online' && f.isOnline)
-                              || (this.statusFilter === 'offline' && !f.isOnline);
+                              || (this.statusFilter === 'online' && f.isOnline === true)
+                              || (this.statusFilter === 'offline' && f.isOnline === false);
 
                          const matchesCustomer = this.customerFilter === 'all' || f.company_name === this.customerFilter;
 
@@ -670,19 +685,30 @@
                                                 </a>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <span
-                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                                                    :class="{
-                                                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': firewall.isOnline,
-                                                        'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': !firewall.isOnline
-                                                    }">
-                                                    <svg class="-ml-0.5 mr-1.5 h-2 w-2"
-                                                        :class="firewall.isOnline ? 'text-green-400' : 'text-red-400'"
-                                                        fill="currentColor" viewBox="0 0 8 8">
-                                                        <circle cx="4" cy="4" r="3" />
-                                                    </svg>
-                                                    <span x-text="firewall.isOnline ? 'Online' : 'Offline'"></span>
-                                                </span>
+                                                <!-- Online/Offline Badge -->
+                                                <template x-if="firewall.isOnline !== null">
+                                                    <span
+                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                                        :class="{
+                                                            'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': firewall.isOnline === true,
+                                                            'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': firewall.isOnline === false
+                                                        }">
+                                                        <svg class="-ml-0.5 mr-1.5 h-2 w-2" :class="{
+                                                                'text-green-400': firewall.isOnline === true,
+                                                                'text-red-400': firewall.isOnline === false
+                                                            }" fill="currentColor" viewBox="0 0 8 8">
+                                                            <circle cx="4" cy="4" r="3" />
+                                                        </svg>
+                                                        <span
+                                                            x-text="firewall.isOnline === true ? 'Online' : 'Offline'"></span>
+                                                    </span>
+                                                </template>
+
+                                                <!-- Skeleton Loading State (Null) -->
+                                                <template x-if="firewall.isOnline === null">
+                                                    <span
+                                                        class="inline-block w-16 h-5 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></span>
+                                                </template>
                                             </td>
                                             <td
                                                 class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
@@ -1178,8 +1204,7 @@
                         }
                         const form = document.getElementById('bulkForm');
                         form.submit();
-                    }
-
-                }
+                                }
+     }
             </script>
 </x-app-layout>

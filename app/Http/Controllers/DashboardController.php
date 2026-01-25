@@ -34,10 +34,14 @@ class DashboardController extends Controller
             $firewalls = Firewall::where('company_id', $user->company_id)->orderBy('name')->get();
         }
 
+        // Check if status caching is enabled
+        $cacheSetting = \App\Models\SystemSetting::where('key', 'enable_status_cache')->value('value');
+        $useCache = $cacheSetting !== null ? filter_var($cacheSetting, FILTER_VALIDATE_BOOLEAN) : true;
+
         // Attach cached status data to each firewall instance for display.
         // This avoids N+1 API calls on the dashboard load.
-        $firewalls->each(function ($firewall) {
-            $cached = Cache::get('firewall_status_' . $firewall->id);
+        $firewalls->each(function ($firewall) use ($useCache) {
+            $cached = $useCache ? Cache::get('firewall_status_' . $firewall->id) : null;
             if ($cached) {
                 // Store the full wrapper
                 $firewall->cached_status = $cached;
@@ -79,7 +83,7 @@ class DashboardController extends Controller
 
         // ... (existing code for avgCpu/avgMemory calculation if needed to stay same) ...
         // Wait, I need to make sure I don't break the flow. The previous view logic is unchanged.
-        
+
         // Filter firewalls with cached status
         $firewallsWithData = $firewalls->filter(function ($firewall) {
             return $firewall->cached_status !== null &&
@@ -165,7 +169,7 @@ class DashboardController extends Controller
 
         try {
             $api = new PfSenseApiService($firewall);
-            
+
             // Use the shared service method (Same as Job)
             $dynamicStatus = $api->refreshSystemStatus();
 
@@ -187,7 +191,7 @@ class DashboardController extends Controller
 
         } catch (\Exception $e) {
             $cached = Cache::get('firewall_status_' . $firewall->id);
-            
+
             // Prepare offline status while preserving last known data if possible
             $offlineStatus = [
                 'online' => false,
