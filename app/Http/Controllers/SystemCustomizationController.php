@@ -25,6 +25,7 @@ class SystemCustomizationController extends Controller
             'fallback_interval' => 'nullable|integer|min:5|max:600',
             'sidebar_bg' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
             'sidebar_text' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'enable_status_cache' => 'nullable|boolean',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -59,6 +60,10 @@ class SystemCustomizationController extends Controller
 
         if ($request->filled('sidebar_text')) {
             SystemSetting::updateOrCreate(['key' => 'sidebar_text'], ['value' => $request->sidebar_text]);
+        }
+
+        if ($request->has('enable_status_cache')) {
+            SystemSetting::updateOrCreate(['key' => 'enable_status_cache'], ['value' => $request->enable_status_cache]);
         }
 
         return redirect()->route('system.settings.index')->with('success', 'Settings updated successfully.');

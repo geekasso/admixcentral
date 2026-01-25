@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Broadcast;
 
 // Register broadcasting authentication routes
-Broadcast::routes(['middleware' => ['web', 'auth']]);
+// Broadcast::routes(['middleware' => ['web', 'auth']]);
 
 Route::get('/', function () {
     return redirect()->route('login');
