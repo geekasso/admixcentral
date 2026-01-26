@@ -213,7 +213,7 @@
                 /**
                  * Get count of items matching current filters
                  */
-                get filteredCount() {
+                filteredCount() {
                     return this.items.filter(item => {
                         // Search filter
                         const q = this.search.toLowerCase();
