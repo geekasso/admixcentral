@@ -63,7 +63,8 @@
 </head>
 
 <body class="font-sans antialiased h-full overflow-hidden bg-gray-100 dark:bg-gray-900"
-    x-data="{ sidebarOpen: false, collapsed: false }">
+    x-data="{ sidebarOpen: false, collapsed: window.innerWidth < 1536 }"
+    @resize.window="collapsed = window.innerWidth < 1536">
     <!-- Mobile Header -->
     <div
         class="md:hidden flex items-center justify-between h-16 bg-gray-900 border-b border-gray-700 px-4 z-40 relative">

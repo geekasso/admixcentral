@@ -27,7 +27,7 @@
                     <div x-data="dashboardCoordinator({{ $firewallsWithStatus->pluck('id')->toJson() }})"
                         style="display: none;"></div>
 
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
                         <!-- Firewalls Widget -->
                         <div
                             class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 flex items-center">
@@ -172,17 +172,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4">
-                        <div class="flex flex-wrap w-full lg:w-auto justify-between items-center gap-2">
+                    <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 mb-4">
+                        <div class="flex flex-wrap w-full xl:w-auto justify-between items-center gap-2">
                             <h3 class="text-lg font-semibold whitespace-nowrap">Managed Firewalls</h3>
-                            <span class="text-xs text-gray-500 font-normal block lg:hidden"
+                            <span class="text-xs text-gray-500 font-normal block xl:hidden"
                                 x-text="'Showing ' + filteredCount() + ' of ' + items.length + ' firewalls'"></span>
                         </div>
 
                         <div
-                            class="flex flex-col sm:grid sm:grid-cols-2 lg:flex lg:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+                            class="flex flex-col sm:grid sm:grid-cols-2 xl:flex xl:flex-row items-stretch sm:items-center gap-2 w-full xl:w-auto">
                             <span
-                                class="text-xs text-gray-500 font-normal self-start lg:self-center whitespace-nowrap lg:mr-2 hidden lg:inline"
+                                class="text-xs text-gray-500 font-normal self-start xl:self-center whitespace-nowrap xl:mr-2 hidden xl:inline"
                                 x-text="'Showing ' + filteredCount() + ' of ' + items.length + ' firewalls'"></span>
                             <!-- Customer Filter -->
                             @php
@@ -201,7 +201,7 @@
                                     this.open = false;
                                     this.filter = '';
                                 }
-                            }" class="relative w-full sm:col-span-1 lg:w-56" @keydown.escape="open = false"
+                            }" class="relative w-full sm:col-span-1 xl:w-56" @keydown.escape="open = false"
                                 @click.outside="open = false">
 
                                 <!-- Trigger Button -->
@@ -249,7 +249,7 @@
 
                             <!-- Status Filter -->
                             <select x-model="statusFilter"
-                                class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 text-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:col-span-1 lg:w-auto">
+                                class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 text-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:col-span-1 xl:w-auto">
                                 <option value="all">All Status</option>
                                 <option value="online">Online</option>
                                 <option value="offline">Offline</option>
@@ -257,7 +257,7 @@
 
                             <!-- Search Input -->
                             <div
-                                class="flex items-center w-full sm:col-span-2 lg:w-64 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus-within:ring-2 focus-within:ring-indigo-500 bg-white">
+                                class="flex items-center w-full sm:col-span-2 xl:w-64 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus-within:ring-2 focus-within:ring-indigo-500 bg-white">
                                 <div class="pl-3 pr-2 text-gray-500">
                                     <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -286,12 +286,12 @@
                             @foreach($firewallsWithStatus as $firewall)
                                 <div x-show="matches(search) && matchesFilters(statusFilter, customerFilter)"
                                     x-data="firewallCard(
-                                                                                                                                                                                                                                                                                {{ json_encode($firewall->cached_status) }}, 
-                                                                                                                                                                                                                                                                                '{{ strtolower($firewall->name . ' ' . $firewall->company->name . ' ' . $firewall->url . ' ' . $firewall->hostname) }}',
-                                                                                                                                                                                                                                                                                '{{ route('firewall.check-status', $firewall) }}',
-                                                                                                                                                                                                                                                                                {{ $firewall->id }},
-                                                                                                                                                                                                                                                                                '{{ $firewall->company->name }}'
-                                                                                                                                                                                                                                                                            )"
+                                                                                                                                                                                                                                                                                                {{ json_encode($firewall->cached_status) }}, 
+                                                                                                                                                                                                                                                                                                '{{ strtolower($firewall->name . ' ' . $firewall->company->name . ' ' . $firewall->url . ' ' . $firewall->hostname) }}',
+                                                                                                                                                                                                                                                                                                '{{ route('firewall.check-status', $firewall) }}',
+                                                                                                                                                                                                                                                                                                {{ $firewall->id }},
+                                                                                                                                                                                                                                                                                                '{{ $firewall->company->name }}'
+                                                                                                                                                                                                                                                                                            )"
                                     class="relative border border-gray-200 dark:border-gray-700 rounded-xl p-3 sm:p-5 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200">
 
                                     {{-- Overlay Moved to Body --}}
@@ -499,10 +499,10 @@
                                                                             :key="gateway.name">
                                                                             <div class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1"
                                                                                 :class="{
-                                                                                                                                                                                                                                                                                                                        'border-l-2 border-green-500': gateway.status === 'online' || gateway.status === 'none',
-                                                                                                                                                                                                                                                                                                                        'border-l-2 border-red-500': gateway.status === 'offline' || gateway.status === 'down',
-                                                                                                                                                                                                                                                                                                                        'border-l-2 border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                                                                                                                                                                                                                                                                                    }"
+                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                                                                                                                                                                                                                                                                                                    }"
                                                                                 :title="gateway.monitorip || gateway.srcip">
                                                                                 <span
                                                                                     class="text-sm font-mono font-medium text-gray-700 dark:text-gray-300"
@@ -510,10 +510,10 @@
                                                                                 <div class="flex items-center gap-1.5">
                                                                                     <div class="w-2 h-2 rounded-full"
                                                                                         :class="{
-                                                                                                                                                                                                                                                                                                                            'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
-                                                                                                                                                                                                                                                                                                                            'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
-                                                                                                                                                                                                                                                                                                                            'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                                                                                                                                                                                                                                                                                        }">
+                                                                                                                                                                                                                                                                                                                                            'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                                                                                                                                                                                                                                                                                                            'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                                                                                                                                                                                                                                                                                                            'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                                                                                                                                                                                                                                                                                                        }">
                                                                                     </div>
                                                                                     <span
                                                                                         class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400"
