@@ -7,6 +7,19 @@
     <form method="POST" action="{{ route('setup.store') }}">
         @csrf
 
+        <!-- Hostname -->
+        <div>
+            <label for="hostname" class="block font-medium text-sm text-gray-700 dark:text-gray-300">System
+                Hostname</label>
+            <input id="hostname"
+                class="block mt-1 w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"
+                type="text" name="hostname" :value="old('hostname', request()->getHost())" required autofocus />
+            <p class="mt-1 text-xs text-gray-500">The public hostname for this server (e.g. central.example.com).</p>
+            @error('hostname')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
         <!-- Name -->
         <div>
             <label for="name" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Name</label>
