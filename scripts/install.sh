@@ -54,7 +54,8 @@ apt install -y \
   build-essential software-properties-common \
   nginx supervisor \
   mysql-server \
-  openssl
+  openssl \
+  certbot python3-certbot-nginx
 
 log "[3/12] Composer..."
 if ! command -v composer >/dev/null 2>&1; then
@@ -169,6 +170,12 @@ chown -R "$APP_USER":"$APP_USER" "$APP_DIR"
 sudo -u "$APP_USER" env HOME="$APP_DIR" npm cache clean --force
 sudo -u "$APP_USER" env HOME="$APP_DIR" npm install
 sudo -u "$APP_USER" env HOME="$APP_DIR" npm run build
+
+log "[10b/12] Configure sudoers for SSL management..."
+cat >/etc/sudoers.d/admixcentral <<EOF
+$APP_USER ALL=(ALL) NOPASSWD: /usr/bin/certbot, /usr/sbin/nginx, /usr/bin/systemctl reload nginx, /usr/bin/tee /etc/nginx/sites-available/$NGINX_SITE_NAME
+EOF
+chmod 0440 /etc/sudoers.d/admixcentral
 
 log "[11/12] Nginx site config..."
 cat >/etc/nginx/sites-available/"$NGINX_SITE_NAME" <<EOF

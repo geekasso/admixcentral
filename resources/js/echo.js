@@ -14,11 +14,11 @@ window.Pusher = Pusher;
 // Initialize Echo with Reverb configuration
 window.Echo = new Echo({
     broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    wsHost: import.meta.env.VITE_REVERB_HOST,
-    wsPort: import.meta.env.VITE_REVERB_PORT ?? 8080,
-    wssPort: import.meta.env.VITE_REVERB_PORT ?? 8080,
-    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+    key: window.AdmixConfig?.reverb?.key || import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: window.AdmixConfig?.reverb?.host || import.meta.env.VITE_REVERB_HOST,
+    wsPort: window.AdmixConfig?.reverb?.port || import.meta.env.VITE_REVERB_PORT || 8080,
+    wssPort: window.AdmixConfig?.reverb?.port || import.meta.env.VITE_REVERB_PORT || 8080,
+    forceTLS: (window.AdmixConfig?.reverb?.scheme || import.meta.env.VITE_REVERB_SCHEME || 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
     disableStats: true,
     // Tuning for faster reconnection

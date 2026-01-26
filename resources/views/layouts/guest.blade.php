@@ -107,6 +107,16 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
+    <script>
+        window.AdmixConfig = {
+            reverb: {
+                key: "{{ env('VITE_REVERB_APP_KEY') }}",
+                host: "{{ env('VITE_REVERB_HOST') }}",
+                port: "{{ env('VITE_REVERB_PORT', 8080) }}",
+                scheme: "{{ env('VITE_REVERB_SCHEME', 'http') }}"
+            }
+        };
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @if(isset($settings['favicon_path']))

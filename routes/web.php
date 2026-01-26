@@ -15,6 +15,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+
+
 Route::get('/test-routing', function () {
     return 'Routing Works';
 });
@@ -31,6 +33,16 @@ Route::prefix('ws')->name('ws.')->group(function () {
     Route::post('/device/disconnect', [App\Http\Controllers\WebSocket\DeviceWebSocketController::class, 'disconnect'])->name('device.disconnect');
     Route::get('/info', [App\Http\Controllers\WebSocket\DeviceWebSocketController::class, 'info'])->name('info');
 });
+
+// Hostname Reachability Check (Public/Open for verification, or generally accessible)
+Route::any('/system/check-hostname', [App\Http\Controllers\SystemCustomizationController::class, 'checkHostname'])
+    ->name('system.check-hostname');
+
+// Server-side proxy check (protected by auth middleware via 'web' group if needed, but here public for logic simplicity or move down)
+// Actually, let's keep it protected or ensure it's safe. It's safe as it just proxies to check-hostname.
+Route::post('/system/proxy-check', [App\Http\Controllers\SystemCustomizationController::class, 'proxyCheck'])
+    ->middleware(['auth', 'verified'])
+    ->name('system.proxy-check');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Profile management
@@ -248,6 +260,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/system/settings/restore', [App\Http\Controllers\SystemCustomizationController::class, 'restore'])
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
         ->name('system.settings.restore');
+
+    Route::post('/system/ssl/install', [App\Http\Controllers\SystemSslController::class, 'store'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.ssl.install');
+
+    Route::delete('/system/ssl/uninstall', [App\Http\Controllers\SystemSslController::class, 'destroy'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.ssl.uninstall');
+
+
 
     Route::get('/firewall/{firewall}/system/rest-api', [App\Http\Controllers\SystemRestApiController::class, 'index'])
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])

@@ -28,6 +28,35 @@
     .btn-xl {
         @apply px-8 py-4 text-lg;
     }
+
+    /* Modern Card System */
+    .card-modern {
+        @apply bg-white dark:bg-gray-800 shadow-xl rounded-2xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700 transition-all hover:shadow-2xl;
+    }
+
+    .card-header-modern {
+        @apply px-6 py-6 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex items-center gap-4;
+    }
+
+    .card-icon-wrapper {
+        @apply p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl;
+    }
+
+    .card-icon {
+        @apply w-6 h-6 text-indigo-600 dark:text-indigo-400;
+    }
+
+    .card-title-modern {
+        @apply text-lg font-bold text-gray-900 dark:text-white;
+    }
+
+    .card-subtitle-modern {
+        @apply text-sm text-gray-500 dark:text-gray-400;
+    }
+
+    .card-body-modern {
+        @apply px-6 py-6 space-y-8;
+    }
 }
 
 @layer base {
