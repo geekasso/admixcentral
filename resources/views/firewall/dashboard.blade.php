@@ -573,7 +573,7 @@
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         // Initialize Leaflet map centered on firewall coordinates
-                                        var map = L.map('firewall-map').setView([{{ $firewall->latitude }}, {{ $firewall->longitude }}], 13);
+                                        var map = L.map('firewall-map', { scrollWheelZoom: false }).setView([{{ $firewall->latitude }}, {{ $firewall->longitude }}], 13);
 
                                         // Add OpenStreetMap tile layer
                                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
