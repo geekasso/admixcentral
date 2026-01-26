@@ -43,28 +43,59 @@
                                 <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Firewalls</p>
                                 <div class="flex items-center text-4xl font-bold text-gray-900 dark:text-gray-100">
                                     {{ $totalFirewalls }}
-                                    <span x-show="offlineCount > 0 || (offlineCount === 0 && showOnlineBadge)"
-                                        x-transition.opacity.duration.500ms
-                                        class="ml-3 flex items-center text-xs font-medium px-2 py-1 rounded-full align-middle transition-all duration-500 ease-in-out"
-                                        :class="offlineCount > 0 ? 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900' : 'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900'"
-                                        style="display: none;">
-                                        <!-- Offline Content -->
-                                        <template x-if="offlineCount > 0">
-                                            <span class="flex items-center">
-                                                <span class="relative flex h-2 w-2 mr-2">
-                                                    <span
-                                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                                                    <span
-                                                        class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
-                                                </span>
-                                                <span><span x-text="offlineCount"></span> Offline</span>
-                                            </span>
-                                        </template>
+                                    <!-- Unified Status Badge -->
+                                    <span x-data="{ isReady: false }"
+                                        x-effect="isReady = (offlineCount > 0 || (offlineCount === 0 && showOnlineBadge))"
+                                        class="ml-3 flex items-center text-xs font-medium sm:px-2 sm:py-1 p-0 rounded-full align-middle transition-all duration-500 ease-in-out"
+                                        :class="
+                                            !isReady 
+                                                ? 'bg-transparent sm:bg-gray-100 sm:dark:bg-gray-800 animate-pulse' 
+                                                : (offlineCount > 0 
+                                                    ? 'text-red-600 dark:text-red-400 sm:bg-red-100 sm:dark:bg-red-900 bg-transparent' 
+                                                    : 'text-green-600 dark:text-green-400 sm:bg-green-100 sm:dark:bg-green-900 bg-transparent')
+                                        ">
 
-                                        <!-- Online Content -->
-                                        <template x-if="offlineCount === 0">
-                                            <span>All Online</span>
-                                        </template>
+                                        <!-- Content -->
+                                        <div class="flex items-center">
+                                            <!-- Desktop Dot/Indicator -->
+                                            <span class="relative flex h-2 w-2 sm:mr-2">
+                                                <!-- Loading Dot (Desktop) -->
+                                                <span x-show="!isReady"
+                                                    class="w-full h-full bg-gray-300 dark:bg-gray-600 rounded-full hidden sm:inline-flex"></span>
+
+                                                <!-- Offline Dot -->
+                                                <template x-if="isReady && offlineCount > 0">
+                                                    <span class="w-full h-full relative inline-flex">
+                                                        <span
+                                                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                                                        <span
+                                                            class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
+                                                    </span>
+                                                </template>
+
+                                                <!-- Online Dot -->
+                                                <template x-if="isReady && offlineCount === 0">
+                                                    <span
+                                                        class="relative inline-flex rounded-full h-2 w-2 bg-green-600"></span>
+                                                </template>
+                                            </span>
+
+                                            <!-- Mobile Dot (Only shows when loading or when ready; basically always checking isReady logic implicitly for color, but size is fixed) -->
+                                            <!-- Wait, on mobile we ONLY show the dot. The container has p-0. -->
+                                            <!-- The 'Desktop Dot' above has 'sm:mr-2'. On mobile it has no margin 
+                                                 BUT the 'Desktop Dot' (lines above) handles the actual colored circle. 
+                                                 We just need to make sure the 'sm:mr-2' is removed on mobile. 
+                                                 Actually, the dot above is 'relative flex h-2 w-2'. 
+                                                 It works for mobile too. -->
+
+                                            <!-- Text Content (Desktop Only) -->
+                                            <span x-show="!isReady" class="w-16 h-4 hidden sm:inline-block"></span>
+
+                                            <span x-show="isReady" class="hidden sm:inline">
+                                                <span
+                                                    x-text="offlineCount > 0 ? offlineCount + ' Offline' : 'All Online'"></span>
+                                            </span>
+                                        </div>
                                     </span>
                                 </div>
                             </div>
@@ -248,12 +279,12 @@
                         <div class="space-y-4">
                             @foreach($firewallsWithStatus as $firewall)
                                 <div x-show="matches(search) && matchesFilters(statusFilter, customerFilter)" x-data="firewallCard(
-                                                                                        {{ json_encode($firewall->cached_status) }}, 
-                                                                                        '{{ strtolower($firewall->name . ' ' . $firewall->company->name . ' ' . $firewall->url . ' ' . $firewall->hostname) }}',
-                                                                                        '{{ route('firewall.check-status', $firewall) }}',
-                                                                                        {{ $firewall->id }},
-                                                                                        '{{ $firewall->company->name }}'
-                                                                                    )"
+                                                                                                                        {{ json_encode($firewall->cached_status) }}, 
+                                                                                                                        '{{ strtolower($firewall->name . ' ' . $firewall->company->name . ' ' . $firewall->url . ' ' . $firewall->hostname) }}',
+                                                                                                                        '{{ route('firewall.check-status', $firewall) }}',
+                                                                                                                        {{ $firewall->id }},
+                                                                                                                        '{{ $firewall->company->name }}'
+                                                                                                                    )"
                                     class="relative border border-gray-200 dark:border-gray-700 rounded-xl p-3 sm:p-5 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200">
 
                                     {{-- Overlay Moved to Body --}}
@@ -461,10 +492,10 @@
                                                                             :key="gateway.name">
                                                                             <div class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1"
                                                                                 :class="{
-                                                                                                                                'border-l-2 border-green-500': gateway.status === 'online' || gateway.status === 'none',
-                                                                                                                                'border-l-2 border-red-500': gateway.status === 'offline' || gateway.status === 'down',
-                                                                                                                                'border-l-2 border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                                                                                            }"
+                                                                                                                                                                'border-l-2 border-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                                                                                                                                'border-l-2 border-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                                                                                                                                'border-l-2 border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                                                                                                                            }"
                                                                                 :title="gateway.monitorip || gateway.srcip">
                                                                                 <span
                                                                                     class="text-sm font-mono font-medium text-gray-700 dark:text-gray-300"
@@ -472,10 +503,10 @@
                                                                                 <div class="flex items-center gap-1.5">
                                                                                     <div class="w-2 h-2 rounded-full"
                                                                                         :class="{
-                                                                                                                                    'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
-                                                                                                                                    'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
-                                                                                                                                    'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                                                                                                }">
+                                                                                                                                                                    'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                                                                                                                                    'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                                                                                                                                    'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                                                                                                                                }">
                                                                                     </div>
                                                                                     <span
                                                                                         class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400"
