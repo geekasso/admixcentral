@@ -99,7 +99,7 @@
                 @include('layouts.navigation')
             @endif
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 pb-20">
 
                 <!-- Page Content -->
                 @isset($firewall)
