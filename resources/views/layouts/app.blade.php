@@ -13,6 +13,12 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Favicon -->
+    @php
+        $favicon = $settings['icon_path'] ?? ($settings['favicon_path'] ?? ($settings['logo_path'] ?? asset('favicon.ico')));
+    @endphp
+    <link rel="icon" href="{{ $favicon }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -30,10 +36,6 @@
     </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    @if(isset($settings['favicon_path']))
-        <link rel="icon" href="{{ $settings['favicon_path'] }}">
-    @endif
-
     <style>
         [x-cloak] {
             display: none !important;
@@ -46,6 +48,18 @@
             background-color: transparent !important;
         }
     </style>
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function (err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
 </head>
 
 <body class="font-sans antialiased h-full overflow-hidden bg-gray-100 dark:bg-gray-900"

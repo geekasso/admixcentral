@@ -2,6 +2,7 @@
     $settings = \App\Models\SystemSetting::all()->pluck('value', 'key');
     $theme = $settings['theme'] ?? 'light';
     $logo = $settings['logo_path'] ?? null;
+    $favicon = $settings['favicon_path'] ?? ($logo ?? asset('favicon.ico'));
     $pageBg = $settings['sidebar_bg'] ?? '#1f2937';
 
     // Calculate YIQ contrast for the form container
@@ -106,7 +107,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Scripts -->
+    <link rel="icon" href="{{ $favicon }}">
     <script>
         window.AdmixConfig = {
             reverb: {
@@ -178,22 +179,24 @@
     </div>
 
     <!-- Scrollable Content Wrapper -->
-    <div class="w-full h-full overflow-y-auto flex flex-col sm:justify-center items-center pt-6 sm:pt-0 relative z-10">
+    <div
+        class="min-h-[100dvh] w-full flex flex-col justify-start sm:justify-center items-center py-12 px-4 sm:px-6 lg:px-8 relative z-10 supports-[min-height:100dvh]:min-h-[100dvh]">
         <!-- Main Content -->
-        <div class="mb-6">
+        <div class="mb-8">
             <a href="/">
                 @if($logo)
                     <img src="{{ $logo }}" class="fill-current text-gray-500"
-                        style="width: auto; height: auto; max-width: 12rem; max-height: 4rem; object-fit: contain;"
+                        style="width: auto; height: auto; max-width: 14rem; max-height: 5rem; object-fit: contain;"
                         alt="Logo" />
                 @else
-                    <img src="{{ asset('images/logo.png') }}" class="w-20 h-20 fill-current text-gray-500"
-                        style="width: 5rem; height: 5rem;" alt="Logo" />
+                    <img src="{{ asset('images/logo.png') }}"
+                        class="w-24 h-24 fill-current text-gray-500 shadow-xl rounded-full"
+                        style="width: 6rem; height: 6rem;" alt="Logo" />
                 @endif
             </a>
         </div>
 
-        <div class="w-full sm:max-w-md px-6 py-4 {{ $shadowClass }} overflow-hidden sm:rounded-lg border {{ $formClasses }} relative"
+        <div class="w-full max-w-md p-8 {{ $shadowClass }} overflow-hidden rounded-2xl border {{ $formClasses }} relative"
             style="background-color: {{ $pageBg }};">
             <!-- Modern Gradient Top Border/Accent - Reduced Opacity -->
             <div

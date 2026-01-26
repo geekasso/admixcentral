@@ -12,8 +12,37 @@ use Illuminate\Support\Facades\Broadcast;
 // Broadcast::routes(['middleware' => ['web', 'auth']]);
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect('/login');
 });
+
+Route::get('/manifest.json', function () {
+    $settings = \App\Models\SystemSetting::pluck('value', 'key')->toArray();
+    $appName = $settings['app_name'] ?? config('app.name', 'AdmixCentral');
+    // Use icon_path if available, then favicon_path, then fallback to logo or default
+    $iconPath = $settings['icon_path'] ?? ($settings['favicon_path'] ?? ($settings['logo_path'] ?? '/images/logo.png'));
+    // Ensure logo path is absolute URL if needed or relative to root
+
+    return response()->json([
+        "name" => $appName,
+        "short_name" => $appName,
+        "start_url" => "/",
+        "display" => "standalone",
+        "background_color" => "#111827",
+        "theme_color" => "#111827",
+        "icons" => [
+            [
+                "src" => $iconPath,
+                "sizes" => "192x192",
+                "type" => "image/png"
+            ],
+            [
+                "src" => $iconPath,
+                "sizes" => "512x512",
+                "type" => "image/png"
+            ]
+        ]
+    ]);
+})->name('manifest');
 
 
 

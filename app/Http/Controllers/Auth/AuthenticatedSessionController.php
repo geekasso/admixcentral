@@ -28,6 +28,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Prevent redirect loop or unexpected redirect to system/status API route
+        // This happens if a background check hits the route while logged out
+        $intended = $request->session()->get('url.intended');
+        if ($intended && str_contains($intended, 'system/status')) {
+            $request->session()->forget('url.intended');
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
