@@ -14,7 +14,7 @@
                         <h3 class="text-xl font-semibold">System Information</h3>
 
                         <div class="flex items-center gap-3">
-                            <span class="text-sm text-gray-500 font-mono dark:text-gray-400">{{ $firewall->url }}</span>
+
 
                             <template x-if="systemLoading">
                                 <div class="animate-pulse bg-gray-200 h-6 w-20 rounded"></div>
