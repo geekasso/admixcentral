@@ -1173,38 +1173,57 @@
         <!-- Delete Confirmation Modal -->
         <!-- Delete Confirmation Modal -->
         <x-modal name="delete-firewall-modal" :show="false" focusable>
-            <div class="p-6" x-data="{ confirmEmail: '' }"
+            <div x-data="{ confirmEmail: '' }"
                 x-on:open-modal.window="if ($event.detail === 'delete-firewall-modal') confirmEmail = ''">
-                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    {{ __('Delete Firewall') }}
-                </h2>
+                <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div
+                            class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-100">
+                                {{ __('Delete Firewall') }}
+                            </h3>
+                            <div class="mt-2 text-left">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    {{ __('Are you sure you want to delete this firewall? This action cannot be undone.') }}
+                                </p>
+                                <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                                    {{ __('Please type your email address to confirm:') }} <span
+                                        class="font-mono font-bold">{{ auth()->user()->email }}</span>
+                                </p>
 
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    {{ __('Are you sure you want to delete this firewall? This action cannot be undone.') }}
-                </p>
-                <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                    {{ __('Please type your email address to confirm:') }} <span
-                        class="font-mono font-bold">{{ auth()->user()->email }}</span>
-                </p>
+                                <div class="mt-4">
+                                    <x-input-label for="confirm_email" value="{{ __('Email Address') }}"
+                                        class="sr-only" />
 
-                <div class="mt-6">
-                    <x-input-label for="confirm_email" value="{{ __('Email Address') }}" class="sr-only" />
-
-                    <x-text-input id="confirm_email" name="confirm_email" type="email" class="mt-1 block w-3/4"
-                        placeholder="{{ __('Email Address') }}" x-model="confirmEmail"
-                        @keyup.enter="if(confirmEmail === '{{ auth()->user()->email }}') document.getElementById('delete-firewall-form').submit()" />
+                                    <x-text-input id="confirm_email" name="confirm_email" type="email"
+                                        class="block w-full sm:w-3/4" placeholder="{{ __('Email Address') }}"
+                                        x-model="confirmEmail"
+                                        @keyup.enter="if(confirmEmail === '{{ auth()->user()->email }}') document.getElementById('delete-firewall-form').submit()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mt-6 flex justify-end">
-                    <x-secondary-button @click="$dispatch('close')">
-                        {{ __('Cancel') }}
-                    </x-secondary-button>
-
-                    <x-danger-button class="ml-3" x-bind:disabled="confirmEmail !== '{{ auth()->user()->email }}'"
+                <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <x-danger-button class="sm:ml-3 w-full sm:w-auto justify-center"
+                        x-bind:disabled="confirmEmail !== '{{ auth()->user()->email }}'"
                         x-bind:class="{ 'opacity-50 cursor-not-allowed': confirmEmail !== '{{ auth()->user()->email }}' }"
                         @click="document.getElementById('delete-firewall-form').submit()">
                         {{ __('Delete Firewall') }}
                     </x-danger-button>
+
+                    <x-secondary-button class="mt-3 sm:mt-0 w-full sm:w-auto justify-center"
+                        @click="$dispatch('close')">
+                        {{ __('Cancel') }}
+                    </x-secondary-button>
                 </div>
             </div>
         </x-modal>

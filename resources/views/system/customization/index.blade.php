@@ -406,57 +406,49 @@
                     </div>
 
                     <!-- SSL Modal -->
-                    <div x-show="showModal" style="display: none;" class="relative z-50">
-                        <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm" @click="showModal = false"></div>
-                        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-                            <div class="flex min-h-full items-center justify-center p-4">
-                                <div
-                                    class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:max-w-md w-full p-6 border border-gray-200 dark:border-gray-700">
-                                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white mb-4">Install
-                                        Let's Encrypt SSL</h3>
+                    <x-modal name="install-ssl-modal" :show="$errors->isNotEmpty()" focusable maxWidth="md">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white mb-4">Install
+                                Let's Encrypt SSL</h3>
 
-                                    <div class="space-y-4">
-                                        <div>
-                                            <label
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Domain
-                                                Name</label>
-                                            <input type="text" x-model="domain"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                                placeholder="central.example.com">
-                                        </div>
-                                        <div>
-                                            <label
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email
-                                                Address (for renewal)</label>
-                                            <input type="email" x-model="email"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                                placeholder="admin@example.com">
-                                        </div>
-
-                                        <!-- Error Message -->
-                                        <div x-show="error" class="text-red-500 text-sm mt-2" x-text="error"></div>
-                                    </div>
-
-                                    <div class="mt-6 flex justify-end gap-3">
-                                        <button type="button" @click="showModal = false"
-                                            class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
-                                        <button type="button" @click="installSsl" :disabled="loading"
-                                            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50 flex items-center gap-2">
-                                            <svg x-show="loading" class="animate-spin h-4 w-4 text-white" fill="none"
-                                                viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                                    stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor"
-                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                                </path>
-                                            </svg>
-                                            <span x-text="loading ? 'Installing...' : 'Install Certificate'"></span>
-                                        </button>
-                                    </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Domain
+                                        Name</label>
+                                    <input type="text" x-model="domain"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        placeholder="central.example.com">
                                 </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email
+                                        Address (for renewal)</label>
+                                    <input type="email" x-model="email"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        placeholder="admin@example.com">
+                                </div>
+
+                                <!-- Error Message -->
+                                <div x-show="error" class="text-red-500 text-sm mt-2" x-text="error"></div>
+                            </div>
+
+                            <div class="mt-6 flex justify-end gap-3">
+                                <button type="button" x-on:click="$dispatch('close')"
+                                    class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
+                                <button type="button" @click="installSsl" :disabled="loading"
+                                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50 flex items-center gap-2">
+                                    <svg x-show="loading" class="animate-spin h-4 w-4 text-white" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>
+                                    <span x-text="loading ? 'Installing...' : 'Install Certificate'"></span>
+                                </button>
                             </div>
                         </div>
-                    </div>
+                    </x-modal>
                 </div>
 
                 <script>
@@ -469,8 +461,8 @@
                             error: null,
                             openModal(currentUrl) {
                                 this.domain = currentUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
-                                this.showModal = true;
                                 this.error = null;
+                                window.dispatchEvent(new CustomEvent('open-modal', { detail: 'install-ssl-modal' }));
                             },
                             async installSsl() {
                                 if (!this.domain || !this.email) {
@@ -554,8 +546,11 @@
                             <!-- System Status Check (Locked) -->
                             <div x-data="{ 
                                     locked: true, 
-                                    showModal: false,
-                                    unlock() { this.locked = false; this.showModal = false; $nextTick(() => $refs.intervalInput.focus()); } 
+                                    unlock() { 
+                                        this.locked = false; 
+                                        window.dispatchEvent(new CustomEvent('close-modal', { detail: 'status-check-warning' }));
+                                        $nextTick(() => $refs.intervalInput.focus()); 
+                                    } 
                                 }">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">System Status
                                     Check Interval</label>
@@ -567,46 +562,37 @@
                                         class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600">
 
                                     <div x-show="locked" class="absolute inset-y-0 right-0 flex items-center pr-2">
-                                        <button type="button" @click="showModal = true"
+                                        <button type="button" @click="$dispatch('open-modal', 'status-check-warning')"
                                             class="bg-gray-200 dark:bg-gray-700 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300">Unlock</button>
                                     </div>
                                 </div>
 
                                 <!-- Warning Modal -->
-                                <div x-show="showModal" style="display: none;" class="relative z-50">
-                                    <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm"
-                                        @click="showModal = false"></div>
-                                    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-                                        <div class="flex min-h-full items-center justify-center p-4">
-                                            <div
-                                                class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:max-w-sm w-full p-6 border border-gray-200 dark:border-gray-700">
-                                                <div
-                                                    class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 mb-4">
-                                                    <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                                    </svg>
-                                                </div>
-                                                <div class="text-center">
-                                                    <h3
-                                                        class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                                                        Caution Recommended</h3>
-                                                    <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">Changing
-                                                        this value too low might cause high server load. Are you sure?
-                                                    </div>
-                                                </div>
-                                                <div class="mt-5 sm:mt-6 grid grid-cols-2 gap-3">
-                                                    <button type="button" @click="showModal = false"
-                                                        class="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
-                                                    <button type="button" @click="unlock()"
-                                                        class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">Unlock</button>
-                                                </div>
+                                <x-modal name="status-check-warning" maxWidth="sm" focusable>
+                                    <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                                        <div
+                                            class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 mb-4">
+                                            <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                        </div>
+                                        <div class="text-center">
+                                            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                                                Caution Recommended</h3>
+                                            <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">Changing
+                                                this value too low might cause high server load. Are you sure?
                                             </div>
                                         </div>
+                                        <div class="mt-5 sm:mt-6 grid grid-cols-2 gap-3">
+                                            <button type="button" x-on:click="$dispatch('close')"
+                                                class="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
+                                            <button type="button" @click="unlock()"
+                                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">Unlock</button>
+                                        </div>
                                     </div>
-                                </div>
+                                </x-modal>
                             </div>
 
                         </div>
@@ -664,88 +650,75 @@
 
                 <!-- Force Save Warning Modal -->
                 <div x-data="{ 
-                        show: false, 
                         errorMessage: '',
                         hostname: '',
                         url: '',
-                        open(msg, host, link) { this.errorMessage = msg; this.hostname = host; this.url = link; this.show = true; },
-                        confirm() { this.show = false; document.getElementById('saveButton').closest('form').submit(); }
+                        open(msg, host, link) { 
+                            this.errorMessage = msg; this.hostname = host; this.url = link; 
+                            window.dispatchEvent(new CustomEvent('open-modal', { detail: 'force-save-modal' }));
+                        },
+                        confirm() { document.getElementById('saveButton').closest('form').submit(); }
                     }"
                     @open-force-save-modal.window="open($event.detail.error, $event.detail.hostname, $event.detail.url)"
-                    x-show="show" style="display: none;" class="relative z-50">
+                    >
 
-                    <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm transition-opacity" x-show="show"
-                        x-transition.opacity></div>
-
-                    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-                        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                            <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-gray-200 dark:border-gray-700"
-                                x-show="show" x-transition:enter="ease-out duration-300"
-                                x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                                x-transition:leave="ease-in duration-200"
-                                x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                @click.outside="show = false">
-
-                                <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                                    <div class="sm:flex sm:items-start">
-                                        <div
-                                            class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
-                                            <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none"
-                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                                            </svg>
-                                        </div>
-                                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                                                Verification Failed</h3>
-                                            <div class="mt-2">
-                                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                    Could not automatically verify access to <span
-                                                        class="font-mono font-medium text-gray-700 dark:text-gray-300"
-                                                        x-text="hostname"></span>.
-                                                </p>
-
-                                                <div class="mt-3 mb-3">
-                                                    <a :href="url" target="_blank"
-                                                        class="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 underline">
-                                                        <span>Open site in new tab to verify manually</span>
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
-                                                            </path>
-                                                        </svg>
-                                                    </a>
-                                                </div>
-
-                                                <p class="text-sm text-red-600 dark:text-red-400 font-mono bg-red-50 dark:bg-red-900/10 p-2 rounded text-xs break-all"
-                                                    x-text="errorMessage"></p>
-                                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                                    If you are sure DNS is configured correctly (e.g., using a local IP
-                                                    or internal DNS), you can force save these settings.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <x-modal name="force-save-modal" focusable maxWidth="lg">
+                        <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
                                 <div
-                                    class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                    <button type="button" @click="confirm()"
-                                        class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
-                                        Proceed Anyway
-                                    </button>
-                                    <button type="button" @click="show = false"
-                                        class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto">
-                                        Cancel
-                                    </button>
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
+                                    <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none"
+                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                                    </svg>
+                                </div>
+                                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                    <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                                        Verification Failed</h3>
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                            Could not automatically verify access to <span
+                                                class="font-mono font-medium text-gray-700 dark:text-gray-300"
+                                                x-text="hostname"></span>.
+                                        </p>
+
+                                        <div class="mt-3 mb-3">
+                                            <a :href="url" target="_blank"
+                                                class="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 underline">
+                                                <span>Open site in new tab to verify manually</span>
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                                    </path>
+                                                </svg>
+                                            </a>
+                                        </div>
+
+                                        <p class="text-sm text-red-600 dark:text-red-400 font-mono bg-red-50 dark:bg-red-900/10 p-2 rounded text-xs break-all"
+                                            x-text="errorMessage"></p>
+                                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                            If you are sure DNS is configured correctly (e.g., using a local IP
+                                            or internal DNS), you can force save these settings.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div
+                            class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                            <button type="button" @click="confirm()"
+                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
+                                Proceed Anyway
+                            </button>
+                            <button type="button" x-on:click="$dispatch('close')"
+                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto">
+                                Cancel
+                            </button>
+                        </div>
+                    </x-modal>
                 </div>
 
             </form>
@@ -753,117 +726,88 @@
     </div>
 
     <!-- Uninstall SSL Warning Modal -->
-    <div x-data="{ show: false }" @open-uninstall-ssl-modal.window="show = true" x-show="show" style="display: none;"
-        class="relative z-50">
-        <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm" @click="show = false" x-transition.opacity></div>
-        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-gray-200 dark:border-gray-700"
-                    x-show="show" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave="ease-in duration-200"
-                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    @click.outside="show = false">
-                    <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                                </svg>
-                            </div>
-                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">Uninstall
-                                    SSL Certificate?</h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                                        Are you sure you want to remove the SSL certificate? This will revert your site
-                                        to <span
-                                            class="font-mono text-xs bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">http://</span>
-                                        and traffic will no longer be encrypted.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                        <form method="POST" action="{{ route('system.ssl.uninstall') }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
-                                Uninstall
-                            </button>
-                        </form>
-                        <button type="button" @click="show = false"
-                            class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto">
-                            Cancel
-                        </button>
+    <x-modal name="uninstall-ssl-modal" focusable maxWidth="lg">
+        <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+                <div
+                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
+                    <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                </div>
+                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                    <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">Uninstall
+                        SSL Certificate?</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Are you sure you want to remove the SSL certificate? This will revert your site
+                            to <span
+                                class="font-mono text-xs bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">http://</span>
+                            and traffic will no longer be encrypted.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <form method="POST" action="{{ route('system.ssl.uninstall') }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit"
+                    class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
+                    Uninstall
+                </button>
+            </form>
+            <button type="button" x-on:click="$dispatch('close')"
+                class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto">
+                Cancel
+            </button>
+        </div>
+    </x-modal>
 
     <!-- Restore Branding Modal -->
-    <div x-data="{ show: false, type: '' }" @open-restore-modal.window="show = true; type = $event.detail.type"
-        x-show="show" style="display: none;" class="relative z-50">
-        <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm" @click="show = false" x-transition.opacity></div>
-        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-gray-200 dark:border-gray-700"
-                    x-show="show" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave="ease-in duration-200"
-                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    @click.outside="show = false">
-                    <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                                </svg>
-                            </div>
-                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-                                    x-text="'Restore Default ' + type.charAt(0).toUpperCase() + type.slice(1)"></h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                                        Are you sure you want to restore the default <span x-text="type"></span>? This
-                                        cannot be undone.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+    <div x-data="{ type: '' }" @open-restore-modal.window="type = $event.detail.type; $dispatch('open-modal', 'restore-branding-modal')">
+        <x-modal name="restore-branding-modal" focusable maxWidth="md">
+            <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div
+                        class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
+                        <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
                     </div>
-                    <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                        <form method="POST" action="{{ route('system.settings.restore') }}">
-                            @csrf
-                            <input type="hidden" name="type" :value="type">
-                            <button type="submit"
-                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
-                                Restore
-                            </button>
-                        </form>
-                        <button type="button" @click="show = false"
-                            class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto">
-                            Cancel
-                        </button>
+                    <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+                            x-text="'Restore Default ' + type.charAt(0).toUpperCase() + type.slice(1)"></h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                Are you sure you want to restore the default <span x-text="type"></span>? This
+                                cannot be undone.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Toast Notification -->
+            <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <form method="POST" action="{{ route('system.settings.restore') }}">
+                    @csrf
+                    <input type="hidden" name="type" :value="type">
+                    <button type="submit"
+                        class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
+                        Restore
+                    </button>
+                </form>
+                <button type="button" x-on:click="$dispatch('close')"
+                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto">
+                    Cancel
+                </button>
+            </div>
+        </x-modal>
+    </div>     <!-- Toast Notification -->
         <div x-data="{ show: false, message: '', type: 'success' }"
             @notify.window="show = true; message = $event.detail.message; type = $event.detail.type || 'success'; setTimeout(() => show = false, 4000)"
             x-show="show" x-transition:enter="transform ease-out duration-300 transition"
@@ -910,7 +854,7 @@
             }
 
             function confirmUninstall() {
-                window.dispatchEvent(new CustomEvent('open-uninstall-ssl-modal'));
+                window.dispatchEvent(new CustomEvent('open-modal', { detail: 'uninstall-ssl-modal' }));
             }
 
             async function verifyAndSubmit() {

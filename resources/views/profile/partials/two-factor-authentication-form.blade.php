@@ -220,71 +220,94 @@
 
             <!-- Password Confirmation Modal -->
             <x-modal name="confirm-password-2fa" focusable>
-                <div class="p-6">
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        {{ __('Confirm Password') }}
-                    </h2>
+                <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div
+                            class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/20 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-100">
+                                {{ __('Confirm Password') }}
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    {{ __('For your security, please confirm your password to continue.') }}
+                                </p>
+                                <div class="mt-4">
+                                    <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
 
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        {{ __('For your security, please confirm your password to continue.') }}
-                    </p>
+                                    <x-text-input x-ref="passwordInput" id="password_2fa" type="password"
+                                        class="mt-1 block w-full" placeholder="{{ __('Password') }}" x-model="password"
+                                        @keydown.enter="confirmPassword" />
 
-                    <div class="mt-6">
-                        <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
-
-                        <x-text-input x-ref="passwordInput" id="password_2fa" type="password" class="mt-1 block w-3/4"
-                            placeholder="{{ __('Password') }}" x-model="password" @keydown.enter="confirmPassword" />
-
-                        <p x-show="passwordError" x-text="passwordError"
-                            class="mt-2 text-sm text-red-600 dark:text-red-400"></p>
+                                    <p x-show="passwordError" x-text="passwordError"
+                                        class="mt-2 text-sm text-red-600 dark:text-red-400"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="mt-6 flex justify-end">
-                        <x-secondary-button x-on:click="$dispatch('close-modal', 'confirm-password-2fa')">
-                            {{ __('Cancel') }}
-                        </x-secondary-button>
-
-                        <x-primary-button class="ml-3" x-on:click="confirmPassword">
-                            {{ __('Confirm') }}
-                        </x-primary-button>
-                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <x-primary-button class="sm:ms-3 w-full sm:w-auto justify-center" x-on:click="confirmPassword">
+                        {{ __('Confirm') }}
+                    </x-primary-button>
+                    <x-secondary-button class="mt-3 sm:mt-0 w-full sm:w-auto justify-center"
+                        x-on:click="$dispatch('close')">
+                        {{ __('Cancel') }}
+                    </x-secondary-button>
                 </div>
             </x-modal>
 
             <!-- 2FA Enrollment / QR Code Modal -->
             <x-modal name="2fa-setup" focusable>
-                <div class="p-6">
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        {{ __('Finish Enabling Two Factor Authentication') }}
-                    </h2>
+                <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div
+                            class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900/20 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M7.875 14.25l1.214 1.942a2.25 2.25 0 001.908 1.058h2.006c.776 0 1.497-.4 1.908-1.058l1.214-1.942M2.41 9a2.25 2.25 0 010-3.182l.981-.981c.563-.563 1.346-.837 2.126-.689l1.25.234c.54.1 1.096-.1 1.492-.536l.241-.266c.9-.99 2.517-.99 3.417 0l.241.266c.396.435.952.635 1.492.536l1.25-.234c.78-.148 1.563.125 2.126.688l.981.981A2.25 2.25 0 0121.59 9m-19.18 0l-.882 2.524a3 3 0 00.999 3.528l2.91 1.922m13.12 0l2.91-1.922a3 3 0 00.999-3.528L21.59 9m-13.12 0V5.25a2.25 2.25 0 014.5 0V9m-4.5 0h4.5" />
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-100">
+                                {{ __('Finish Enabling Two Factor Authentication') }}
+                            </h3>
+                            <div class="mt-2 text-left">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    {{ __('Scan the following QR code using your phone\'s authenticator application.') }}
+                                </p>
 
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        {{ __('Scan the following QR code using your phone\'s authenticator application.') }}
-                    </p>
+                                <div
+                                    class="mt-4 p-4 bg-white dark:bg-gray-100 rounded-lg inline-block border border-gray-200">
+                                    <div x-html="qrCode"></div>
+                                </div>
 
-                    <div class="mt-4 p-4 bg-white dark:bg-gray-100 rounded-lg inline-block">
-                        <div x-html="qrCode"></div>
+                                <div class="mt-4">
+                                    <x-input-label for="code" value="{{ __('Code') }}" />
+                                    <x-text-input id="code" type="text" name="code" class="block mt-1 w-1/2"
+                                        inputmode="numeric" autofocus autocomplete="one-time-code"
+                                        x-model="confirmationCode" @keydown.enter="confirm2FA" />
+                                    <p class="text-sm text-gray-500 mt-2">Enter the 6-digit code from your app.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="mt-4">
-                        <x-input-label for="code" value="{{ __('Code') }}" />
-
-                        <x-text-input id="code" type="text" name="code" class="block mt-1 w-1/2" inputmode="numeric"
-                            autofocus autocomplete="one-time-code" x-model="confirmationCode"
-                            @keydown.enter="confirm2FA" />
-                        <p class="text-sm text-gray-500 mt-2">Enter the 6-digit code from your app.</p>
-                    </div>
-
-                    <div class="mt-6 flex justify-end">
-                        <x-secondary-button x-on:click="$dispatch('close-modal', '2fa-setup'); disable2FA()">
-                            <!-- Cancel = Disable pending state -->
-                            {{ __('Cancel') }}
-                        </x-secondary-button>
-
-                        <x-primary-button class="ml-3" x-on:click="confirm2FA">
-                            {{ __('Confirm') }}
-                        </x-primary-button>
-                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <x-primary-button class="sm:ms-3 w-full sm:w-auto justify-center" x-on:click="confirm2FA">
+                        {{ __('Confirm') }}
+                    </x-primary-button>
+                    <x-secondary-button class="mt-3 sm:mt-0 w-full sm:w-auto justify-center"
+                        x-on:click="$dispatch('close'); disable2FA()">
+                        {{ __('Cancel') }}
+                    </x-secondary-button>
                 </div>
             </x-modal>
 
