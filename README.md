@@ -4,38 +4,42 @@ AdmixCentral is a centralized firewall management dashboard tailored for managin
 
 ## Features
 
-- **Multi-Tenancy**: Manage multiple companies and their respective firewalls securely with isolated scopes.
-- **Unified Dashboard**: View system status, resource usage (CPU, RAM, Swap), and critical alerts across all managed firewalls.
+### 🛡️ Enterprise Security
+- **Two-Factor Authentication (2FA)**: TOTP-based 2FA (Google Authenticator, Authy) with recovery codes and password confirmation for sensitive actions.
+- **Secure Architecture**: Isolated multi-tenancy scopes, secure session management, and CSRF protection.
+- **Role-Based Access**: Granular control over company and user permissions.
+
+### 📱 Mobile-First Experience
+- **Progressive Web App (PWA)**: Installable on iOS/Android for a native app-like experience.
+- **Responsive Design**: "Glanceable" mobile dashboard with stacked card layouts, auto-minimizing sidebars, and touch-optimized navigation.
+- **Dark Mode**: Fully integrated dark mode support that respects system preferences.
+
+### ⚡ Real-Time Operations
+- **WebSocket Updates**: Live dashboard status updates (CPU, RAM, Traffic) without refreshing.
+- **Live Diagnostics**: Real-time ping, traceroute, and system activity logs.
+
+### 🔧 Core Management
+- **Unified Dashboard**: centralized view of health status, resource usage, and alerts across all managed instances.
+- **Automated SSL/Hostname**: Built-in lifecycle management for Let's Encrypt SSL certificates and dynamic hostname handling.
 - **System Customization**:
-    - **Branding**: Upload custom Logos and Favicons.
-    - **Theming**: Toggle between Dark and Light modes for the entire application.
-- **Firewall Management**:
-    - **Aliases**: Create, edit, and delete aliases with bulk update capabilities.
-    - **NAT**: Full support for Port Forward, Outbound, and 1:1 NAT mapping management.
-    - **Rules**: Manage firewall rules with drag-and-drop reordering.
-    - **Virtual IPs**: Manage CARP, IP Alias, and Proxy ARP virtual IPs.
-    - **Traffic Shaper**: Configure Limiters for bandwidth management.
-- **Service Management**:
-    - **DHCP**: Manage scopes, static mappings (with subnet suggestions), and relay.
-    - **DNS**: Manage DNS Forwarder and Resolver settings.
-    - **VPN**: 
-        - **OpenVPN**: Server and Client management.
-        - **IPSec**: Full Phase 1 and Phase 2 tunnel management (IKEv1/v2, Modern Encryption).
-        - **WireGuard**: Tunnel and Peer management.
-    - **Additional**: ACME (Let's Encrypt), HAProxy, FreeRADIUS.
-- **Diagnostics**:
-    - **Interactive Tables**: View and filter system tables (pf tables).
-    - **Status Pages**: ARP Table, Firewall States, System Logs, Gateways, Interfaces.
-    - **Tools**: Execute shell commands, Ping, Traceroute, Reboot, and Halt systems.
-- **Bulk Actions**: 
-    - Apply configurations (Aliases, NAT Rules, Firewall Rules, IPSec Tunnels) to multiple firewalls simultaneously.
-    - Perform bulk system actions like Reboot or Update.
-- **Secure Integration**: Interacts with pfSense via the REST API or XMLRPC.
+    - **Branding**: Dynamic Logo and Favicon uploading.
+    - **Theming**: "Indigo Standard" unified design system.
+
+### 🔥 Firewall Management
+- **Aliases & Rules**: Bulk management of aliases, NAT rules, and firewall rules with drag-and-drop ordering.
+- **VPN Management**:
+    - **OpenVPN**: Server/Client configuration.
+    - **IPSec**: Full IKEv1/v2 tunnel management.
+    - **WireGuard**: Modern, high-performance tunnel and peer management.
+- **Services**: DHCP, DNS Resolver/Forwarder, HAProxy, and ACME integration.
+- **Backup & Restore**: Automated config backups and one-click restore points.
 
 ## Tech Stack
 
 - **Framework**: [Laravel 11.x](https://laravel.com) (PHP 8.2+)
-- **Frontend**: Blade Templates, Tailwind CSS (Custom `pf-*` utility classes), Alpine.js
+- **Security**: Laravel Fortify (2FA, Authentication)
+- **Frontend**: Blade, Tailwind CSS (Custom Utility Framework), Alpine.js
+- **Real-Time**: Laravel Reverb / WebSockets
 - **Database**: SQLite (default), MySQL/PostgreSQL supported
 - **API Integration**: Custom service layer interacting with [jaredhendrickson13/pfsense-api](https://github.com/jaredhendrickson13/pfsense-api)
 
