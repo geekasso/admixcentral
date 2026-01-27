@@ -1,6 +1,6 @@
 # AdmixCentral
 
-AdmixCentral is a centralized firewall management dashboard tailored for managing multiple **pfSense** instances. It leverages the pfSense API to provide a unified interface for system administrators to manage firewalls, companies, and users from a single pane of glass.
+AdmixCentral is a centralized firewall management dashboard tailored for managing multiple **pfSense** instances. It leverages the [pfRest API](https://pfrest.org/) to provide a unified interface for system administrators to manage firewalls, companies, and users from a single pane of glass.
 
 ## Features
 
@@ -40,8 +40,8 @@ AdmixCentral is a centralized firewall management dashboard tailored for managin
 - **Security**: Laravel Fortify (2FA, Authentication)
 - **Frontend**: Blade, Tailwind CSS (Custom Utility Framework), Alpine.js
 - **Real-Time**: Laravel Reverb / WebSockets
-- **Database**: SQLite (default), MySQL/PostgreSQL supported
-- **API Integration**: Custom service layer interacting with [jaredhendrickson13/pfsense-api](https://github.com/jaredhendrickson13/pfsense-api)
+- **Database**: MySQL 8.0+ (Primary), PostgreSQL supported
+- **API Integration**: Custom service layer interacting with [pfRest (pfSense REST API)](https://pfrest.org/) - [GitHub](https://github.com/pfrest/pfSense-pkg-RESTAPI)
 
 ---
 
@@ -52,6 +52,7 @@ This release marks a major architectural shift from the initial prototype. The f
 | System Area | Legacy Specification (v0.x) | Modern Specification (v1.0) |
 | :--- | :--- | :--- |
 | **Data Transport** | REST Polling (Waterfall requests) | **WebSockets (Laravel Reverb)** + Optimistic UI |
+| **Database** | SQLite (File-based) | **MySQL 8.0+** (Transactional, Scalable) |
 | **Authentication** | Basic Session Auth | **2FA (TOTP)** via Laravel Fortify + Password Confirmation |
 | **Frontend Strategy** | Desktop-centric Dashboard | **Mobile-First PWA** (Installable, Responsive, Touch-optimized) |
 | **Resilience** | UI froze on connection loss | **Offline Resilience** (Cached state, Blur overlays, Auto-reconnect) |
@@ -69,7 +70,7 @@ Use these instructions for setting up a local development environment.
 - PHP >= 8.2
 - Composer
 - Node.js & NPM
-- SQLite (or another database server)
+- MySQL 8.0+
 
 ### Steps
 
@@ -90,9 +91,14 @@ Use these instructions for setting up a local development environment.
    cp .env.example .env
    php artisan key:generate
    ```
-   *Note: creating the sqlite database file works best if you create it first:*
+   *Note: Ensure your `.env` is configured for MySQL credentials:*
    ```bash
-   touch database/database.sqlite
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=admixcentral
+   DB_USERNAME=root
+   DB_PASSWORD=
    ```
 
 4. **Run Migrations**
@@ -128,7 +134,7 @@ For a production environment, it is recommended to use Nginx with PHP-FPM and SS
 Ensure your server has the following installed:
 - Nginx
 - PHP 8.2 or higher + FPM (`php8.2-fpm`)
-- MySql / MariaDB (Recommended for production over SQLite)
+- MySQL 8.0+ or MariaDB 10.5+
 - Certbot (for SSL)
 
 ### 2. File Ownership & Permissions
@@ -272,7 +278,7 @@ Upon first installation, AdmixCentral requires you to create a **Global Admin** 
 
 ## Firewall Setup
 
-To manage a pfSense firewall, ensure the [pfsense-api](https://github.com/jaredhendrickson13/pfsense-api) package is installed on the target pfSense machine.
+To manage a pfSense firewall, ensure the [pfSense REST API (pfRest)](https://github.com/pfrest/pfSense-pkg-RESTAPI) package is installed on the target pfSense machine.
 
 1. Log in to AdmixCentral.
 2. Navigate to **Firewalls > Add Firewall**.
