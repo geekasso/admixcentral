@@ -598,6 +598,22 @@
                                                 </svg>
                                             </div>
                                         </th>
+
+                                        @if(auth()->user()->isGlobalAdmin())
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer select-none group"
+                                                @click="sortBy = 'company'; sortAsc = !sortAsc">
+                                                <div class="flex items-center gap-1">
+                                                    Company
+                                                    <svg class="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors"
+                                                        :class="{ 'text-indigo-600 dark:text-indigo-400': sortBy === 'company', 'rotate-180': sortBy === 'company' && !sortAsc }"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                    </svg>
+                                                </div>
+                                            </th>
+                                        @endif
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer select-none group"
                                             @click="sortBy = 'displayUrl'; sortAsc = !sortAsc">
@@ -650,21 +666,7 @@
                                                 </svg>
                                             </div>
                                         </th>
-                                        @if(auth()->user()->isGlobalAdmin())
-                                            <th scope="col"
-                                                class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer select-none group"
-                                                @click="sortBy = 'company'; sortAsc = !sortAsc">
-                                                <div class="flex items-center gap-1">
-                                                    Company
-                                                    <svg class="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors"
-                                                        :class="{ 'text-indigo-600 dark:text-indigo-400': sortBy === 'company', 'rotate-180': sortBy === 'company' && !sortAsc }"
-                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                                    </svg>
-                                                </div>
-                                            </th>
-                                        @endif
+
                                         <th scope="col"
                                             class="px-6 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                             Actions
@@ -710,6 +712,16 @@
                                                         class="inline-block w-16 h-5 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></span>
                                                 </template>
                                             </td>
+
+                                            @if(auth()->user()->isGlobalAdmin())
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                                    <a :href="firewall.company_url"
+                                                        class="text-indigo-600 hover:text-indigo-900 hover:underline dark:text-indigo-400 dark:hover:text-indigo-300"
+                                                        x-text="firewall.company_name">
+                                                    </a>
+                                                </td>
+                                            @endif
                                             <td
                                                 class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                 <a :href="firewall.linkUrl" target="_blank" rel="noopener noreferrer"
@@ -805,15 +817,7 @@
                                                     </template>
                                                 </div>
                                             </td>
-                                            @if(auth()->user()->isGlobalAdmin())
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                                    <a :href="firewall.company_url"
-                                                        class="text-indigo-600 hover:text-indigo-900 hover:underline dark:text-indigo-400 dark:hover:text-indigo-300"
-                                                        x-text="firewall.company_name">
-                                                    </a>
-                                                </td>
-                                            @endif
+
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <div class="flex items-center justify-end space-x-3">
                                                     <a :href="firewall.edit_url"
@@ -830,7 +834,7 @@
                                         </tr>
                                     </template>
                                     <tr x-show="filteredRows.length === 0">
-                                        <td colspan="{{ auth()->user()->isGlobalAdmin() ? '8' : '7' }}"
+                                        <td colspan="{{ auth()->user()->isGlobalAdmin() ? '9' : '8' }}"
                                             class="px-6 py-4 text-center text-gray-500">
                                             No firewalls found. <a href="{{ route('firewalls.create') }}"
                                                 class="text-blue-600 hover:underline">Add one now</a>.
@@ -1204,7 +1208,7 @@
                         }
                         const form = document.getElementById('bulkForm');
                         form.submit();
-                                }
-     }
+                    }
+                }
             </script>
 </x-app-layout>
