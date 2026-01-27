@@ -45,6 +45,21 @@ AdmixCentral is a centralized firewall management dashboard tailored for managin
 
 ---
 
+## Architecture Evolution (v0.x to v1.0)
+
+This release marks a major architectural shift from the initial prototype. The following specification changes have been implemented to support enterprise-grade reliability and mobile usability:
+
+| System Area | Legacy Specification (v0.x) | Modern Specification (v1.0) |
+| :--- | :--- | :--- |
+| **Data Transport** | REST Polling (Waterfall requests) | **WebSockets (Laravel Reverb)** + Optimistic UI |
+| **Authentication** | Basic Session Auth | **2FA (TOTP)** via Laravel Fortify + Password Confirmation |
+| **Frontend Strategy** | Desktop-centric Dashboard | **Mobile-First PWA** (Installable, Responsive, Touch-optimized) |
+| **Resilience** | UI froze on connection loss | **Offline Resilience** (Cached state, Blur overlays, Auto-reconnect) |
+| **Design System** | Ad-hoc Utility Classes | **"Indigo Standard"** (Unified colors, typography, and modal systems) |
+| **Multi-Tenancy** | Basic scope filtration | **Strict Scope Isolation** with Role-Based Access Control |
+
+---
+
 ## Development & Testing Setup
 
 Use these instructions for setting up a local development environment.
