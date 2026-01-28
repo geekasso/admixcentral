@@ -451,7 +451,164 @@
                     </x-modal>
                 </div>
 
+                <!-- Section: Email Configuration -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <div class="card-icon-wrapper">
+                            <svg class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="card-title-modern">Email Configuration</h3>
+                            <p class="card-subtitle-modern">Configure email delivery settings for notifications and
+                                magic logins.</p>
+                        </div>
+                    </div>
+                    <div class="card-body-modern space-y-6"
+                        x-data="{ driver: '{{ $settings['mail_driver'] ?? 'log' }}' }">
+
+                        <!-- Driver Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mail
+                                Driver</label>
+                            <select name="mail_driver" x-model="driver"
+                                class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="log">Log (Development)</option>
+                                <option value="mailgun">Mailgun</option>
+                            </select>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Mailgun is recommended for
+                                production.</p>
+                        </div>
+
+                        <!-- Mailgun Settings -->
+                        <div x-show="driver === 'mailgun'"
+                            class="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <!-- Mailgun Specific Settings -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <!-- Domain -->
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mailgun
+                                        Domain</label>
+                                    <input type="text" name="mailgun_domain"
+                                        value="{{ $settings['mailgun_domain'] ?? '' }}"
+                                        placeholder="mg.yourdomain.com"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+
+                                <!-- Secret -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">API
+                                        Key (Secret)</label>
+                                    <input type="password" name="mailgun_secret"
+                                        value="{{ $settings['mailgun_secret'] ?? '' }}"
+                                        placeholder="key-xxxxxxxxxxxxxxxx"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+
+                                <!-- Region/Endpoint -->
+                                <div class="col-span-1 md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mailgun Region</label>
+                                    <select name="mailgun_endpoint"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="api.mailgun.net" {{ ($settings['mailgun_endpoint'] ?? 'api.mailgun.net') === 'api.mailgun.net' ? 'selected' : '' }}>US (api.mailgun.net)</option>
+                                        <option value="api.eu.mailgun.net" {{ ($settings['mailgun_endpoint'] ?? '') === 'api.eu.mailgun.net' ? 'selected' : '' }}>EU (api.eu.mailgun.net)</option>
+                                    </select> 
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Select EU if your Mailgun domain is in the European region.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- From Address -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">From
+                                        Address</label>
+                                    <input type="email" name="mail_from_address"
+                                        value="{{ $settings['mail_from_address'] ?? 'hello@example.com' }}"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+
+                                <!-- From Name -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">From
+                                        Name</label>
+                                    <input type="text" name="mail_from_name"
+                                        value="{{ $settings['mail_from_name'] ?? config('app.name') }}"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700" x-data="emailTester()">
+                                <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-4">Test Configuration</h4>
+                                <div class="flex gap-4 items-end">
+                                    <div class="flex-1">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Send Test Email To</label>
+                                        <input type="email" x-model="testEmail" placeholder="your@email.com"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <button type="button" @click="sendTestEmail" :disabled="loading"
+                                        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+                                        <span x-show="!loading">Send Test Email</span>
+                                        <span x-show="loading">Sending...</span>
+                                    </button>
+                                </div>
+                                <!-- Feedback Messages -->
+                                <div x-show="successMessage" x-transition class="mt-4 p-3 rounded-md bg-green-50 text-green-700 dark:bg-green-900/50 dark:text-green-300">
+                                    <p x-text="successMessage"></p>
+                                </div>
+                                <div x-show="errorMessage" x-transition class="mt-4 p-3 rounded-md bg-red-50 text-red-700 dark:bg-red-900/50 dark:text-red-300">
+                                    <p x-text="errorMessage"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
                 <script>
+                    function emailTester() {
+                        return {
+                            testEmail: '{{ auth()->user()->email }}',
+                            loading: false,
+                            successMessage: null,
+                            errorMessage: null,
+                            async sendTestEmail() {
+                                if (!this.testEmail) {
+                                    this.errorMessage = 'Please enter an email address.';
+                                    return;
+                                }
+                                this.loading = true;
+                                this.errorMessage = null;
+                                this.successMessage = null;
+
+                                try {
+                                    const response = await fetch('{{ route("system.settings.test-email") }}', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                        },
+                                        body: JSON.stringify({ test_email: this.testEmail })
+                                    });
+
+                                    const data = await response.json();
+
+                                    if (data.success) {
+                                        this.successMessage = data.message;
+                                    } else {
+                                        this.errorMessage = data.message || 'Failed to send test email.';
+                                    }
+                                } catch (e) {
+                                    this.errorMessage = 'An error occurred while sending the email.';
+                                } finally {
+                                    this.loading = false;
+                                }
+                            }
+                        }
+                    }
+
                     function sslInstaller() {
                         return {
                             showModal: false,
@@ -659,16 +816,15 @@
                         },
                         confirm() { document.getElementById('saveButton').closest('form').submit(); }
                     }"
-                    @open-force-save-modal.window="open($event.detail.error, $event.detail.hostname, $event.detail.url)"
-                    >
+                    @open-force-save-modal.window="open($event.detail.error, $event.detail.hostname, $event.detail.url)">
 
                     <x-modal name="force-save-modal" focusable maxWidth="lg">
                         <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                             <div class="sm:flex sm:items-start">
                                 <div
                                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
-                                    <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none"
-                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                                     </svg>
@@ -707,8 +863,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                             <button type="button" @click="confirm()"
                                 class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
                                 Proceed Anyway
@@ -768,7 +923,8 @@
     </x-modal>
 
     <!-- Restore Branding Modal -->
-    <div x-data="{ type: '' }" @open-restore-modal.window="type = $event.detail.type; $dispatch('open-modal', 'restore-branding-modal')">
+    <div x-data="{ type: '' }"
+        @open-restore-modal.window="type = $event.detail.type; $dispatch('open-modal', 'restore-branding-modal')">
         <x-modal name="restore-branding-modal" focusable maxWidth="md">
             <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:items-start">
@@ -807,195 +963,195 @@
                 </button>
             </div>
         </x-modal>
-    </div>     <!-- Toast Notification -->
-        <div x-data="{ show: false, message: '', type: 'success' }"
-            @notify.window="show = true; message = $event.detail.message; type = $event.detail.type || 'success'; setTimeout(() => show = false, 4000)"
-            x-show="show" x-transition:enter="transform ease-out duration-300 transition"
-            x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
-            x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
-            x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0" x-cloak
-            class="fixed bottom-0 right-0 z-50 m-6 max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
-            <div class="p-4">
-                <div class="flex items-start">
-                    <div class="flex-shrink-0">
-                        <svg x-show="type === 'success'" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </div> <!-- Toast Notification -->
+    <div x-data="{ show: false, message: '', type: 'success' }"
+        @notify.window="show = true; message = $event.detail.message; type = $event.detail.type || 'success'; setTimeout(() => show = false, 4000)"
+        x-show="show" x-transition:enter="transform ease-out duration-300 transition"
+        x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+        x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+        x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0" x-cloak
+        class="fixed bottom-0 right-0 z-50 m-6 max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
+        <div class="p-4">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <svg x-show="type === 'success'" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <svg x-show="type === 'error'" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="ml-3 w-0 flex-1 pt-0.5">
+                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="message"></p>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex">
+                    <button @click="show = false"
+                        class="bg-transparent rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
                         </svg>
-                        <svg x-show="type === 'error'" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div class="ml-3 w-0 flex-1 pt-0.5">
-                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="message"></p>
-                    </div>
-                    <div class="ml-4 flex-shrink-0 flex">
-                        <button @click="show = false"
-                            class="bg-transparent rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <span class="sr-only">Close</span>
-                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            function restoreDefault(type) {
-                window.dispatchEvent(new CustomEvent('open-restore-modal', { detail: { type: type } }));
+    <script>
+        function restoreDefault(type) {
+            window.dispatchEvent(new CustomEvent('open-restore-modal', { detail: { type: type } }));
+        }
+
+        function confirmUninstall() {
+            window.dispatchEvent(new CustomEvent('open-modal', { detail: 'uninstall-ssl-modal' }));
+        }
+
+        async function verifyAndSubmit() {
+            const btn = document.getElementById('saveButton');
+            const spinner = document.getElementById('verifyingSpinner');
+            const form = btn.closest('form');
+
+            // Get values
+            // Get values
+            const hostnameInput = form.querySelector('input[name="site_url"]');
+            // const protocolElement = form.querySelector('[name="site_protocol"]');
+
+            const hostname = hostnameInput.value.trim();
+            const protocol = 'http'; // Force HTTP for verification
+
+            if (!hostname) {
+                form.submit();
+                return;
             }
 
-            function confirmUninstall() {
-                window.dispatchEvent(new CustomEvent('open-modal', { detail: 'uninstall-ssl-modal' }));
-            }
+            // UI State
+            btn.classList.add('hidden');
+            spinner.classList.remove('hidden');
 
-            async function verifyAndSubmit() {
-                const btn = document.getElementById('saveButton');
-                const spinner = document.getElementById('verifyingSpinner');
-                const form = btn.closest('form');
+            // Construct Link URL
+            let cleanHost = hostname.replace(/^https?:\/\//, '').replace(/\/$/, '');
+            const checkLink = `${protocol}://${cleanHost}`;
 
-                // Get values
-                // Get values
-                const hostnameInput = form.querySelector('input[name="site_url"]');
-                // const protocolElement = form.querySelector('[name="site_protocol"]');
+            // Use server-side proxy to check reachability
+            // This avoids Mixed Content (HTTPS -> HTTP) and CORS issues
+            const proxyUrl = '{{ route("system.proxy-check") }}';
 
-                const hostname = hostnameInput.value.trim();
-                const protocol = 'http'; // Force HTTP for verification
+            try {
+                const response = await fetch(proxyUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ url: checkLink })
+                });
 
-                if (!hostname) {
+                const data = await response.json();
+
+                if (data.status === 'ok') {
                     form.submit();
-                    return;
+                } else {
+                    throw new Error(data.message || 'Validation failed');
                 }
 
-                // UI State
-                btn.classList.add('hidden');
-                spinner.classList.remove('hidden');
+            } catch (error) {
+                console.error('Verification failed:', error);
 
-                // Construct Link URL
-                let cleanHost = hostname.replace(/^https?:\/\//, '').replace(/\/$/, '');
-                const checkLink = `${protocol}://${cleanHost}`;
+                // Reset UI buttons first so they don't get stuck if user cancels modal
+                btn.classList.remove('hidden');
+                spinner.classList.add('hidden');
 
-                // Use server-side proxy to check reachability
-                // This avoids Mixed Content (HTTPS -> HTTP) and CORS issues
-                const proxyUrl = '{{ route("system.proxy-check") }}';
-
-                try {
-                    const response = await fetch(proxyUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ url: checkLink })
-                    });
-
-                    const data = await response.json();
-
-                    if (data.status === 'ok') {
-                        form.submit();
-                    } else {
-                        throw new Error(data.message || 'Validation failed');
+                // Dispatch event to open modal
+                window.dispatchEvent(new CustomEvent('open-force-save-modal', {
+                    detail: {
+                        error: error.message,
+                        hostname: hostname,
+                        url: checkLink
                     }
-
-                } catch (error) {
-                    console.error('Verification failed:', error);
-
-                    // Reset UI buttons first so they don't get stuck if user cancels modal
-                    btn.classList.remove('hidden');
-                    spinner.classList.add('hidden');
-
-                    // Dispatch event to open modal
-                    window.dispatchEvent(new CustomEvent('open-force-save-modal', {
-                        detail: {
-                            error: error.message,
-                            hostname: hostname,
-                            url: checkLink
-                        }
-                    }));
-                }
+                }));
             }
+        }
 
-            window.verifyReachabilityOnly = async function () {
-                console.log('Verify Button Clicked');
-                const btn = document.getElementById('verifyDomainBtn');
+        window.verifyReachabilityOnly = async function () {
+            console.log('Verify Button Clicked');
+            const btn = document.getElementById('verifyDomainBtn');
 
-                // Use the hidden input for protocol now (since dropdown is gone)
-                // But verifyAndSubmit used querySelector('[name="site_protocol"]').
-                // My previous fix in Step 1135 ensured it finds it.
+            // Use the hidden input for protocol now (since dropdown is gone)
+            // But verifyAndSubmit used querySelector('[name="site_protocol"]').
+            // My previous fix in Step 1135 ensured it finds it.
 
-                const hostnameInput = document.querySelector('input[name="site_url"]');
-                // const protocolElement = document.querySelector('[name="site_protocol"]');
+            const hostnameInput = document.querySelector('input[name="site_url"]');
+            // const protocolElement = document.querySelector('[name="site_protocol"]');
 
-                const hostname = hostnameInput.value.trim();
-                const protocol = 'http'; // Force HTTP for verification
+            const hostname = hostnameInput.value.trim();
+            const protocol = 'http'; // Force HTTP for verification
 
-                if (!hostname) return;
+            if (!hostname) return;
 
-                const originalText = btn.innerText;
-                btn.disabled = true;
-                btn.innerText = '...';
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = '...';
 
 
-                // Construct Link URL
-                let cleanHost = hostname.replace(/^https?:\/\//, '').replace(/\/$/, '');
-                const checkLink = `${protocol}://${cleanHost}`;
-                const targetUrl = `${checkLink}/system/check-hostname`;
+            // Construct Link URL
+            let cleanHost = hostname.replace(/^https?:\/\//, '').replace(/\/$/, '');
+            const checkLink = `${protocol}://${cleanHost}`;
+            const targetUrl = `${checkLink}/system/check-hostname`;
 
-                console.log(`Verifying reachability of: ${targetUrl}`);
+            console.log(`Verifying reachability of: ${targetUrl}`);
 
-                // Use server-side proxy
-                const proxyUrl = '{{ route("system.proxy-check") }}';
+            // Use server-side proxy
+            const proxyUrl = '{{ route("system.proxy-check") }}';
 
-                try {
-                    const response = await fetch(proxyUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ url: checkLink })
-                    });
+            try {
+                const response = await fetch(proxyUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ url: checkLink })
+                });
 
-                    const data = await response.json();
+                const data = await response.json();
 
-                    if (data.status === 'ok') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: `Domain is accessible via HTTP`,
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true
-                        });
-                    } else {
-                        throw new Error(data.message || 'Verification Failed');
-                    }
-                } catch (error) {
-                    console.error(error);
+                if (data.status === 'ok') {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: `Not Accessible: ${error.message || 'Unknown Error'}`,
+                        icon: 'success',
+                        title: 'Success!',
+                        text: `Domain is accessible via HTTP`,
                         toast: true,
                         position: 'top-end',
                         showConfirmButton: false,
-                        timer: 5000,
+                        timer: 3000,
                         timerProgressBar: true
                     });
-                } finally {
-                    btn.disabled = false;
-                    btn.innerText = originalText;
+                } else {
+                    throw new Error(data.message || 'Verification Failed');
                 }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: `Not Accessible: ${error.message || 'Unknown Error'}`,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
             }
-        </script>
+        }
+    </script>
 </x-app-layout>

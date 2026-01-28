@@ -193,7 +193,11 @@
 
     <!-- User Profile (Fixed Footer) -->
     <div class="border-t sidebar-border p-2">
-        <div class="relative" x-data="{ userOpen: false }">
+        <div class="relative" x-data="{ 
+                userOpen: false, 
+                canInstall: false 
+             }" @pwa-ready.window="canInstall = true" @appinstalled.window="canInstall = false"
+            @pwa-installed.window="canInstall = false">
             <button @click="userOpen = !userOpen"
                 class="group flex w-full items-center px-2 py-2 text-sm font-medium rounded-lg sidebar-nav-item focus:outline-none">
                 <svg class="mr-3 h-8 w-8 rounded-full flex-shrink-0 text-gray-400 border border-gray-500/30 p-1"
@@ -234,6 +238,12 @@
                 <a href="{{ route('profile.edit') }}"
                     class="block px-4 py-2 text-sm sidebar-nav-item hover:font-semibold">
                     {{ __('Profile Settings') }}
+                </a>
+
+                <!-- Persistent PWA Install Link -->
+                <a href="#" @click.prevent="window.pwaInstall()" x-show="canInstall" style="display: none;"
+                    class="block px-4 py-2 text-sm sidebar-nav-item hover:font-semibold text-indigo-400">
+                    {{ __('Install App') }}
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -292,8 +302,19 @@
     },
 
     checkBackend() {
-    fetch('{{ route('system.status') }}')
-    .then(res => res.json())
+    fetch('{{ route('system.status') }}', {
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(res => {
+        if (res.status === 401 || res.status === 419) {
+             // Session expired, do not parse JSON, just fail quietly
+             throw new Error('Unauthenticated');
+        }
+        return res.json();
+    })
     .then(data => {
     this.systemStatus = data;
     this.backendChecked = true;

@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Broadcast;
 // Register broadcasting authentication routes
 // Broadcast::routes(['middleware' => ['web', 'auth']]);
 
+Route::post('/login/magic', [App\Http\Controllers\Auth\MagicLoginController::class, 'send'])->name('login.magic');
+Route::get('/login/magic/{id}', [App\Http\Controllers\Auth\MagicLoginController::class, 'verify'])->name('login.magic.verify');
+
 Route::get('/', function () {
     return redirect('/login');
 });
@@ -18,27 +21,36 @@ Route::get('/', function () {
 Route::get('/manifest.json', function () {
     $settings = \App\Models\SystemSetting::pluck('value', 'key')->toArray();
     $appName = $settings['app_name'] ?? config('app.name', 'AdmixCentral');
-    // Use icon_path if available, then favicon_path, then fallback to logo or default
-    $iconPath = $settings['icon_path'] ?? ($settings['favicon_path'] ?? ($settings['logo_path'] ?? '/images/logo.png'));
-    // Ensure logo path is absolute URL if needed or relative to root
+
+    // Resolve icon path: priority to icon_path, then favicon, then logo, then default
+    $rawPath = $settings['icon_path'] ?? ($settings['favicon_path'] ?? ($settings['logo_path'] ?? '/images/logo.png'));
+
+    // Ensure it's a full URL if it's not already
+    $iconUrl = \Illuminate\Support\Str::startsWith($rawPath, ['http://', 'https://']) ? $rawPath : asset($rawPath);
 
     return response()->json([
         "name" => $appName,
         "short_name" => $appName,
-        "start_url" => "/",
+        "description" => "AdmixCentral Dashboard",
+        "id" => "/?source=pwa",
+        "start_url" => "/?source=pwa",
+        "scope" => "/",
         "display" => "standalone",
         "background_color" => "#111827",
         "theme_color" => "#111827",
+        "orientation" => "portrait",
         "icons" => [
             [
-                "src" => $iconPath,
+                "src" => $iconUrl,
                 "sizes" => "192x192",
-                "type" => "image/png"
+                "type" => "image/png",
+                "purpose" => "any"
             ],
             [
-                "src" => $iconPath,
+                "src" => $iconUrl,
                 "sizes" => "512x512",
-                "type" => "image/png"
+                "type" => "image/png",
+                "purpose" => "any"
             ]
         ]
     ]);
@@ -289,6 +301,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/system/settings/restore', [App\Http\Controllers\SystemCustomizationController::class, 'restore'])
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
         ->name('system.settings.restore');
+
+    Route::post('/system/settings/test-email', [App\Http\Controllers\SystemCustomizationController::class, 'testEmail'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.settings.test-email');
 
     Route::post('/system/ssl/install', [App\Http\Controllers\SystemSslController::class, 'store'])
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])

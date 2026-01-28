@@ -48,7 +48,7 @@
             background-color: transparent !important;
         }
     </style>
-    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <link rel="manifest" href="{{ route('manifest') }}">
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
@@ -240,6 +240,90 @@
                 }
             };
         };
+    </script>
+    <!-- PWA INSTALL BUTTON -->
+    <div id="pwa-install-container" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2"
+        style="display: none;">
+        <button id="pwa-install-btn"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center space-x-2 transition-all transform hover:scale-105">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>Install App</span>
+        </button>
+        <button id="pwa-dismiss-btn"
+            class="bg-gray-800/80 hover:bg-gray-700 text-gray-200 p-2 rounded-full shadow-lg transition-all backdrop-blur-sm"
+            title="Dismiss temporarily">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        (function () {
+            window.deferredPrompt = null;
+            const installContainer = document.getElementById('pwa-install-container');
+            const installBtn = document.getElementById('pwa-install-btn');
+            const dismissBtn = document.getElementById('pwa-dismiss-btn');
+
+            // Global install function for sidebar/other components
+            window.pwaInstall = function () {
+                if (window.deferredPrompt) {
+                    window.deferredPrompt.prompt();
+                    window.deferredPrompt.userChoice.then((choiceResult) => {
+                        window.deferredPrompt = null;
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('PWA: User accepted the A2HS prompt');
+                            installContainer.style.display = 'none';
+                        } else {
+                            console.log('PWA: User dismissed the A2HS prompt');
+                        }
+                    });
+                } else {
+                    console.log('PWA: No deferred prompt available');
+                }
+            };
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent Chrome 67 and earlier from automatically showing the prompt
+                e.preventDefault();
+                // Stash the event so it can be triggered later.
+                window.deferredPrompt = e;
+
+                // Dispatch event for other components (like sidebar) to know install is available
+                window.dispatchEvent(new CustomEvent('pwa-ready'));
+
+                // Show floating button only if not dismissed in this session
+                if (!sessionStorage.getItem('pwa-dismissed')) {
+                    installContainer.style.display = 'flex'; // Changed to flex for button alignment
+                    console.log('PWA: Install event captured, button shown');
+                } else {
+                    console.log('PWA: Install event captured, but button dismissed for session');
+                }
+            });
+
+            installBtn.addEventListener('click', (e) => {
+                window.pwaInstall();
+            });
+
+            dismissBtn.addEventListener('click', (e) => {
+                installContainer.style.display = 'none';
+                sessionStorage.setItem('pwa-dismissed', 'true');
+                console.log('PWA: Floating button dismissed for session');
+            });
+
+            window.addEventListener('appinstalled', () => {
+                window.deferredPrompt = null;
+                installContainer.style.display = 'none';
+                console.log('PWA: App installed');
+                // Optional: dispatch event to update sidebar state
+                window.dispatchEvent(new CustomEvent('pwa-installed'));
+            });
+        })();
     </script>
 </body>
 

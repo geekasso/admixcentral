@@ -75,6 +75,11 @@ class SystemCustomizationController extends Controller
             'enable_status_cache' => 'nullable|boolean',
             'site_url' => 'nullable|string|min:3',
             'site_protocol' => 'nullable|in:http,https',
+            'mail_driver' => 'nullable|in:mailgun,log',
+            'mailgun_domain' => 'nullable|string',
+            'mailgun_secret' => 'nullable|string',
+            'mail_from_address' => 'nullable|email',
+            'mail_from_name' => 'nullable|string|max:255',
         ]);
 
         if ($request->filled('site_url') && $request->filled('site_protocol')) {
@@ -153,6 +158,31 @@ class SystemCustomizationController extends Controller
             SystemSetting::updateOrCreate(['key' => 'enable_status_cache'], ['value' => $request->enable_status_cache]);
         }
 
+        // Mail Configuration
+        if ($request->filled('mail_driver')) {
+            SystemSetting::updateOrCreate(['key' => 'mail_driver'], ['value' => $request->mail_driver]);
+        }
+
+        if ($request->filled('mailgun_domain')) {
+            SystemSetting::updateOrCreate(['key' => 'mailgun_domain'], ['value' => $request->mailgun_domain]);
+        }
+
+        if ($request->filled('mailgun_secret')) {
+            SystemSetting::updateOrCreate(['key' => 'mailgun_secret'], ['value' => $request->mailgun_secret]);
+        }
+
+        if ($request->filled('mailgun_endpoint')) {
+            SystemSetting::updateOrCreate(['key' => 'mailgun_endpoint'], ['value' => $request->mailgun_endpoint]);
+        }
+
+        if ($request->filled('mail_from_address')) {
+            SystemSetting::updateOrCreate(['key' => 'mail_from_address'], ['value' => $request->mail_from_address]);
+        }
+
+        if ($request->filled('mail_from_name')) {
+            SystemSetting::updateOrCreate(['key' => 'mail_from_name'], ['value' => $request->mail_from_name]);
+        }
+
         return redirect()->route('system.settings.index')->with('success', 'Settings updated successfully.');
     }
 
@@ -168,5 +198,16 @@ class SystemCustomizationController extends Controller
         SystemSetting::where('key', $key)->delete();
 
         return redirect()->route('system.settings.index')->with('success', ucfirst($request->type) . ' restored to default.');
+    }
+    public function testEmail(Request $request)
+    {
+        $request->validate(['test_email' => 'required|email']);
+
+        try {
+            \Illuminate\Support\Facades\Mail::to($request->test_email)->send(new \App\Mail\TestEmail());
+            return response()->json(['success' => true, 'message' => 'Test email sent successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

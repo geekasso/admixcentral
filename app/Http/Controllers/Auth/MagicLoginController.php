@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Mail\MagicLoginLink;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
+
+class MagicLoginController extends Controller
+{
+    public function send(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:users,email']);
+
+        $user = User::where('email', $request->email)->first();
+
+        // Generate signed URL (valid for 15 mins)
+        $url = URL::temporarySignedRoute(
+            'login.magic.verify',
+            now()->addMinutes(15),
+            ['id' => $user->id]
+        );
+
+        Mail::to($user->email)->send(new MagicLoginLink($url));
+
+        return back()->with('status', 'We have emailed you a magic login link!');
+    }
+
+    public function verify(Request $request, $id)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(401);
+        }
+
+        $user = User::findOrFail($id);
+
+        Auth::login($user);
+
+        return redirect('/dashboard');
+    }
+}

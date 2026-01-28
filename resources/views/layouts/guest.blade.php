@@ -153,6 +153,19 @@
                 !important;
         }
     </style>
+    </style>
+    <link rel="manifest" href="{{ route('manifest') }}">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function (err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
 </head>
 
 <body class="font-sans text-gray-900 antialiased h-screen overflow-hidden relative"
@@ -205,6 +218,57 @@
             {{ $slot }}
         </div>
     </div>
-</body>
+    <!-- PWA INSTALL BUTTON -->
+    <div id="pwa-install-container" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 50;">
+        <button id="pwa-install-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center space-x-2 transition-all transform hover:scale-105">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>Install App</span>
+        </button>
+    </div>
 
-</html>
+    <script>
+        (function() {
+            let deferredPrompt;
+            const installContainer = document.getElementById('pwa-install-container');
+            const installBtn = document.getElementById('pwa-install-btn');
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent Chrome 67 and earlier from automatically showing the prompt
+                e.preventDefault();
+                // Stash the event so it can be triggered later.
+                deferredPrompt = e;
+                // Update UI to notify the user they can add to home screen
+                installContainer.style.display = 'block';
+                console.log('PWA: Install event captured, button shown');
+            });
+
+            installBtn.addEventListener('click', (e) => {
+                // Hide the app provided install promotion
+                installContainer.style.display = 'none';
+                // Show the prompt
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond to the prompt
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('PWA: User accepted the A2HS prompt');
+                        } else {
+                            console.log('PWA: User dismissed the A2HS prompt');
+                        }
+                        deferredPrompt = null;
+                    });
+                }
+            });
+
+            window.addEventListener('appinstalled', () => {
+                // Clear the deferredPrompt so it can be garbage collected
+                deferredPrompt = null;
+                // Optionally, send analytics event to indicate successful install
+                console.log('PWA: App installed');
+                installContainer.style.display = 'none';
+            });
+        })();
+    </script>
+</body>
