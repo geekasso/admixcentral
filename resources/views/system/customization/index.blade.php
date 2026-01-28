@@ -475,8 +475,8 @@
                                 Driver</label>
                             <select name="mail_driver" x-model="driver"
                                 class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="log">Log (Development)</option>
-                                <option value="mailgun">Mailgun</option>
+                                <option value="log">Local Logging (No Email Sent)</option>
+                                <option value="mailgun">Mailgun (Recommended)</option>
                             </select>
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Mailgun is recommended for
                                 production.</p>
@@ -489,12 +489,10 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <!-- Domain -->
                                 <div>
-                                    <label
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mailgun
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mailgun
                                         Domain</label>
                                     <input type="text" name="mailgun_domain"
-                                        value="{{ $settings['mailgun_domain'] ?? '' }}"
-                                        placeholder="mg.yourdomain.com"
+                                        value="{{ $settings['mailgun_domain'] ?? '' }}" placeholder="mg.yourdomain.com"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 </div>
 
@@ -510,13 +508,17 @@
 
                                 <!-- Region/Endpoint -->
                                 <div class="col-span-1 md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mailgun Region</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mailgun
+                                        Region</label>
                                     <select name="mailgun_endpoint"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                        <option value="api.mailgun.net" {{ ($settings['mailgun_endpoint'] ?? 'api.mailgun.net') === 'api.mailgun.net' ? 'selected' : '' }}>US (api.mailgun.net)</option>
-                                        <option value="api.eu.mailgun.net" {{ ($settings['mailgun_endpoint'] ?? '') === 'api.eu.mailgun.net' ? 'selected' : '' }}>EU (api.eu.mailgun.net)</option>
-                                    </select> 
-                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Select EU if your Mailgun domain is in the European region.</p>
+                                        <option value="api.mailgun.net" {{ ($settings['mailgun_endpoint'] ?? 'api.mailgun.net') === 'api.mailgun.net' ? 'selected' : '' }}>US
+                                            (api.mailgun.net)</option>
+                                        <option value="api.eu.mailgun.net" {{ ($settings['mailgun_endpoint'] ?? '') === 'api.eu.mailgun.net' ? 'selected' : '' }}>EU (api.eu.mailgun.net)
+                                        </option>
+                                    </select>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Select EU if your Mailgun
+                                        domain is in the European region.</p>
                                 </div>
                             </div>
 
@@ -541,10 +543,12 @@
                             </div>
 
                             <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700" x-data="emailTester()">
-                                <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-4">Test Configuration</h4>
+                                <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-4">Test Configuration
+                                </h4>
                                 <div class="flex gap-4 items-end">
                                     <div class="flex-1">
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Send Test Email To</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Send
+                                            Test Email To</label>
                                         <input type="email" x-model="testEmail" placeholder="your@email.com"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
@@ -555,10 +559,12 @@
                                     </button>
                                 </div>
                                 <!-- Feedback Messages -->
-                                <div x-show="successMessage" x-transition class="mt-4 p-3 rounded-md bg-green-50 text-green-700 dark:bg-green-900/50 dark:text-green-300">
+                                <div x-show="successMessage" x-transition
+                                    class="mt-4 p-3 rounded-md bg-green-50 text-green-700 dark:bg-green-900/50 dark:text-green-300">
                                     <p x-text="successMessage"></p>
                                 </div>
-                                <div x-show="errorMessage" x-transition class="mt-4 p-3 rounded-md bg-red-50 text-red-700 dark:bg-red-900/50 dark:text-red-300">
+                                <div x-show="errorMessage" x-transition
+                                    class="mt-4 p-3 rounded-md bg-red-50 text-red-700 dark:bg-red-900/50 dark:text-red-300">
                                     <p x-text="errorMessage"></p>
                                 </div>
                             </div>
