@@ -286,12 +286,12 @@
                             @foreach($firewallsWithStatus as $firewall)
                                 <div x-show="matches(search) && matchesFilters(statusFilter, customerFilter)"
                                     x-data="firewallCard(
-                                                                                                                                                                                                                                                                                                                                                                {{ json_encode($firewall->cached_status) }}, 
-                                                                                                                                                                                                                                                                                                                                                                '{{ strtolower($firewall->name . ' ' . $firewall->company->name . ' ' . $firewall->url . ' ' . $firewall->hostname) }}',
-                                                                                                                                                                                                                                                                                                                                                                '{{ route('firewall.check-status', $firewall) }}',
-                                                                                                                                                                                                                                                                                                                                                                {{ $firewall->id }},
-                                                                                                                                                                                                                                                                                                                                                                '{{ $firewall->company->name }}'
-                                                                                                                                                                                                                                                                                                                                                            )"
+                                                                                                                                                                                                                                                                                                                                                                                                                                {{ json_encode($firewall->cached_status) }}, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                '{{ strtolower($firewall->name . ' ' . $firewall->company->name . ' ' . $firewall->url . ' ' . $firewall->hostname) }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                '{{ route('firewall.check-status', $firewall) }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                {{ $firewall->id }},
+                                                                                                                                                                                                                                                                                                                                                                                                                                '{{ $firewall->company->name }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                            )"
                                     class="relative border border-gray-100 dark:border-gray-700 rounded-2xl p-3 sm:p-4 bg-white dark:bg-gray-800 shadow-md hover:shadow-xl transition-shadow duration-200">
 
                                     {{-- Overlay Moved to Body --}}
@@ -355,9 +355,16 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
-                                            <span class="font-mono" x-show="!online">Offline</span>
-                                            <span class="font-mono" x-show="online"
-                                                x-text="status?.data?.uptime || status?.data?.uptime_text || status?.data?.uptime_string || 'Updating...'"></span>
+                                            <template x-if="loading">
+                                                <div class="h-3 w-12 bg-blue-200 dark:bg-blue-800 rounded animate-pulse"></div>
+                                            </template>
+                                            <template x-if="!loading">
+                                                <span>
+                                                    <span class="font-mono" x-show="!online">Offline</span>
+                                                    <span class="font-mono" x-show="online"
+                                                        x-text="status?.data?.uptime || status?.data?.uptime_text || status?.data?.uptime_string || 'Updating...'"></span>
+                                                </span>
+                                            </template>
                                         </div>
                                     </div>
 
@@ -500,21 +507,31 @@
                                                                             :key="gateway.name">
                                                                             <div class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1"
                                                                                 :class="{
-                                                                                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-green-500': gateway.status === 'online' || gateway.status === 'none',
-                                                                                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-red-500': gateway.status === 'offline' || gateway.status === 'down',
-                                                                                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                                                                                                                                                                                                                                                                                                                                                                    }"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }"
                                                                                 :title="gateway.monitorip || gateway.srcip">
-                                                                                <span
-                                                                                    class="text-sm font-mono font-medium text-gray-700 dark:text-gray-300"
-                                                                                    x-text="gateway.descr || gateway.name || 'Unknown'"></span>
+                                                                                <div class="flex flex-col min-w-0"><span
+                                                                                        class="text-xs font-semibold text-gray-700 dark:text-gray-200 truncate"
+                                                                                        x-text="gateway.descr || 'Unknown'"></span>
+                                                                                    <div
+                                                                                        class="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400 font-mono truncate">
+                                                                                        <span
+                                                                                            x-show="gateway.name && gateway.name !== gateway.descr"
+                                                                                            x-text="gateway.name"></span><span
+                                                                                            x-show="gateway.name && gateway.name !== gateway.descr"
+                                                                                            class="text-gray-300 dark:text-gray-600">|</span><span
+                                                                                            x-text="gateway.monitorip || gateway.srcip || 'N/A'"></span>
+                                                                                    </div>
+                                                                                </div>
                                                                                 <div class="flex items-center gap-1.5">
                                                                                     <div class="w-2 h-2 rounded-full"
                                                                                         :class="{
-                                                                                                                                                                                                                                                                                                                                                                                                            'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
-                                                                                                                                                                                                                                                                                                                                                                                                            'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
-                                                                                                                                                                                                                                                                                                                                                                                                            'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                                                                                                                                                                                                                                                                                                                                                                        }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }">
                                                                                     </div>
                                                                                     <span
                                                                                         class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400"
@@ -813,6 +830,9 @@
                         // If we got results (Sync fallback), dispatch them immediately
                         if (data.results) {
                             Object.entries(data.results).forEach(([id, status]) => {
+                                // Mark as cached so the card knows not to show "Offline" overlay yet
+                                if (status) status._source = 'cache';
+
                                 window.dispatchEvent(new CustomEvent('firewall-updated-' + id, {
                                     detail: { status: status }
                                 }));
@@ -845,7 +865,12 @@
                 }
             }));
             Alpine.data('firewallCard', (initialStatus, staticInfo, checkUrl, firewallId, companyName) => ({
-                loading: !initialStatus,
+                // Treat as loading if:
+                // 1. No initial status (Cache Miss)
+                // 2. Initial status says Offline (Cache Hit but needs verification)
+                // This prevents "Offline" flash/overlay until real-time update confirms it.
+                loading: !initialStatus || (initialStatus && (initialStatus.online !== true && initialStatus.online !== 'true' && initialStatus.online !== 1)),
+
                 online: initialStatus ? (initialStatus.online !== false) : null,
                 reportedOffline: false,
                 status: initialStatus,
@@ -976,7 +1001,32 @@
                 init() {
                     // Standardize initial status
                     if (this.status) {
+                        this.status._source = 'cache';
+                    }
+
+                    // Only apply if we aren't waiting for verification (valid Online status)
+                    // OR if we have data to show.
+                    if (this.status && !this.loading) {
                         this.updateFromStatus(this.status);
+                    } else if (this.loading && this.status) {
+                        // Mark as cache so updateFromStatus keeps it loading if offline
+                        this.status._source = 'cache';
+                        this.updateFromStatus(this.status);
+
+                        // If we are forced to load due to Offline cache, set a safety timeout
+                        // If 15 seconds pass and we are STILL loading, revert to Verified Offline.
+                        setTimeout(() => {
+                            if (this.loading) {
+                                console.warn(`[Firewall ${this.firewallId}] Verification timed out (15s). Forcing Offline.`);
+                                // Force a non-cached offline status to show the overlay
+                                this.updateFromStatus({
+                                    online: false,
+                                    error: 'Connection timed out',
+                                    data: null,
+                                    _source: 'timeout_forced'
+                                });
+                            }
+                        }, 15000);
                     }
 
                     // Listen for updates from coordinator (Sync fallback)
@@ -998,18 +1048,28 @@
 
                     this.status = status;
 
-                    // Explicitly check for boolean/string truthiness to ensure we catch recovery
+                    // Explicitly check for boolean/string truthiness
                     const prevOnline = this.online;
                     this.online = (status.online === true || status.online === 'true' || status.online === 1);
 
+                    // Determine if this is a "Cached" update
+                    const isCached = (status._source === 'cache');
+
+                    // LOADING STATE LOGIC
+                    if (isCached && !this.online) {
+                        this.loading = true; // Keep skeleton if cached offline
+                    } else {
+                        this.loading = false; // Optimistic or Verified -> Show content
+                    }
+
+                    // Status Change Logging
                     if (prevOnline !== this.online) {
                         console.log(`[Firewall ${this.firewallId}] Status changed: ${prevOnline ? 'Online' : 'Offline'} -> ${this.online ? 'Online' : 'Offline'}`, status);
                     }
 
-                    this.loading = false;
                     this.error = status.error || null;
 
-                    // Update local state for health score and reports
+                    // Update reported state & Dispatch events
                     if (this.online && this.reportedOffline) {
                         this.reportedOffline = false;
                         this.$dispatch('device-online', { id: this.firewallId });
@@ -1031,7 +1091,7 @@
                         this.loadHistory.push(oneMinLoad);
                     }
 
-                    // Notify global listeners (like Health Score widget)
+                    // Notify global listeners
                     this.$dispatch('device-updated', { id: this.firewallId, online: this.online });
                 },
 

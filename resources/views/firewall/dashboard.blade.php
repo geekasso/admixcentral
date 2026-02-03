@@ -190,9 +190,22 @@
                                                         'border-red-500': gateway.status === 'offline' || gateway.status === 'down',
                                                         'border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
                                                     }" :title="gateway.monitorip || gateway.srcip">
-                                                    <span
-                                                        class="text-sm font-mono font-medium text-gray-700 dark:text-gray-300"
-                                                        x-text="gateway.descr || gateway.name || 'Unknown'"></span>
+                                                    <div class="flex flex-col min-w-0">
+                                                        <span
+                                                            class="text-xs font-semibold text-gray-700 dark:text-gray-200 truncate"
+                                                            x-text="gateway.descr || 'Unknown'"></span>
+                                                        <div
+                                                            class="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400 font-mono truncate">
+                                                            <span
+                                                                x-show="gateway.name && gateway.name !== gateway.descr"
+                                                                x-text="gateway.name"></span>
+                                                            <span
+                                                                x-show="gateway.name && gateway.name !== gateway.descr"
+                                                                class="text-gray-300 dark:text-gray-600">|</span>
+                                                            <span
+                                                                x-text="gateway.monitorip || gateway.srcip || 'N/A'"></span>
+                                                        </div>
+                                                    </div>
                                                     <div class="flex items-center gap-1.5">
                                                         <div class="w-2 h-2 rounded-full" :class="{
                                                             'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
