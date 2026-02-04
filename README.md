@@ -26,6 +26,7 @@ AdmixCentral is a centralized firewall management dashboard tailored for managin
     - **Theming**: "Indigo Standard" unified design system.
 
 ### 🔥 Firewall Management
+- **Tunables**: Full management of system tunables (sysctls) with reliable "Apply Changes" behavior.
 - **Aliases & Rules**: Bulk management of aliases, NAT rules, and firewall rules with drag-and-drop ordering.
 - **VPN Management**:
     - **OpenVPN**: Server/Client configuration.
