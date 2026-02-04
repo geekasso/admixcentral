@@ -371,6 +371,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/notifications', [App\Http\Controllers\SystemController::class, 'notifications'])->name('notifications');
         Route::post('/notifications', [App\Http\Controllers\SystemController::class, 'updateNotifications'])->name('notifications.update');
+        Route::post('/notifications/test', [App\Http\Controllers\SystemController::class, 'testNotifications'])->name('notifications.test');
 
         // Routing
 

@@ -136,16 +136,62 @@ class SystemController extends Controller
                     break;
 
                 case 'notifications':
-                    $notifyData = $request->except(['_token', '_method', 'tab']);
-                    // Checkboxes handling
-                    $notifyData['disable'] = $request->has('disable');
-                    $notifyData['ssl'] = $request->has('ssl');
-                    $notifyData['sslvalidate'] = $request->has('sslvalidate');
-                    if (isset($notifyData['timeout'])) {
-                        $notifyData['timeout'] = (int) $notifyData['timeout'];
+                    // Identify which sub-section we are saving based on hidden 'type' field or unique keys
+                    $type = $request->input('notification_type', 'smtp');
+
+                    if ($type === 'smtp') {
+                        $notifyData = $request->except(['_token', '_method', 'tab', 'notification_type']);
+                        // Checkboxes handling
+                        $checkboxes = ['ssl', 'sslvalidate'];
+                        foreach ($checkboxes as $chk) {
+                            if (!$request->has($chk)) {
+                                $notifyData[$chk] = false;
+                            } else {
+                                $notifyData[$chk] = true;
+                            }
+                        }
+
+                        // Enforce LOGIN mechanism if username is provided
+                        if (!empty($notifyData['username']) && empty($notifyData['authentication_mechanism'])) {
+                            $notifyData['authentication_mechanism'] = 'LOGIN';
+                        } elseif (!empty($notifyData['username']) && ($notifyData['authentication_mechanism'] ?? '') === 'PLAIN') {
+                            $notifyData['authentication_mechanism'] = 'LOGIN';
+                        }
+
+                        $api->updateSystemNotifications($notifyData);
+
+                    } elseif ($type === 'telegram') {
+                        $telegramData = [
+                            'enable' => $request->has('telegram_enable'),
+                            'api' => $request->input('telegram_api'),
+                            'chatid' => $request->input('telegram_chatid'),
+                        ];
+                        $api->updateSystemNotificationsTelegram($telegramData);
+
+                    } elseif ($type === 'pushover') {
+                        $pushoverData = [
+                            'enable' => $request->has('pushover_enable'),
+                            'apikey' => $request->input('pushover_apikey'),
+                            'userkey' => $request->input('pushover_userkey'),
+                            'sound' => $request->input('pushover_sound'),
+                            'priority' => $request->input('pushover_priority'),
+                        ];
+                        $api->updateSystemNotificationsPushover($pushoverData);
+
+                    } elseif ($type === 'slack') {
+                        $slackData = [
+                            'enable' => $request->has('slack_enable'),
+                            'api' => $request->input('slack_api'),
+                            'channel' => $request->input('slack_channel'),
+                        ];
+                        $api->updateSystemNotificationsSlack($slackData);
+
+                    } elseif ($type === 'sounds') {
+                        $soundsData = [
+                            'disablebeep' => $request->has('disablebeep'),
+                        ];
+                        $api->updateSystemNotificationsSounds($soundsData);
                     }
-                    \Illuminate\Support\Facades\Log::info('Updating Notifications:', $notifyData);
-                    $api->updateSystemNotifications($notifyData);
                     break;
             }
 
@@ -368,5 +414,81 @@ class SystemController extends Controller
         }
 
         return view('system.certificate-manager', compact('firewall', 'cas', 'certs'));
+    }
+
+    /**
+     * Test Notification Settings (Custom SMTP Tester)
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function testNotifications(Request $request, Firewall $firewall)
+    {
+        // ... (validation logic remains same)
+        $validated = $request->validate([
+            'ipaddress' => 'required|string',
+            'port' => 'required|integer',
+            'ssl' => 'boolean', // In UI it's 'ssl', checks box
+            'fromaddress' => 'required|email',
+            'notifyemailaddress' => 'required|email',
+            'username' => 'nullable|string',
+            'password' => 'nullable|string',
+        ]);
+
+        $transportConfig = [
+            'transport' => 'smtp',
+            'host' => $validated['ipaddress'],
+            'port' => $validated['port'],
+            'username' => $validated['username'] ?? null,
+            'password' => $validated['password'] ?? null,
+            'timeout' => null,
+            'local_domain' => env('MAIL_EHLO_DOMAIN'),
+        ];
+
+        // Determine encryption
+        if ($request->boolean('ssl')) {
+            if ($validated['port'] == 465) {
+                $transportConfig['encryption'] = 'ssl';
+            } else {
+                $transportConfig['encryption'] = 'tls';
+            }
+        } else {
+            $transportConfig['encryption'] = null;
+        }
+
+        $fromEmail = $validated['fromaddress'];
+        $toEmail = $validated['notifyemailaddress'];
+
+        // Prepare the temporary mailer config
+        config(['mail.mailers.smtp_test' => $transportConfig]);
+
+        // We set it globally for this request context
+        config(['mail.from.address' => $fromEmail]);
+        config(['mail.from.name' => $fromEmail]);
+
+        // Gather context info
+        $firewallName = $firewall->name;
+        $customerName = $firewall->company->name ?? 'Unknown Customer';
+
+        try {
+            \Illuminate\Support\Facades\Mail::mailer('smtp_test')->raw(
+                "This is a test email from {$fromEmail}.\n\nFirewall: {$firewallName}\nCustomer: {$customerName}\n\nIf you received this, your SMTP settings are correct.",
+                function ($message) use ($toEmail, $fromEmail, $firewallName, $customerName) {
+                    $message->to($toEmail)
+                        ->from($fromEmail, $fromEmail)
+                        ->subject("SMTP Test - {$customerName} - {$firewallName}");
+                }
+            );
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Status: Test email sent successfully to ' . $toEmail
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Connection Failed: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
