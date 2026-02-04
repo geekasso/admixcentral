@@ -5,15 +5,15 @@
 
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
-            @if($tab !== 'tunables')
-                <x-apply-changes-banner :firewall="$firewall"
-                route="{{ route('firewall.apply', $firewall) }}" />
+            @if($tab !== 'tunables' && $tab !== 'notifications')
+                <x-apply-changes-banner :firewall="$firewall" route="{{ route('firewall.apply', $firewall) }}" />
             @endif
-     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200" x-data="{
                         showModal: false,
                         editing: false,
-                        form: { id: '', tunable: '', value: '', descr: '' }
+                        form: { id: '', tunable: '', value: '', descr: '' },
+                        activeSubTab: 'smtp'
                     }"
                     @open-tunable-modal.window="showModal = true; editing = false; form = { id: '', tunable: '', value: '', descr: '' }">
 
@@ -111,129 +111,308 @@
 
                         @elseif($tab === 'notifications')
                             <!-- Notifications Tab -->
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">E-Mail</h3>
-                            <div class="grid grid-cols-1 gap-6">
-                                <div class="flex items-center">
-                                    <input id="disable" name="disable" type="checkbox"
-                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['disable'] ?? '') ? 'checked' : '' }}>
-                                    <label for="disable"
-                                        class="ml-2 block text-sm text-gray-900">{{ __('Disable SMTP Notifications') }}</label>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Notification Settings</h3>
+                        
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <!-- Hidden input to tell controller which type we are saving -->
+                                <input type="hidden" name="notification_type" x-model="activeSubTab">
+                        
+                                <!-- Sidebar -->
+                                <div class="w-full md:w-1/4">
+                                     <nav class="space-y-1" aria-label="Sidebar">
+                                        @foreach(['smtp' => 'E-Mail', 'sounds' => 'Sounds', 'telegram' => 'Telegram', 'pushover' => 'Pushover', 'slack' => 'Slack'] as $key => $label)
+                                        <button type="button" @click="activeSubTab = '{{ $key }}'"
+                                            :class="activeSubTab === '{{ $key }}' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
+                                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-md w-full transition-colors duration-150 ease-in-out">
+                                            <span class="truncate">{{ $label }}</span>
+                                        </button>
+                                        @endforeach
+                                     </nav>
                                 </div>
-                                <div>
-                                    <x-input-label for="ipaddress" :value="__('E-Mail Server')" />
-                                    <x-text-input id="ipaddress" class="block mt-1 w-full" type="text" name="ipaddress"
-                                        :value="$data['notifications']['ipaddress'] ?? ''" />
-                                </div>
-                                <div>
-                                    <x-input-label for="port" :value="__('SMTP Port')" />
-                                    <x-text-input id="port" class="block mt-1 w-full" type="number" name="port"
-                                        :value="$data['notifications']['port'] ?? ''" />
-                                </div>
-                                <div>
-                                    <x-input-label for="timeout" :value="__('Connection Timeout')" />
-                                    <x-text-input id="timeout" class="block mt-1 w-full" type="number" name="timeout"
-                                        :value="$data['notifications']['timeout'] ?? ''" />
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="ssl" name="ssl" type="checkbox"
-                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['ssl'] ?? '') ? 'checked' : '' }}>
-                                    <label for="ssl"
-                                        class="ml-2 block text-sm text-gray-900">{{ __('Enable SSL/TLS') }}</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="sslvalidate" name="sslvalidate" type="checkbox"
-                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['sslvalidate'] ?? '') ? 'checked' : '' }}>
-                                    <label for="sslvalidate"
-                                        class="ml-2 block text-sm text-gray-900">{{ __('Validate SSL/TLS Certificate') }}</label>
-                                </div>
-                                <div>
-                                    <x-input-label for="fromaddress" :value="__('From E-Mail Address')" />
-                                    <x-text-input id="fromaddress" class="block mt-1 w-full" type="email" name="fromaddress"
-                                        :value="$data['notifications']['fromaddress'] ?? ''" />
-                                </div>
-                                <div>
-                                    <x-input-label for="notifyemailaddress" :value="__('Notification E-Mail Address')" />
-                                    <x-text-input id="notifyemailaddress" class="block mt-1 w-full" type="email"
-                                        name="notifyemailaddress" :value="$data['notifications']['notifyemailaddress'] ?? ''" />
+                        
+                                <!-- Content Area -->
+                                <div class="w-full md:w-3/4">
+                                    <!-- SMTP (Existing Form) -->
+                                    <div x-show="activeSubTab === 'smtp'" class="space-y-6">
+                                        <div class="flex items-center">
+                                            <input id="disable" name="disable" type="checkbox"
+                                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['disable'] ?? '') ? 'checked' : '' }}>
+                                            <label for="disable"
+                                                class="ml-2 block text-sm text-gray-900">{{ __('Disable SMTP Notifications') }}</label>
+                                        </div>
+                                        <div>
+                                            <x-input-label for="ipaddress" :value="__('E-Mail Server')" />
+                                            <x-text-input id="ipaddress" class="block mt-1 w-full" type="text" name="ipaddress"
+                                                :value="$data['notifications']['ipaddress'] ?? ''" />
+                                            <p class="mt-1 text-sm text-gray-500">
+                                                {{ __('This is the IP address or hostname of the SMTP E-Mail server.') }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <x-input-label for="port" :value="__('SMTP Port')" />
+                                            <x-text-input id="port" class="block mt-1 w-full" type="number" name="port"
+                                                :value="$data['notifications']['port'] ?? ''" />
+                                            <p class="mt-1 text-sm text-gray-500">
+                                                {{ __('The port of the SMTP server directly. Typically 25, 465, or 587.') }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <x-input-label for="timeout" :value="__('Connection Timeout')" />
+                                            <x-text-input id="timeout" class="block mt-1 w-full" type="number" name="timeout"
+                                                :value="$data['notifications']['timeout'] ?? ''" />
+                                            <p class="mt-1 text-sm text-gray-500">
+                                                {{ __('The number of seconds to wait before a connection is dropped.') }}
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="ssl" name="ssl" type="checkbox"
+                                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['ssl'] ?? '') ? 'checked' : '' }}>
+                                            <label for="ssl"
+                                                class="ml-2 block text-sm text-gray-900">{{ __('Enable SSL/TLS') }}</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="sslvalidate" name="sslvalidate" type="checkbox"
+                                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['sslvalidate'] ?? '') ? 'checked' : '' }}>
+                                            <label for="sslvalidate"
+                                                class="ml-2 block text-sm text-gray-900">{{ __('Validate SSL/TLS Certificate') }}</label>
+                                        </div>
+        
+                                        <div>
+                                            <x-input-label for="fromaddress" :value="__('From E-Mail Address')" />
+                                            <x-text-input id="fromaddress" class="block mt-1 w-full" type="email" name="fromaddress"
+                                                :value="$data['notifications']['fromaddress'] ?? ''" />
+                                            <p class="mt-1 text-sm text-gray-500">
+                                                {{ __('This is the e-mail address that will appear in the From field.') }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <x-input-label for="notifyemailaddress" :value="__('Notification E-Mail Address')" />
+                                            <x-text-input id="notifyemailaddress" class="block mt-1 w-full" type="email"
+                                                name="notifyemailaddress" :value="$data['notifications']['notifyemailaddress'] ?? ''" />
+                                            <p class="mt-1 text-sm text-gray-500">
+                                                {{ __('Enter the e-mail address that you want to send email notifications to.') }}
+                                            </p>
+                                        </div>
+        
+                                        <div class="border-t border-gray-200 pt-6 mt-2">
+                                            <h4 class="text-md font-medium text-gray-900 mb-4">{{ __('Authentication') }}</h4>
+                                            <div class="grid grid-cols-1 gap-6"
+                                                x-data="{ auth_mech: '{{ $data['notifications']['authentication_mechanism'] ?: 'PLAIN' }}' }">
+                                                <div>
+                                                    <x-input-label for="authentication_mechanism" :value="__('Notification E-Mail Auth Mechanism')" />
+                                                    <select id="authentication_mechanism" name="authentication_mechanism"
+                                                        x-model="auth_mech"
+                                                        class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                        <option value="PLAIN">PLAIN</option>
+                                                        <option value="LOGIN">LOGIN</option>
+                                                        <option value="CRAM-MD5">CRAM-MD5</option>
+                                                        <option value="SCRAM-SHA-1">SCRAM-SHA-1</option>
+                                                        <option value="SCRAM-SHA-256">SCRAM-SHA-256</option>
+                                                    </select>
+                                                    <p class="mt-1 text-sm text-gray-500">
+                                                        {{ __('Select the authentication mechanism used by the SMTP server.') }}
+                                                    </p>
+                                                </div>
+        
+                                                <div x-show="auth_mech === 'LOGIN'">
+                                                    <x-input-label for="username" :value="__('Notification E-Mail Auth Username')" />
+                                                    <x-text-input id="username" class="block mt-1 w-full" type="text"
+                                                        name="username" :value="$data['notifications']['username'] ?? ''" />
+                                                    <p class="mt-1 text-sm text-gray-500">
+                                                        {{ __('Enter the username for authentication with the SMTP server.') }}
+                                                    </p>
+                                                </div>
+                                                <div x-show="auth_mech === 'LOGIN'">
+                                                    <x-input-label for="password" :value="__('Notification E-Mail Auth Password')" />
+                                                    <x-text-input id="password" class="block mt-1 w-full" type="password"
+                                                        name="password" :value="$data['notifications']['password'] ?? ''" />
+                                                    <p class="mt-1 text-sm text-gray-500">
+                                                        {{ __('Enter the password for authentication with the SMTP server.') }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                    <!-- Sounds -->
+                                    <div x-show="activeSubTab === 'sounds'" style="display: none;" class="space-y-6">
+                                         <div>
+                                            <div class="flex items-center">
+                                                <input id="disablebeep" name="disablebeep" type="checkbox"
+                                                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['sounds']['disablebeep'] ?? '') ? 'checked' : '' }}>
+                                                <label for="disablebeep" class="ml-2 block text-sm text-gray-900">{{ __('Disable Startup/Shutdown Beep') }}</label>
+                                            </div>
+                                        </div>
+                                         <div class="opacity-50">
+                                            <div class="flex items-center">
+                                                <input id="enable_console_bell" name="enable_console_bell" type="checkbox" disabled
+                                                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 cursor-not-allowed">
+                                                <label for="enable_console_bell" class="ml-2 block text-sm text-gray-900 cursor-not-allowed">{{ __('Enable the console bell') }}</label>
+                                            </div>
+                                            <p class="mt-1 text-sm text-red-500">
+                                                {{ __('Note: This setting is currently not available via the pfSense REST API.') }}
+                                            </p>
+                                        </div>
+                                    </div>
+                        
+                                    <!-- Telegram -->
+                                    <div x-show="activeSubTab === 'telegram'" style="display: none;" class="space-y-6">
+                                        <div class="flex items-center">
+                                            <input id="telegram_enable" name="telegram_enable" type="checkbox"
+                                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['telegram']['enable'] ?? '') ? 'checked' : '' }}>
+                                            <label for="telegram_enable" class="ml-2 block text-sm text-gray-900">{{ __('Enable Telegram Notifications') }}</label>
+                                        </div>
+                                        <div>
+                                            <x-input-label for="telegram_api" :value="__('API Key')" />
+                                            <x-text-input id="telegram_api" class="block mt-1 w-full" type="text" name="telegram_api"
+                                                :value="$data['notifications']['telegram']['api'] ?? ''" />
+                                        </div>
+                                        <div>
+                                            <x-input-label for="telegram_chatid" :value="__('Chat ID')" />
+                                            <x-text-input id="telegram_chatid" class="block mt-1 w-full" type="text" name="telegram_chatid"
+                                                :value="$data['notifications']['telegram']['chatid'] ?? ''" />
+                                        </div>
+                                    </div>
+                        
+                                    <!-- Pushover -->
+                                    <div x-show="activeSubTab === 'pushover'" style="display: none;" class="space-y-6">
+                                        <div class="flex items-center">
+                                            <input id="pushover_enable" name="pushover_enable" type="checkbox"
+                                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['pushover']['enable'] ?? '') ? 'checked' : '' }}>
+                                            <label for="pushover_enable" class="ml-2 block text-sm text-gray-900">{{ __('Enable Pushover Notifications') }}</label>
+                                        </div>
+                                         <div>
+                                            <x-input-label for="pushover_apikey" :value="__('API Token')" />
+                                            <x-text-input id="pushover_apikey" class="block mt-1 w-full" type="text" name="pushover_apikey"
+                                                :value="$data['notifications']['pushover']['apikey'] ?? ''" />
+                                        </div>
+                                        <div>
+                                            <x-input-label for="pushover_userkey" :value="__('User Key')" />
+                                            <x-text-input id="pushover_userkey" class="block mt-1 w-full" type="text" name="pushover_userkey"
+                                                :value="$data['notifications']['pushover']['userkey'] ?? ''" />
+                                        </div>
+                                         <div>
+                                            <x-input-label for="pushover_sound" :value="__('Sound')" />
+                                            <x-text-input id="pushover_sound" class="block mt-1 w-full" type="text" name="pushover_sound"
+                                                :value="$data['notifications']['pushover']['sound'] ?? ''" />
+                                        </div>
+                                         <div>
+                                            <x-input-label for="pushover_priority" :value="__('Priority')" />
+                                            <select id="pushover_priority" name="pushover_priority"
+                                                class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                <option value="0" {{ ($data['notifications']['pushover']['priority'] ?? '') == '0' ? 'selected' : '' }}>Normal</option>
+                                                <option value="1" {{ ($data['notifications']['pushover']['priority'] ?? '') == '1' ? 'selected' : '' }}>High</option>
+                                                <option value="2" {{ ($data['notifications']['pushover']['priority'] ?? '') == '2' ? 'selected' : '' }}>Emergency</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                        
+                                    <!-- Slack -->
+                                    <div x-show="activeSubTab === 'slack'" style="display: none;" class="space-y-6">
+                                         <div class="flex items-center">
+                                            <input id="slack_enable" name="slack_enable" type="checkbox"
+                                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($data['notifications']['slack']['enable'] ?? '') ? 'checked' : '' }}>
+                                            <label for="slack_enable" class="ml-2 block text-sm text-gray-900">{{ __('Enable Slack Notifications') }}</label>
+                                        </div>
+                                        <div>
+                                            <x-input-label for="slack_api" :value="__('Webhook URL')" />
+                                            <x-text-input id="slack_api" class="block mt-1 w-full" type="text" name="slack_api"
+                                                :value="$data['notifications']['slack']['api'] ?? ''" />
+                                        </div>
+                                         <div>
+                                            <x-input-label for="slack_channel" :value="__('Channel')" />
+                                            <x-text-input id="slack_channel" class="block mt-1 w-full" type="text" name="slack_channel"
+                                                :value="$data['notifications']['slack']['channel'] ?? ''" />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                         @elseif($tab === 'tunables')
-                            <!-- System Tunables Tab -->
-                            <div>
+                                <!-- System Tunables Tab -->
+                                <div>
                                     <x-apply-changes-banner :firewall="$firewall"
                                         route="{{ route('system.advanced.tunables.apply', $firewall) }}" />
 
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="text-lg font-medium text-gray-900">System Tunables</h3>
-                                    <x-button-add
-                                        @click="showModal = true; editing = false; form = { id: '', tunable: '', value: '', descr: '' }">
-                                        {{ __('Add Tunable') }}
-                                    </x-button-add>
-                                </div>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <h3 class="text-lg font-medium text-gray-900">System Tunables</h3>
+                                        <x-button-add
+                                            @click="showModal = true; editing = false; form = { id: '', tunable: '', value: '', descr: '' }">
+                                            {{ __('Add Tunable') }}
+                                        </x-button-add>
+                                    </div>
 
-                                <div class="overflow-x-auto">
-                                    <table class="min-w-full divide-y divide-gray-200">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Tunable Name</th>
-                                                <th scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Description</th>
-                                                <th scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Value</th>
-                                                <th scope="col" class="relative px-6 py-3">
-                                                    <span class="sr-only">Actions</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            @forelse($data['tunables'] as $tunable)
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-50">
                                                 <tr>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                        {{ $tunable['tunable'] ?? 'N/A' }}
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                        {{ $tunable['descr'] ?? '' }}
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                        {{ $tunable['value'] ?? '' }}
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                        <button type="button"
-                                                            @click="showModal = true; editing = true; form = { id: '{{ $tunable['id'] ?? $tunable['tunable'] ?? '' }}', tunable: '{{ $tunable['tunable'] ?? '' }}', value: '{{ $tunable['value'] ?? '' }}', descr: '{{ $tunable['descr'] ?? '' }}' }"
-                                                            class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                                                        <button type="button"
-                                                            @click="deleteTunable('{{ $tunable['id'] ?? $tunable['tunable'] ?? '' }}')"
-                                                            class="text-red-600 hover:text-red-900">Delete</button>
-                                                    </td>
+                                                    <th scope="col"
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Tunable Name</th>
+                                                    <th scope="col"
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Description</th>
+                                                    <th scope="col"
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Value</th>
+                                                    <th scope="col" class="relative px-6 py-3">
+                                                        <span class="sr-only">Actions</span>
+                                                    </th>
                                                 </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="4"
-                                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No
-                                                        custom tunables found.</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                @forelse($data['tunables'] as $tunable)
+                                                    <tr>
+                                                        <td
+                                                            class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                            {{ $tunable['tunable'] ?? 'N/A' }}
+                                                        </td>
+                                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                            {{ $tunable['descr'] ?? '' }}
+                                                        </td>
+                                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                            {{ $tunable['value'] ?? '' }}
+                                                        </td>
+                                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                            <button type="button"
+                                                                @click="showModal = true; editing = true; form = { id: '{{ $tunable['id'] ?? $tunable['tunable'] ?? '' }}', tunable: '{{ $tunable['tunable'] ?? '' }}', value: '{{ $tunable['value'] ?? '' }}', descr: '{{ $tunable['descr'] ?? '' }}' }"
+                                                                class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
+                                                            <button type="button"
+                                                                @click="deleteTunable('{{ $tunable['id'] ?? $tunable['tunable'] ?? '' }}')"
+                                                                class="text-red-600 hover:text-red-900">Delete</button>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="4"
+                                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                                            No
+                                                            custom tunables found.</td>
+                                                    </tr>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
 
-                        @if($tab !== 'tunables')
-                            <div class="flex items-center justify-end mt-4">
-                                <x-primary-button class="ml-4">
-                                    {{ __('Save') }}
-                                </x-primary-button>
-                            </div>
-                        @endif
-                        @if($tab !== 'tunables')
-                            </form>
-                        @endif
+                            @if($tab !== 'tunables')
+                                <div class="flex items-center justify-end mt-4">
+                                    @if($tab === 'notifications')
+                                        <button type="button" id="test-smtp-btn" onclick="testSmtpSettings()"
+                                            x-show="activeSubTab === 'smtp'"
+                                            class="mr-4 inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-500 active:bg-gray-700 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                            {{ __('Test SMTP Settings') }}
+                                        </button>
+                                    @endif
+                                    <x-primary-button class="ml-4">
+                                        {{ __('Save') }}
+                                    </x-primary-button>
+                                </div>
+                            @endif
+                            @if($tab !== 'tunables')
+                                </form>
+                            @endif
 
                     <!-- Modal -->
                     <div x-show="showModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
@@ -316,5 +495,81 @@
         let form = document.getElementById('delete-tunable-form');
         form.action = '{{ route('system.advanced.tunables.destroy', ['firewall' => $firewall, 'id' => 'PLACEHOLDER']) }}'.replace('PLACEHOLDER', id);
         form.submit();
+    }
+
+    function testSmtpSettings() {
+        const btn = document.getElementById('test-smtp-btn');
+        const originalText = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = 'Testing...';
+
+        // Helper to safely get value or empty string
+        const getValue = (id) => document.getElementById(id) ? document.getElementById(id).value : '';
+        const getChecked = (id) => document.getElementById(id) ? document.getElementById(id).checked : false;
+
+        const data = {
+            ipaddress: getValue('ipaddress'),
+            port: getValue('port'),
+            ssl: getChecked('ssl'),
+            sslvalidate: getChecked('sslvalidate'),
+            fromaddress: getValue('fromaddress'),
+            notifyemailaddress: getValue('notifyemailaddress'),
+            username: getValue('username'),
+            password: getValue('password'),
+            authentication_mechanism: getValue('authentication_mechanism'),
+            _token: '{{ csrf_token() }}'
+        };
+
+        fetch('{{ route('system.notifications.test', $firewall) }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: data.message,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.message,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 5000,
+                        timerProgressBar: true
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An error occurred while testing SMTP settings. Check console for details.',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            });
     }
 </script>

@@ -231,6 +231,46 @@ class PfSenseApiService
         return $this->patch('/system/notifications/email_settings', $data);
     }
 
+    public function getSystemNotificationsTelegram()
+    {
+        return $this->get('/system/notifications/telegram_settings');
+    }
+
+    public function updateSystemNotificationsTelegram(array $data)
+    {
+        return $this->patch('/system/notifications/telegram_settings', $data);
+    }
+
+    public function getSystemNotificationsPushover()
+    {
+        return $this->get('/system/notifications/pushover_settings');
+    }
+
+    public function updateSystemNotificationsPushover(array $data)
+    {
+        return $this->patch('/system/notifications/pushover_settings', $data);
+    }
+
+    public function getSystemNotificationsSlack()
+    {
+        return $this->get('/system/notifications/slack_settings');
+    }
+
+    public function updateSystemNotificationsSlack(array $data)
+    {
+        return $this->patch('/system/notifications/slack_settings', $data);
+    }
+
+    public function getSystemNotificationsSounds()
+    {
+        return $this->get('/system/notifications/sounds_settings');
+    }
+
+    public function updateSystemNotificationsSounds(array $data)
+    {
+        return $this->patch('/system/notifications/sounds_settings', $data);
+    }
+
     // System Advanced - Tunables
     public function getSystemTunables()
     {
