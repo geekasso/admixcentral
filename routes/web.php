@@ -359,6 +359,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/advanced/tunables', [App\Http\Controllers\SystemController::class, 'storeTunable'])->name('advanced.tunables.store');
         Route::patch('/advanced/tunables/{id}', [App\Http\Controllers\SystemController::class, 'updateTunable'])->name('advanced.tunables.update');
         Route::delete('/advanced/tunables/{id}', [App\Http\Controllers\SystemController::class, 'destroyTunable'])->name('advanced.tunables.destroy');
+        Route::post('/advanced/tunables/apply', [App\Http\Controllers\SystemController::class, 'applyTunables'])->name('advanced.tunables.apply');
         Route::get('/general-setup', [App\Http\Controllers\SystemController::class, 'generalSetup'])->name('general-setup');
         Route::post('/general-setup', [App\Http\Controllers\SystemController::class, 'updateGeneralSetup'])->name('general-setup.update');
         Route::get('/high-avail-sync', [App\Http\Controllers\SystemController::class, 'highAvailSync'])->name('high-avail-sync');

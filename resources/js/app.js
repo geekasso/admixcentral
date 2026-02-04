@@ -6,8 +6,10 @@ import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
 
 import Alpine from 'alpinejs';
+import collapse from '@alpinejs/collapse';
 
 window.Alpine = Alpine;
+Alpine.plugin(collapse);
 window.tippy = tippy;
 
 // Initialize tippy globally for any element with class 'has-tooltip'

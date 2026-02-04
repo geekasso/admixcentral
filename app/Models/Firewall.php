@@ -26,6 +26,7 @@ class Firewall extends Model
         'api_key' => 'encrypted',
         'api_secret' => 'encrypted',
         'api_token' => 'encrypted',
+        'is_dirty' => 'boolean',
     ];
 
     public function getRouteKeyName()

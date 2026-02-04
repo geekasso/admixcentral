@@ -239,17 +239,116 @@ class PfSenseApiService
 
     public function createSystemTunable(array $data)
     {
-        return $this->post('/system/tunable', $data);
+        $response = $this->post('/system/tunable', $data);
+        $this->markSubsystemDirty('sysctl');
+        return $response;
     }
 
     public function updateSystemTunable(array $data)
     {
-        return $this->patch('/system/tunable', $data);
+        $response = $this->patch('/system/tunable', $data);
+        $this->markSubsystemDirty('sysctl');
+        return $response;
     }
 
     public function deleteSystemTunable(string $id)
     {
-        return $this->delete('/system/tunable', ['id' => $id]);
+        $response = $this->delete('/system/tunable', ['id' => $id]);
+        $this->markSubsystemDirty('sysctl');
+        return $response;
+    }
+
+    public function getDirtyState()
+    {
+        // List all files in /tmp and check for known dirty markers
+        // List all files in /tmp and /var/run (pfSense uses /var/run for most dirty flags)
+        $response = $this->diagnosticsCommandPrompt('ls -1 /tmp /var/run');
+
+        if (isset($response['data']['output'])) {
+            $output = $response['data']['output'];
+            $files = explode("\n", $output);
+
+            // Known dirty markers in pfSense
+            $dirtyMarkers = [
+                'filter_dirty',
+                'sysctl.dirty',
+                'interfaces_dirty',
+                'vip_dirty',
+                'config.dirty'
+            ];
+
+            foreach ($files as $file) {
+                $file = trim($file);
+                if (empty($file))
+                    continue;
+
+                if (in_array($file, $dirtyMarkers)) {
+                    return true;
+                }
+
+
+            }
+        }
+
+        return false;
+    }
+
+    public function markSubsystemDirty(string $subsystem)
+    {
+        // Force the subsystem to be marked as dirty path used by pfSense
+        // /var/run/{subsystem}.dirty
+        return $this->diagnosticsCommandPrompt("touch /var/run/{$subsystem}.dirty");
+    }
+
+    /**
+     * Generic method to apply changes for a subsystem using native pfSense PHP commands
+     * and ensuring the dirty flag is cleared.
+     */
+    public function applySubsystemChanges(string $subsystem)
+    {
+        $command = "";
+
+        switch ($subsystem) {
+            case 'sysctl':
+                // System Tunables
+                $command = 'require_once("config.inc"); require_once("system.inc"); require_once("util.inc"); system_setup_sysctl();';
+                break;
+            case 'filter':
+                // Firewall Rules, NAT
+                $command = 'require_once("filter.inc"); filter_configure();';
+                break;
+            case 'interfaces':
+                // Interfaces (Careful: this can cause network interruption)
+                $command = 'require_once("interfaces.inc"); interface_configure();';
+                break;
+            default:
+                throw new \Exception("Unknown subsystem for application: $subsystem");
+        }
+
+        // Wrap connection in php -r
+        $phpCommand = "php -r '$command'";
+
+        // Explicitly remove the dirty file to ensure reliable UI state
+        // This is robust against cases where the php command implies a clean but doesn't remove the file in the way we expect.
+        $cmd = "$phpCommand && rm /var/run/{$subsystem}.dirty";
+
+        return $this->diagnosticsCommandPrompt($cmd);
+    }
+
+    /**
+     * @deprecated Use applySubsystemChanges('sysctl')
+     */
+    public function applySystemTunables()
+    {
+        return $this->applySubsystemChanges('sysctl');
+    }
+
+    /**
+     * @deprecated Use markSubsystemDirty('sysctl')
+     */
+    public function markSysctlDirty()
+    {
+        return $this->markSubsystemDirty('sysctl');
     }
 
     // Routing - Gateways
@@ -470,30 +569,40 @@ class PfSenseApiService
 
         Log::info('Creating firewall rule payload:', $data);
 
-        return $this->post('/firewall/rule', $data);
+        $response = $this->post('/firewall/rule', $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     public function updateFirewallRule(int $id, array $data)
     {
         $data['id'] = $id;
-        return $this->patch("/firewall/rule", $data);
+        $response = $this->patch("/firewall/rule", $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     public function deleteFirewallRule(int $id)
     {
-        return $this->delete('/firewall/rule', ['id' => $id]);
+        $response = $this->delete('/firewall/rule', ['id' => $id]);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     public function updateInterface(string $id, array $data)
     {
         // The API requires PATCH for updates and expects 'id' in the body
         $data['id'] = $id;
-        return $this->patch("/interface", $data);
+        $response = $this->patch("/interface", $data);
+        // Interface changes usually require an interface reload, but often trigger filter reloads too.
+        // For now, valid pfSense behavior is to mark interfaces dirty.
+        $this->markSubsystemDirty('interfaces');
+        return $response;
     }
 
     public function applyChanges()
     {
-        return $this->post('/firewall/apply');
+        return $this->applySubsystemChanges('filter');
     }
 
     /**
@@ -517,7 +626,9 @@ class PfSenseApiService
      */
     public function createNatPortForward(array $data)
     {
-        return $this->post('/firewall/nat/port_forward', $data);
+        $response = $this->post('/firewall/nat/port_forward', $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -526,7 +637,9 @@ class PfSenseApiService
     public function updateNatPortForward(int $id, array $data)
     {
         $data['id'] = $id;
-        return $this->patch("/firewall/nat/port_forward", $data);
+        $response = $this->patch("/firewall/nat/port_forward", $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -534,7 +647,9 @@ class PfSenseApiService
      */
     public function deleteNatPortForward(int $id)
     {
-        return $this->delete('/firewall/nat/port_forward', ['id' => $id]);
+        $response = $this->delete('/firewall/nat/port_forward', ['id' => $id]);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -558,7 +673,9 @@ class PfSenseApiService
      */
     public function updateNatOutboundMode(string $mode)
     {
-        return $this->patch('/firewall/nat/outbound/mode', ['mode' => $mode]);
+        $response = $this->patch('/firewall/nat/outbound/mode', ['mode' => $mode]);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -566,7 +683,9 @@ class PfSenseApiService
      */
     public function createNatOutboundRule(array $data)
     {
-        return $this->post('/firewall/nat/outbound/mapping', $data);
+        $response = $this->post('/firewall/nat/outbound/mapping', $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -575,7 +694,9 @@ class PfSenseApiService
     public function updateNatOutboundRule(int $id, array $data)
     {
         $data['id'] = $id;
-        return $this->patch("/firewall/nat/outbound/mapping", $data);
+        $response = $this->patch("/firewall/nat/outbound/mapping", $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -583,7 +704,9 @@ class PfSenseApiService
      */
     public function deleteNatOutboundRule(int $id)
     {
-        return $this->delete("/firewall/nat/outbound/mapping?id={$id}");
+        $response = $this->delete("/firewall/nat/outbound/mapping?id={$id}");
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -599,7 +722,9 @@ class PfSenseApiService
      */
     public function createNatOneToOneRule(array $data)
     {
-        return $this->post('/firewall/nat/one_to_one/mapping', $data);
+        $response = $this->post('/firewall/nat/one_to_one/mapping', $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -608,7 +733,9 @@ class PfSenseApiService
     public function updateNatOneToOneRule(int $id, array $data)
     {
         $data['id'] = $id;
-        return $this->patch("/firewall/nat/one_to_one/mapping", $data);
+        $response = $this->patch("/firewall/nat/one_to_one/mapping", $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -616,7 +743,9 @@ class PfSenseApiService
      */
     public function deleteNatOneToOneRule(int $id)
     {
-        return $this->delete("/firewall/nat/one_to_one/mapping?id={$id}");
+        $response = $this->delete("/firewall/nat/one_to_one/mapping?id={$id}");
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -632,7 +761,9 @@ class PfSenseApiService
      */
     public function createAlias(array $data)
     {
-        return $this->post('/firewall/alias', $data);
+        $response = $this->post('/firewall/alias', $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -641,7 +772,9 @@ class PfSenseApiService
     public function updateAlias(string $id, array $data)
     {
         $data['id'] = $id;
-        return $this->patch('/firewall/alias', $data);
+        $response = $this->patch('/firewall/alias', $data);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**
@@ -649,7 +782,9 @@ class PfSenseApiService
      */
     public function deleteAlias(string $id)
     {
-        return $this->delete('/firewall/alias', ['id' => $id]);
+        $response = $this->delete('/firewall/alias', ['id' => $id]);
+        $this->markSubsystemDirty('filter');
+        return $response;
     }
 
     /**

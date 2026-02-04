@@ -1,4 +1,4 @@
-@props(['firewall'])
+@props(['firewall', 'route' => route('firewall.apply', $firewall)])
 
 @if($firewall->is_dirty)
     <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div>
-                <form action="{{ route('firewall.apply', $firewall) }}" method="POST">
+                <form action="{{ $route }}" method="POST">
                     @csrf
                     <button type="submit"
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">

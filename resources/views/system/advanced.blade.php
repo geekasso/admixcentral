@@ -5,15 +5,17 @@
 
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            @if($tab !== 'tunables')
+                <x-apply-changes-banner :firewall="$firewall"
+                route="{{ route('firewall.apply', $firewall) }}" />
+            @endif
+     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200" x-data="{
-                    showModal: false,
-                    editing: false,
-                    form: { id: '', tunable: '', value: '', descr: '' },
-                    deleteTunable(id) {
-                            let form = document.getElementById('delete-tunable-form');
-                            form.action = " {{ route('system.advanced.tunables.destroy', ['firewall' => $firewall, 'id' => 'PLACEHOLDER']) }}".replace('PLACEHOLDER', id); form.submit(); } } }"
-                @open-tunable-modal.window="showModal = true; editing = false; form = { id: '', tunable: '', value: '', descr: '' }">
+                        showModal: false,
+                        editing: false,
+                        form: { id: '', tunable: '', value: '', descr: '' }
+                    }"
+                    @open-tunable-modal.window="showModal = true; editing = false; form = { id: '', tunable: '', value: '', descr: '' }">
 
                     <!-- Tabs -->
                     <div class="mb-6 border-b border-gray-200">
@@ -28,13 +30,15 @@
                     </div>
 
                     <!-- Form -->
-                    <form method="POST" action="{{ route('system.advanced.update', ['firewall' => $firewall]) }}">
-                        @csrf
-                        <!-- Add tab as hidden input -->
-                        <input type="hidden" name="tab" value="{{ $tab }}">
+                    @if($tab !== 'tunables')
+                        <form method="POST" action="{{ route('system.advanced.update', ['firewall' => $firewall]) }}">
+                            @csrf
+                            <!-- Add tab as hidden input -->
+                            <input type="hidden" name="tab" value="{{ $tab }}">
+                    @endif
 
                         @if($tab === 'admin')
-                            <!-- Admin Access Tab -->
+                            <!-- ... existing admin tab content ... -->
                             <h3 class="text-lg font-medium text-gray-900 mb-4">webConfigurator</h3>
                             <div class="grid grid-cols-1 gap-6">
                                 <div>
@@ -84,7 +88,8 @@
                                 <div>
                                     <x-input-label for="aliasesresolveinterval" :value="__('Aliases Resolve Interval')" />
                                     <x-text-input id="aliasesresolveinterval" class="block mt-1 w-full" type="number"
-                                        name="aliasesresolveinterval" :value="$data['firewall']['aliasesresolveinterval'] ?? ''" />
+                                        placeholder="300" name="aliasesresolveinterval"
+                                        :value="$data['firewall']['aliasesresolveinterval'] ?? ''" />
                                     <p class="mt-1 text-sm text-gray-500">Interval, in seconds, that will be used to resolve
                                         hostnames configured on aliases.</p>
                                 </div>
@@ -156,9 +161,13 @@
                         @elseif($tab === 'tunables')
                             <!-- System Tunables Tab -->
                             <div>
+                                    <x-apply-changes-banner :firewall="$firewall"
+                                        route="{{ route('system.advanced.tunables.apply', $firewall) }}" />
+
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-lg font-medium text-gray-900">System Tunables</h3>
-                                    <x-button-add @click="showModal = true; editing = false; form = { id: '', tunable: '', value: '', descr: '' }">
+                                    <x-button-add
+                                        @click="showModal = true; editing = false; form = { id: '', tunable: '', value: '', descr: '' }">
                                         {{ __('Add Tunable') }}
                                     </x-button-add>
                                 </div>
@@ -206,7 +215,7 @@
                                                 <tr>
                                                     <td colspan="4"
                                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No
-                                                        tunables found.</td>
+                                                        custom tunables found.</td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
@@ -222,7 +231,9 @@
                                 </x-primary-button>
                             </div>
                         @endif
-                    </form>
+                        @if($tab !== 'tunables')
+                            </form>
+                        @endif
 
                     <!-- Modal -->
                     <div x-show="showModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
@@ -298,3 +309,12 @@
     </div>
     </div>
 </x-app-layout>
+
+<script>
+    function deleteTunable(id) {
+        if (!confirm('Are you sure you want to delete this tunable?')) return;
+        let form = document.getElementById('delete-tunable-form');
+        form.action = '{{ route('system.advanced.tunables.destroy', ['firewall' => $firewall, 'id' => 'PLACEHOLDER']) }}'.replace('PLACEHOLDER', id);
+        form.submit();
+    }
+</script>

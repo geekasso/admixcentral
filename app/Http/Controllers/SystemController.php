@@ -22,7 +22,9 @@ class SystemController extends Controller
         $api = new PfSenseApiService($firewall);
         $tab = $request->query('tab', 'admin');
 
-        $data = [];
+        $data = [
+            'tunables' => [], // Default to empty array
+        ];
         try {
             switch ($tab) {
                 case 'admin':
@@ -32,12 +34,35 @@ class SystemController extends Controller
                     break;
                 case 'firewall':
                     $data['firewall'] = $api->getSystemFirewallAdvanced()['data'] ?? [];
+                    // Fix for API returning PHP_INT_MAX (9223372036854775807) when value is unset
+                    if (isset($data['firewall']['aliasesresolveinterval']) && (string) $data['firewall']['aliasesresolveinterval'] == '9223372036854775807') {
+                        $data['firewall']['aliasesresolveinterval'] = null;
+                    }
                     break;
                 case 'notifications':
                     $data['notifications'] = $api->getSystemNotifications()['data'] ?? [];
                     break;
                 case 'tunables':
-                    $data['tunables'] = $api->getSystemTunables()['data'] ?? [];
+                    try {
+                        $data['tunables'] = $api->getSystemTunables()['data'] ?? [];
+                    } catch (\Exception $e) {
+                        \Illuminate\Support\Facades\Log::error("Failed to fetch tunables: " . $e->getMessage());
+                        $data['tunables'] = [];
+                    }
+
+                    // Sync dirty state with firewall
+                    try {
+                        $isDirty = $api->getDirtyState();
+
+                        // Sync only if changed
+                        if ($firewall->is_dirty !== $isDirty) {
+                            $firewall->is_dirty = $isDirty;
+                            $firewall->save();
+                            \Illuminate\Support\Facades\Log::info("Synced dirty state for Firewall {$firewall->id} to " . ($isDirty ? 'true' : 'false'));
+                        }
+                    } catch (\Exception $e) {
+                        \Illuminate\Support\Facades\Log::warning("Failed to sync dirty state: " . $e->getMessage());
+                    }
                     break;
                 case 'networking':
                 case 'miscellaneous':
@@ -200,6 +225,25 @@ class SystemController extends Controller
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Tunable Deletion Failed: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Failed to delete tunable.']);
+        }
+    }
+
+    public function applyTunables(Firewall $firewall)
+    {
+        try {
+            $api = new PfSenseApiService($firewall);
+            $api->applySystemTunables();
+
+            $firewall->is_dirty = false;
+            $firewall->save();
+
+            \Illuminate\Support\Facades\Log::info("Applied tunables for Firewall ID: {$firewall->id}, is_dirty cleared.");
+
+            return redirect()->route('system.advanced', ['firewall' => $firewall, 'tab' => 'tunables'])
+                ->with('success', 'Tunable changes applied successfully.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Tunable Application Failed: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Failed to apply changes.']);
         }
     }
 
