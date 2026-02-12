@@ -176,14 +176,21 @@
                 </a>
                 <a href="{{ route('system.settings.index') }}"
                     class="group flex items-center px-2 py-2 text-base font-medium rounded-md sidebar-nav-item {{ request()->routeIs('system.settings.*') ? 'active' : '' }}">
-                    <svg class="mr-3 h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                    </svg>
+                    <div class="relative mr-3">
+                        <svg class="h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
+                        @if($updateAvailable ?? false)
+                            <span
+                                class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-500 transform translate-x-1/2 -translate-y-1/2"></span>
+                        @endif
+                    </div>
                     <span :class="collapsed ? 'md:hidden' : 'block'"
                         class="transition-opacity duration-300">{{ __('Settings') }}</span>
                 </a>
+
             @endif
 
             <!-- User Dropdown (Moved to Footer) -->
@@ -252,6 +259,10 @@
                         {{ __('Log Out') }}
                     </a>
                 </form>
+
+                <div class="border-t sidebar-border mt-1 pt-1 pb-1 px-4">
+                    <p class="text-[10px] text-center opacity-50 sidebar-text">v{{ $currentVersion ?? '0.0.0' }}</p>
+                </div>
             </div>
         </div>
     </div>

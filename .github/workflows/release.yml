@@ -1,0 +1,93 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger on version tags like v1.0.0
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, pdo, sqlite, pdo_sqlite
+          tools: composer:v2
+
+      - name: Install Composer Dependencies (No Dev)
+        run: composer install --no-dev --optimize-autoloader --prefer-dist --no-interaction
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install NPM Dependencies & Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare Update Artifact
+        run: |
+          mkdir -p build_artifact/admixcentral
+          # Copy essential files
+          rsync -av --progress . build_artifact/admixcentral \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'tests' \
+            --exclude 'node_modules' \
+            --exclude 'build_artifact' \
+            --exclude '.env' \
+            --exclude 'storage/logs/*.log'
+          
+          cd build_artifact
+          zip -r ../update.zip admixcentral
+
+      - name: Generate Manifest
+        id: manifest
+        run: |
+            current_version=${GITHUB_REF#refs/tags/}
+            sha256=$(sha256sum update.zip | awk '{print $1}')
+            
+            # Simple JSON creation
+            echo "{\"version\": \"$current_version\", \"sha256\": \"$sha256\", \"release_date\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"}" > manifest.json
+            
+            echo "::set-output name=version::$current_version"
+
+      - name: Install Minisign
+        run: sudo apt-get install -y minisign
+
+      - name: Sign Manifest
+        env:
+          MINISIGN_SECRET_KEY: ${{ secrets.MINISIGN_SECRET_KEY }}
+          MINISIGN_PASSWORD: ${{ secrets.MINISIGN_PASSWORD }}
+        run: |
+          # Write the secret key to a file safely
+          echo "$MINISIGN_SECRET_KEY" > minisign.key
+          
+          # Sign the manifest
+          # -S: sign, -m: message file, -x: signature file, -s: secret key file, -t: trusted comment
+          minisign -S -m manifest.json -x manifest.sig -s minisign.key -t "AdmixCentral Update" -P "$MINISIGN_PASSWORD"
+          
+          # Clean up key
+          rm minisign.key
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            update.zip
+            manifest.json
+            manifest.sig
+          body_path: CHANGELOG.md # Ideally extract just the relevant section
+          draft: false
+          prerelease: false
