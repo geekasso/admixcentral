@@ -214,6 +214,21 @@ main() {
   set_env_kv .env "DB_USERNAME" "$DB_USER"
   set_env_kv .env "DB_PASSWORD" "$DB_PASS"
 
+  log "Writing Reverb settings into .env"
+  # Defaults for Reverb (can be overridden by user in .env later)
+  set_env_kv .env "REVERB_APP_ID" "admixcentral"
+  set_env_kv .env "REVERB_APP_KEY" "admixcentral-key"
+  set_env_kv .env "REVERB_APP_SECRET" "admixcentral-secret"
+  set_env_kv .env "REVERB_HOST" "localhost"
+  set_env_kv .env "REVERB_PORT" "8080"
+  set_env_kv .env "REVERB_SCHEME" "http"
+
+  # Explicitly set VITE_ vars to match (essential for frontend build)
+  set_env_kv .env "VITE_REVERB_APP_KEY" "admixcentral-key"
+  set_env_kv .env "VITE_REVERB_HOST" "localhost"
+  set_env_kv .env "VITE_REVERB_PORT" "8080"
+  set_env_kv .env "VITE_REVERB_SCHEME" "http"
+
   log "Ensuring correct ownership"
   chown -R "${WEB_USER}:${WEB_GROUP}" "$INSTALL_DIR"
 
@@ -277,6 +292,29 @@ server {
         try_files \$uri \$uri/ /index.php?\$query_string;
     }
 
+    # Laravel Reverb (WebSockets)
+    location /app {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+    
+    location /apps {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+
     location ~ \.php$ {
         include fastcgi_params;
         fastcgi_pass unix:${php_sock};
@@ -291,6 +329,44 @@ EOF
   ln -sf /etc/nginx/sites-available/admixcentral /etc/nginx/sites-enabled/admixcentral
   nginx -t
   systemctl reload nginx
+
+  log "Configuring Supervisor (Worker + Reverb)"
+  
+  # Queue Worker
+  cat >/etc/supervisor/conf.d/admix-worker.conf <<EOF
+[program:admix-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php ${INSTALL_DIR}/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+user=${WEB_USER}
+numprocs=2
+redirect_stderr=true
+stdout_logfile=${INSTALL_DIR}/storage/logs/worker.log
+stopwaitsecs=3600
+EOF
+
+  # Reverb Server
+  cat >/etc/supervisor/conf.d/admix-reverb.conf <<EOF
+[program:admix-reverb]
+command=php ${INSTALL_DIR}/artisan reverb:start
+autostart=true
+autorestart=true
+user=${WEB_USER}
+numprocs=1
+redirect_stderr=true
+stdout_logfile=${INSTALL_DIR}/storage/logs/reverb.log
+EOF
+
+  # Ensure logs directory exists
+  mkdir -p "${INSTALL_DIR}/storage/logs"
+  chown -R "${WEB_USER}:${WEB_GROUP}" "${INSTALL_DIR}/storage"
+  chmod -R ug+rwX "${INSTALL_DIR}/storage"
+
+  log "Starting Supervisor services..."
+  supervisorctl reread
+  supervisorctl update
+  supervisorctl start all || true
 
   # Reduce exposure: don't keep password in shell env longer than needed
   unset DB_PASS
