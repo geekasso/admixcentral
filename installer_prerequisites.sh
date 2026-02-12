@@ -89,8 +89,8 @@ main() {
   log "Installing base packages"
   apt_install ca-certificates curl gnupg git unzip lsb-release apt-transport-https minisign
 
-  log "Installing Nginx + MySQL"
-  apt_install nginx mysql-server
+  log "Installing Nginx + MySQL + Supervisor"
+  apt_install nginx mysql-server supervisor
 
   log "Installing PHP ${PHP_VER} + extensions"
   apt_install \
