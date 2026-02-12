@@ -664,6 +664,33 @@
                 </script>
 
                 <!-- Section 3: Performance -->
+                <!-- Section: System Backups -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <div class="card-icon-wrapper">
+                            <svg class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="card-title-modern">System Backups</h3>
+                            <p class="card-subtitle-modern">Manage system configuration backups and restoration.</p>
+                        </div>
+                    </div>
+                    <div class="card-body-modern">
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Create encrypted backups of your system configuration, tenants, and users.
+                            </div>
+                            <a href="{{ route('system.backups.index') }}"
+                                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Manage Backups &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Section 3: Performance -->
                 <div class="card-modern">
                     <div class="card-header-modern">

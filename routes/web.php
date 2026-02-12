@@ -314,6 +314,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
         ->name('system.ssl.uninstall');
 
+    // Global System Backups
+    Route::get('/system/backups', [App\Http\Controllers\SystemBackupController::class, 'index'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.backups.index');
+    Route::post('/system/backups', [App\Http\Controllers\SystemBackupController::class, 'store'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.backups.store');
+    Route::post('/system/backups/restore', [App\Http\Controllers\SystemBackupController::class, 'restore'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.backups.restore');
+    Route::get('/system/backups/download/{filename}', [App\Http\Controllers\SystemBackupController::class, 'download'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.backups.download');
+    Route::delete('/system/backups/{filename}', [App\Http\Controllers\SystemBackupController::class, 'destroy'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.backups.destroy');
+
 
 
     Route::get('/firewall/{firewall}/system/rest-api', [App\Http\Controllers\SystemRestApiController::class, 'index'])
@@ -360,6 +377,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/advanced/tunables/{id}', [App\Http\Controllers\SystemController::class, 'updateTunable'])->name('advanced.tunables.update');
         Route::delete('/advanced/tunables/{id}', [App\Http\Controllers\SystemController::class, 'destroyTunable'])->name('advanced.tunables.destroy');
         Route::post('/advanced/tunables/apply', [App\Http\Controllers\SystemController::class, 'applyTunables'])->name('advanced.tunables.apply');
+
         Route::get('/general-setup', [App\Http\Controllers\SystemController::class, 'generalSetup'])->name('general-setup');
         Route::post('/general-setup', [App\Http\Controllers\SystemController::class, 'updateGeneralSetup'])->name('general-setup.update');
         Route::get('/high-avail-sync', [App\Http\Controllers\SystemController::class, 'highAvailSync'])->name('high-avail-sync');
