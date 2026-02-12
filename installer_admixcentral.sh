@@ -12,7 +12,12 @@ die(){ echo -e "\n[X] $*\n"; exit 1; }
 
 # ---------------- CONFIG (override via env) ----------------
 REPO_URL="${REPO_URL:-https://github.com/a-d-m-x/admixcentral.git}"
-INSTALL_DIR="${INSTALL_DIR:-/var/www/admixcentral}"
+BASE_DIR="${INSTALL_DIR:-/var/www/admixcentral}"
+RELEASE_ID="$(date +%Y%m%d%H%M%S)"
+INSTALL_DIR="${BASE_DIR}/releases/${RELEASE_ID}"
+SHARED_DIR="${BASE_DIR}/shared"
+CURRENT_LINK="${BASE_DIR}/current"
+
 WEB_USER="${WEB_USER:-www-data}"
 WEB_GROUP="${WEB_GROUP:-www-data}"
 
@@ -33,7 +38,7 @@ set_env_kv() {
 }
 
 require_commands() {
-  for c in git composer node npm nginx php mysql; do
+  for c in git composer node npm nginx php mysql minisign; do
     command -v "$c" >/dev/null 2>&1 || die "Missing required command: $c (run Part 1 first)"
   done
 }
@@ -85,6 +90,10 @@ main() {
   prompt_db_creds
   db_preflight_test
 
+  log "Preparing atomic deployment structure at ${BASE_DIR}"
+  mkdir -p "${BASE_DIR}/releases"
+  mkdir -p "${SHARED_DIR}"
+  
   log "Cloning repo to ${INSTALL_DIR}"
   rm -rf "$INSTALL_DIR"
   git clone "$REPO_URL" "$INSTALL_DIR"
@@ -93,13 +102,13 @@ main() {
   cd "$INSTALL_DIR"
   [[ -f artisan && -d public ]] || die "Invalid repo layout (expected artisan + public/)"
 
-  log "Ensuring .env exists"
+  log "Ensuring .env exists (initially in release dir)"
   if [[ ! -f .env ]]; then
     cp .env.example .env
     chown "${WEB_USER}:${WEB_GROUP}" .env
   fi
 
-  log "Writing DB settings into .env (repo defaults to MySQL; we set real creds)"
+  log "Writing DB settings into .env"
   set_env_kv .env "DB_HOST" "$DB_HOST"
   set_env_kv .env "DB_PORT" "$DB_PORT"
   set_env_kv .env "DB_DATABASE" "$DB_NAME"
@@ -143,6 +152,33 @@ main() {
 
     npm run build
   '
+  
+  log "Setting up Shared State (Atomic Deployment)"
+  
+  # Move .env to shared if not already there, else use shared
+  if [[ ! -f "${SHARED_DIR}/.env" ]]; then
+      log "Moving generated .env to shared directory"
+      mv "${INSTALL_DIR}/.env" "${SHARED_DIR}/.env"
+  else
+      log "Using existing .env from shared directory"
+      rm -f "${INSTALL_DIR}/.env"
+  fi
+  ln -sf "${SHARED_DIR}/.env" "${INSTALL_DIR}/.env"
+  
+  # Move storage to shared if not already there
+  # Note: The 'storage' folder in repo has structure. We want to preserve it.
+  if [[ ! -d "${SHARED_DIR}/storage" ]]; then
+      log "Moving storage to shared directory"
+      mv "${INSTALL_DIR}/storage" "${SHARED_DIR}/storage"
+  else
+      log "Using existing storage from shared directory (removing repo storage)"
+      rm -rf "${INSTALL_DIR}/storage"
+  fi
+  # Permissions for shared storage
+  chown -R "${WEB_USER}:${WEB_GROUP}" "${SHARED_DIR}"
+  chmod -R 775 "${SHARED_DIR}/storage"
+  
+  ln -sf "${SHARED_DIR}/storage" "${INSTALL_DIR}/storage"
 
   log "Laravel post-setup"
   sudo -u "${WEB_USER}" -H bash -lc '
@@ -151,6 +187,10 @@ main() {
     php artisan config:clear || true
     php artisan cache:clear || true
   '
+
+  log "Linking current to new release"
+  ln -sfn "${INSTALL_DIR}" "${CURRENT_LINK}"
+  chown -h "${WEB_USER}:${WEB_GROUP}" "${CURRENT_LINK}"
 
   log "Configuring Nginx (IP-safe server_name _)"
   rm -f /etc/nginx/sites-enabled/default || true
@@ -161,7 +201,7 @@ server {
     listen 80 default_server;
     listen [::]:80 default_server;
     server_name _;
-    root ${INSTALL_DIR}/public;
+    root ${CURRENT_LINK}/public;
 
     index index.php index.html;
 
@@ -187,7 +227,8 @@ EOF
   log "PART 2 COMPLETE"
   echo
   echo "============================================================"
-  echo "AdmixCentral installed at: ${INSTALL_DIR}"
+  echo "AdmixCentral installed at: ${BASE_DIR}"
+  echo "Current Release: ${INSTALL_DIR}"
   echo "Browse: http://<server-ip>/"
   echo "Part 2 log: ${LOG_FILE}"
   echo "============================================================"

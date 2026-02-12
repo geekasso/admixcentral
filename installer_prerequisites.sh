@@ -87,7 +87,7 @@ main() {
   apt-get update -y
 
   log "Installing base packages"
-  apt_install ca-certificates curl gnupg git unzip lsb-release apt-transport-https
+  apt_install ca-certificates curl gnupg git unzip lsb-release apt-transport-https minisign
 
   log "Installing Nginx + MySQL"
   apt_install nginx mysql-server

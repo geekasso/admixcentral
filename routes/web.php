@@ -331,6 +331,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
         ->name('system.backups.destroy');
 
+    // System Updates
+    Route::get('/system/updates', [App\Http\Controllers\SystemUpdateController::class, 'index'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.updates.index');
+    Route::post('/system/updates/check', [App\Http\Controllers\SystemUpdateController::class, 'check'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.updates.check');
+    Route::post('/system/updates/store', [App\Http\Controllers\SystemUpdateController::class, 'store'])
+        ->middleware([App\Http\Middleware\CheckRole::class . ':admin'])
+        ->name('system.updates.store');
+
 
 
     Route::get('/firewall/{firewall}/system/rest-api', [App\Http\Controllers\SystemRestApiController::class, 'index'])
