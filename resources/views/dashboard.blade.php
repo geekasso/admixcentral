@@ -227,126 +227,150 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 mb-4">
-                        <div class="flex flex-wrap w-full xl:w-auto justify-between items-center gap-2">
-                            <h3 class="text-lg font-semibold whitespace-nowrap">Managed Firewalls</h3>
-                            <span class="text-xs text-gray-500 font-normal block xl:hidden"
-                                x-text="'Showing ' + filteredCount() + ' of ' + items.length + ' firewalls'"></span>
-                        </div>
-
-                        <div
-                            class="flex flex-col sm:grid sm:grid-cols-2 xl:flex xl:flex-row items-stretch sm:items-center gap-2 w-full xl:w-auto">
-                            <span
-                                class="text-xs text-gray-500 font-normal self-start xl:self-center whitespace-nowrap xl:mr-2 hidden xl:inline"
-                                x-text="'Showing ' + filteredCount() + ' of ' + items.length + ' firewalls'"></span>
-                            <!-- Customer Filter -->
-                            @php
-                                $uniqueCustomers = $firewallsWithStatus->pluck('company.name')->unique()->sort()->values();
-                            @endphp
-                            <div x-data="{ 
-                                open: false, 
-                                filter: '', 
-                                customers: {{ json_encode($uniqueCustomers) }},
-                                get filteredCustomers() {
-                                    if (this.filter === '') return this.customers.slice(0, 10);
-                                    return this.customers.filter(c => c.toLowerCase().includes(this.filter.toLowerCase())).slice(0, 10);
-                                },
-                                select(name) {
-                                    customerFilter = name;
-                                    this.open = false;
-                                    this.filter = '';
-                                }
-                            }" class="relative w-full sm:col-span-1 xl:w-56" @keydown.escape="open = false"
-                                @click.outside="open = false">
-
-                                <!-- Trigger Button -->
-                                <button @click="open = !open" type="button"
-                                    class="flex items-center justify-between w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <span x-text="customerFilter === 'all' ? 'All Customers' : customerFilter"
-                                        class="truncate block text-left"></span>
-                                    <svg class="h-4 w-4 ml-2 text-gray-500 transform transition-transform duration-200"
-                                        :class="{'rotate-180': open}" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </button>
-
-                                <!-- Dropdown Menu -->
-                                <div x-show="open" x-transition.opacity.duration.200ms
-                                    class="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-xl overflow-hidden">
-
-                                    <!-- Search Input -->
-                                    <div
-                                        class="p-2 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-                                        <input x-model="filter" x-ref="searchInput" type="text" placeholder="Search..."
-                                            class="w-full text-sm rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500">
-                                    </div>
-
-                                    <!-- List -->
-                                    <ul class="max-h-60 overflow-y-auto py-1">
-                                        <li @click="customerFilter = 'all'; open = false; filter = ''"
-                                            class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-sm text-gray-700 dark:text-gray-300 italic border-b border-gray-100 dark:border-gray-700">
-                                            All Customers</li>
-
-                                        <template x-for="customer in filteredCustomers" :key="customer">
-                                            <li @click="customerFilter = customer; open = false; filter = ''"
-                                                class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-sm text-gray-700 dark:text-gray-300 truncate"
-                                                :class="{'bg-blue-50 dark:bg-blue-900': customerFilter === customer}"
-                                                x-text="customer"></li>
-                                        </template>
-
-                                        <li x-show="filteredCustomers.length === 0"
-                                            class="px-4 py-2 text-sm text-gray-400 italic text-center">No matches</li>
-                                    </ul>
-                                </div>
+                    @if($firewallsWithStatus->isNotEmpty())
+                        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 mb-4">
+                            <div class="flex flex-wrap w-full xl:w-auto justify-between items-center gap-2">
+                                <h3 class="text-lg font-semibold whitespace-nowrap">Managed Firewalls</h3>
+                                <span class="text-xs text-gray-500 font-normal block xl:hidden"
+                                    x-text="'Showing ' + filteredCount() + ' of ' + items.length + ' firewalls'"></span>
                             </div>
 
-                            <!-- Status Filter -->
-                            <select x-model="statusFilter"
-                                class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 text-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:col-span-1 xl:w-auto">
-                                <option value="all">All Status</option>
-                                <option value="online">Online</option>
-                                <option value="offline">Offline</option>
-                            </select>
-
-                            <!-- Search Input -->
                             <div
-                                class="flex items-center w-full sm:col-span-2 xl:w-64 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus-within:ring-2 focus-within:ring-indigo-500 bg-white">
-                                <div class="pl-3 pr-2 text-gray-500">
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
+                                class="flex flex-col sm:grid sm:grid-cols-2 xl:flex xl:flex-row items-stretch sm:items-center gap-2 w-full xl:w-auto">
+                                <span
+                                    class="text-xs text-gray-500 font-normal self-start xl:self-center whitespace-nowrap xl:mr-2 hidden xl:inline"
+                                    x-text="'Showing ' + filteredCount() + ' of ' + items.length + ' firewalls'"></span>
+                                <!-- Customer Filter -->
+                                @php
+                                    $uniqueCustomers = $firewallsWithStatus->pluck('company.name')->unique()->sort()->values();
+                                @endphp
+                                <div x-data="{ 
+                                    open: false, 
+                                    filter: '', 
+                                    customers: {{ json_encode($uniqueCustomers) }},
+                                    get filteredCustomers() {
+                                        if (this.filter === '') return this.customers.slice(0, 10);
+                                        return this.customers.filter(c => c.toLowerCase().includes(this.filter.toLowerCase())).slice(0, 10);
+                                    },
+                                    select(name) {
+                                        customerFilter = name;
+                                        this.open = false;
+                                        this.filter = '';
+                                    }
+                                }" class="relative w-full sm:col-span-1 xl:w-56" @keydown.escape="open = false"
+                                    @click.outside="open = false">
+
+                                    <!-- Trigger Button -->
+                                    <button @click="open = !open" type="button"
+                                        class="flex items-center justify-between w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                        <span x-text="customerFilter === 'all' ? 'All Customers' : customerFilter"
+                                            class="truncate block text-left"></span>
+                                        <svg class="h-4 w-4 ml-2 text-gray-500 transform transition-transform duration-200"
+                                            :class="{'rotate-180': open}" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+
+                                    <!-- Dropdown Menu -->
+                                    <div x-show="open" x-transition.opacity.duration.200ms
+                                        class="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-xl overflow-hidden">
+
+                                        <!-- Search Input -->
+                                        <div
+                                            class="p-2 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                                            <input x-model="filter" x-ref="searchInput" type="text" placeholder="Search..."
+                                                class="w-full text-sm rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+
+                                        <!-- List -->
+                                        <ul class="max-h-60 overflow-y-auto py-1">
+                                            <li @click="customerFilter = 'all'; open = false; filter = ''"
+                                                class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-sm text-gray-700 dark:text-gray-300 italic border-b border-gray-100 dark:border-gray-700">
+                                                All Customers</li>
+
+                                            <template x-for="customer in filteredCustomers" :key="customer">
+                                                <li @click="customerFilter = customer; open = false; filter = ''"
+                                                    class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-sm text-gray-700 dark:text-gray-300 truncate"
+                                                    :class="{'bg-blue-50 dark:bg-blue-900': customerFilter === customer}"
+                                                    x-text="customer"></li>
+                                            </template>
+
+                                            <li x-show="filteredCustomers.length === 0"
+                                                class="px-4 py-2 text-sm text-gray-400 italic text-center">No matches</li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                <input type="text" x-model="search" placeholder="Search..."
-                                    class="form-input-reset flex-1 min-w-0">
-                                <button x-show="search.length > 0" @click="search = ''"
-                                    class="pr-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
-                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
+
+                                <!-- Status Filter -->
+                                <select x-model="statusFilter"
+                                    class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 text-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:col-span-1 xl:w-auto">
+                                    <option value="all">All Status</option>
+                                    <option value="online">Online</option>
+                                    <option value="offline">Offline</option>
+                                </select>
+
+                                <!-- Search Input -->
+                                <div
+                                    class="flex items-center w-full sm:col-span-2 xl:w-64 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus-within:ring-2 focus-within:ring-indigo-500 bg-white">
+                                    <div class="pl-3 pr-2 text-gray-500">
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </div>
+                                    <input type="text" x-model="search" placeholder="Search..."
+                                        class="form-input-reset flex-1 min-w-0">
+                                    <button x-show="search.length > 0" @click="search = ''"
+                                        class="pr-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
+                                        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
 
                     @if($firewallsWithStatus->isEmpty())
-                        <p class="text-gray-500">No firewalls configured yet.</p>
+                        <!-- Enhanced Empty State -->
+                        <div
+                            class="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                            </svg>
+                            <h3 class="mt-4 text-sm font-semibold text-gray-900 dark:text-white">No firewalls managed</h3>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by adding your first
+                                firewall to Admix Central.</p>
+                            <div class="mt-6">
+                                <a href="{{ route('firewalls.create') }}"
+                                    class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                    <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+                                        aria-hidden="true">
+                                        <path
+                                            d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                                    </svg>
+                                    Add Firewall
+                                </a>
+                            </div>
+                        </div>
                     @else
                         <div class="space-y-6">
                             @foreach($firewallsWithStatus as $firewall)
                                 <div x-show="matches(search) && matchesFilters(statusFilter, customerFilter)"
                                     x-data="firewallCard(
-                                                                                                                                                                                                                                                                                                                                                                                                                                        {{ json_encode($firewall->cached_status) }}, 
-                                                                                                                                                                                                                                                                                                                                                                                                                                        '{{ strtolower($firewall->name . ' ' . $firewall->company->name . ' ' . $firewall->url . ' ' . $firewall->hostname) }}',
-                                                                                                                                                                                                                                                                                                                                                                                                                                        '{{ route('firewall.check-status', $firewall) }}',
-                                                                                                                                                                                                                                                                                                                                                                                                                                        {{ $firewall->id }},
-                                                                                                                                                                                                                                                                                                                                                                                                                                        '{{ $firewall->company->name }}'
-                                                                                                                                                                                                                                                                                                                                                                                                                                    )"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                {{ json_encode($firewall->cached_status) }}, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                '{{ strtolower($firewall->name . ' ' . $firewall->company->name . ' ' . $firewall->url . ' ' . $firewall->hostname) }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                '{{ route('firewall.check-status', $firewall) }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                {{ $firewall->id }},
+                                                                                                                                                                                                                                                                                                                                                                                                                                                '{{ $firewall->company->name }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                                            )"
                                     class="relative border border-gray-100 dark:border-gray-700 rounded-2xl p-3 sm:p-4 bg-white dark:bg-gray-800 shadow-md hover:shadow-xl transition-shadow duration-200">
 
                                     {{-- Overlay Moved to Body --}}
@@ -562,10 +586,10 @@
                                                                             :key="gateway.name">
                                                                             <div class="flex items-center justify-between gap-2 text-xs px-2.5 py-1.5 rounded-r bg-gray-50 dark:bg-slate-800/50 mb-1"
                                                                                 :class="{
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                'border-l-2 border-green-500': gateway.status === 'online' || gateway.status === 'none',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                'border-l-2 border-red-500': gateway.status === 'offline' || gateway.status === 'down',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                'border-l-2 border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        'border-l-2 border-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }"
                                                                                 :title="gateway.monitorip || gateway.srcip">
                                                                                 <div class="flex flex-col min-w-0"><span
                                                                                         class="text-xs font-semibold text-gray-700 dark:text-gray-200 truncate"
@@ -583,10 +607,10 @@
                                                                                 <div class="flex items-center gap-1.5">
                                                                                     <div class="w-2 h-2 rounded-full"
                                                                                         :class="{
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'bg-green-500': gateway.status === 'online' || gateway.status === 'none',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'bg-red-500': gateway.status === 'offline' || gateway.status === 'down',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'bg-yellow-500': gateway.status && gateway.status !== 'online' && gateway.status !== 'none' && gateway.status !== 'offline' && gateway.status !== 'down'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }">
                                                                                     </div>
                                                                                     <span
                                                                                         class="capitalize text-[10px] font-medium text-gray-500 dark:text-gray-400"
