@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-02-13
+
+### Added
+- **System Update Manager**: Migrated system update functionality to the System Settings card with "Check" and "Install" capabilities.
+- **Update Checks**: Integrated GitHub Releases API for version checking.
+
+## [0.4.2] - 2026-02-13
+
+### Changed
+- Internal release for testing deployment pipelines.
+
 ## [0.4.1] - 2026-02-04
 
 ### Fixed
