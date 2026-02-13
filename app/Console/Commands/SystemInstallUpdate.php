@@ -84,7 +84,7 @@ class SystemInstallUpdate extends Command
 
             // Construct URLs (In production specific URLs should come from the check update service/DB)
             // For now, constructing based on standard GitHub release structure
-            $baseUrl = "https://github.com/geekasso/admixcentral/releases/download/{$update->available_version}";
+            $baseUrl = "https://github.com/a-d-m-x/admixcentral/releases/download/{$update->available_version}";
             $assetUrl = "{$baseUrl}/update.zip";
             $manifestUrl = "{$baseUrl}/manifest.json";
             $sigUrl = "{$baseUrl}/manifest.sig";
