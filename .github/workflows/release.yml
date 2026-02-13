@@ -63,23 +63,23 @@ jobs:
             
             echo "::set-output name=version::$current_version"
 
-      - name: Install Minisign
-        run: sudo apt-get install -y minisign
+      # - name: Install Minisign
+      #   run: sudo apt-get install -y minisign
 
-      - name: Sign Manifest
-        env:
-          MINISIGN_SECRET_KEY: ${{ secrets.MINISIGN_SECRET_KEY }}
-          MINISIGN_PASSWORD: ${{ secrets.MINISIGN_PASSWORD }}
-        run: |
-          # Write the secret key to a file safely
-          echo "$MINISIGN_SECRET_KEY" > minisign.key
-          
-          # Sign the manifest
-          # -S: sign, -m: message file, -x: signature file, -s: secret key file, -t: trusted comment
-          minisign -S -m manifest.json -x manifest.sig -s minisign.key -t "AdmixCentral Update" -P "$MINISIGN_PASSWORD"
-          
-          # Clean up key
-          rm minisign.key
+      # - name: Sign Manifest
+      #   env:
+      #     MINISIGN_SECRET_KEY: ${{ secrets.MINISIGN_SECRET_KEY }}
+      #     MINISIGN_PASSWORD: ${{ secrets.MINISIGN_PASSWORD }}
+      #   run: |
+      #     # Write the secret key to a file safely
+      #     echo "$MINISIGN_SECRET_KEY" > minisign.key
+      #     
+      #     # Sign the manifest
+      #     # -S: sign, -m: message file, -x: signature file, -s: secret key file, -t: trusted comment
+      #     minisign -S -m manifest.json -x manifest.sig -s minisign.key -t "AdmixCentral Update" -P "$MINISIGN_PASSWORD"
+      #     
+      #     # Clean up key
+      #     rm minisign.key
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -87,7 +87,7 @@ jobs:
           files: |
             update.zip
             manifest.json
-            manifest.sig
+            # manifest.sig
           body_path: CHANGELOG.md # Ideally extract just the relevant section
           draft: false
           prerelease: false

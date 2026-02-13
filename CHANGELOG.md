@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-02-13
+
+### Changed
+- **Release Pipeline**: Temporarily disabled Minisign verification in release workflow to restore automated release publishing.
+
 ## [0.4.3] - 2026-02-13
 
 ### Added
