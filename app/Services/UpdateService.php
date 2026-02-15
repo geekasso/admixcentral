@@ -11,7 +11,7 @@ class UpdateService
     /**
      * The GitHub repository "owner/repo"
      */
-    protected string $repository = 'geekasso/admixcentral';
+    protected string $repository = 'a-d-m-x/admixcentral';
 
     /**
      * Fetch the latest release from GitHub.
