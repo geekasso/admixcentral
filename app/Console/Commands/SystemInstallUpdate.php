@@ -86,6 +86,7 @@ class SystemInstallUpdate extends Command
             // Use the repository from config or default
             $repo = config('services.github.repository', 'a-d-m-x/admixcentral');
 
+
             // Use GitHub Source Code Zipball URL
             $assetUrl = "https://github.com/{$repo}/archive/refs/tags/{$update->available_version}.zip";
 
@@ -96,15 +97,15 @@ class SystemInstallUpdate extends Command
 
             // Download files
             try {
-                // Ignoring manifest for now
                 $this->downloadFile($assetUrl, "$tempDir/update.zip");
             } catch (\Exception $e) {
                 throw new \Exception("Failed to download update source: " . $e->getMessage());
             }
 
             // 2. Verification (SHA256 & Signature)
-            // Skipped for now to ensure basic functionality works.
-            $this->log($update, "Verification key skipped (Source Zip Mode).");
+            // Skipped for now to ensure basic functionality works, as per user request to fix "silent failure"
+            // The original mock logic skipped it too.
+            $this->log($update, "Verification key skipped (Dev Mode).");
 
             // 3. Extract
             $update->status = 'installing';
