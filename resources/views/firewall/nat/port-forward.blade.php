@@ -1,25 +1,37 @@
+@php
+    $knownIfaceTypes = array_merge(
+        ['(self)', 'pptp', 'pppoe', 'l2tp'],
+        array_map(fn($i) => ($i['id'] ?? $i['if']) . ':ip', $interfaces),
+        array_map(fn($i) => $i['id'] ?? $i['if'], $interfaces)
+    );
+@endphp
 <x-app-layout :firewall="$firewall">
     <x-slot name="header">
         <x-firewall-header title="{{ __('Firewall NAT: Port Forward') }}" :firewall="$firewall" />
     </x-slot>
 
+    <script>
+        window._natKnownIfaceTypes = @json($knownIfaceTypes);
+    </script>
     <div class="py-12" x-data="{
         showModal: false,
         showDeleteModal: false,
         deleteId: null,
         isEdit: false,
+        modalError: null,
+        saving: false,
         selected: [],
         allSelected: false,
         form: {
             id: '',
-            interface: '{{ $interfaces[0]['if'] ?? 'wan' }}',
+            interface: '{{ $interfaces[0]["descr"] ?? "WAN" }}',
             ipprotocol: 'inet',
             protocol: 'tcp',
             src_type: 'any',
             src: '',
             src_not: false,
             srcport: '',
-            dst_type: 'wan:ip',
+            dst_type: '(self)',
             dst: '',
             dst_not: false,
             dstport: '',
@@ -33,14 +45,14 @@
         resetForm() {
             this.form = {
                 id: '',
-                interface: '{{ $interfaces[0]['if'] ?? 'wan' }}',
+                interface: '{{ $interfaces[0]["descr"] ?? "WAN" }}',
                 ipprotocol: 'inet',
                 protocol: 'tcp',
                 src_type: 'any',
                 src: '',
                 src_not: false,
                 srcport: '',
-                dst_type: 'wan:ip',
+                dst_type: '(self)',
                 dst: '',
                 dst_not: false,
                 dstport: '',
@@ -52,6 +64,8 @@
                 associated_rule_id: 'new'
             };
             this.isEdit = false;
+            this.modalError = null;
+            this.saving = false;
         },
         editRule(rule, index) {
             this.isEdit = true;
@@ -66,7 +80,7 @@
                 let invert = false;
                 let addr = String(val);
                 if (addr.startsWith('!')) { invert = true; addr = addr.slice(1); }
-                const knownTypes = ['wan:ip','lan:ip','opt1:ip','opt2:ip','wan','lan','opt1','opt2'];
+                const knownTypes = (window._natKnownIfaceTypes || []);
                 if (knownTypes.includes(addr)) return { type: addr, address: '', invert };
                 return { type: addr.includes('/') ? 'network' : 'address', address: addr, invert };
             };
@@ -122,6 +136,36 @@
                 form.appendChild(iInp);
             });
             form.submit();
+        },
+        async submitRule(form) {
+            this.saving = true;
+            this.modalError = null;
+            const url = form.action;
+            const formData = new FormData(form);
+            const method = (formData.get('_method') || 'POST').toUpperCase();
+            if (method !== 'POST') { formData.delete('_method'); }
+            try {
+                const resp = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: formData
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    const firstError = data.errors ? Object.values(data.errors)[0]?.[0] : null;
+                    this.modalError = firstError || data.error || data.message || 'An error occurred. Please try again.';
+                }
+            } catch (e) {
+                this.modalError = 'Network error. Please try again.';
+            } finally {
+                this.saving = false;
+            }
         }
     }" @open-create-modal.window="resetForm(); showModal = true">
 
@@ -130,8 +174,6 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
                     @include('firewall.nat.tabs', ['active' => 'port-forward'])
-
-                    <x-apply-changes-banner :firewall="$firewall" />
 
                     @if(session('success'))
                         <div class="mt-4 mb-4 px-4 py-3 bg-green-100 border border-green-400 text-green-700 rounded">
@@ -361,8 +403,8 @@
             {{-- Backdrop --}}
             <div x-show="showModal" class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm"
                  x-transition:enter="ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                 x-transition:leave="ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                 @click="showModal = false"></div>
+                 x-transition:leave="ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+            </div>
 
             {{-- Dialog --}}
             <div x-show="showModal"
@@ -377,7 +419,8 @@
                     <form method="POST"
                           :action="isEdit
                               ? '{{ route('firewall.nat.port-forward.update', ['firewall' => $firewall, 'id' => 'REPLACE_ME']) }}'.replace('REPLACE_ME', form.id)
-                              : '{{ route('firewall.nat.port-forward.store', $firewall) }}'">
+                              : '{{ route('firewall.nat.port-forward.store', $firewall) }}'"
+                          @submit.prevent="submitRule($el)">
                         @csrf
                         <template x-if="isEdit">
                             <input type="hidden" name="_method" value="PUT">
@@ -395,6 +438,15 @@
 
                         <div class="px-6 py-5 space-y-6 max-h-[75vh] overflow-y-auto">
 
+                            {{-- Inline error banner --}}
+                            <div x-show="modalError" x-transition style="display:none;"
+                                class="flex items-start gap-3 rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700 px-4 py-3">
+                                <svg class="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <p class="text-sm text-red-700 dark:text-red-300" x-text="modalError"></p>
+                            </div>
+
                             {{-- Disabled checkbox --}}
                             <div class="flex items-center space-x-3">
                                 <input id="nat-disabled" name="disabled" type="checkbox" x-model="form.disabled"
@@ -411,9 +463,10 @@
                                         <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Interface</label>
                                         <select name="interface" x-model="form.interface"
                                             class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 sm:text-sm">
-                                            @foreach($interfaces as $ifName => $iface)
-                                                @php $ifVal = $iface['name'] ?? (is_string($ifName) ? $ifName : ($iface['id'] ?? $iface['if'])); @endphp
-                                                <option value="{{ $ifVal }}">{{ $iface['descr'] ?? strtoupper($ifVal) }}</option>
+                                            @foreach($interfaces as $iface)
+                                                <option value="{{ $iface['descr'] ?? strtoupper($iface['id'] ?? $iface['if']) }}">
+                                                    {{ $iface['descr'] ?? strtoupper($iface['id'] ?? $iface['if']) }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -464,12 +517,19 @@
                                         <select name="src_type" x-model="form.src_type"
                                             class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 sm:text-sm">
                                             <option value="any">Any</option>
-                                            <option value="address">Host / Alias</option>
+                                            <option value="address">Address or Alias</option>
                                             <option value="network">Network</option>
-                                            <option value="wan:ip">WAN address</option>
-                                            <option value="lan:ip">LAN address</option>
-                                            <option value="wan">WAN net</option>
-                                            <option value="lan">LAN net</option>
+                                            <option value="pptp">PPTP clients</option>
+                                            <option value="pppoe">PPPoE clients</option>
+                                            <option value="l2tp">L2TP clients</option>
+                                            @foreach($interfaces as $iface)
+                                                @php $ifId = $iface['id'] ?? $iface['if']; $ifDescr = $iface['descr'] ?? strtoupper($ifId); @endphp
+                                                <option value="{{ $ifId }}:ip">{{ $ifDescr }} address</option>
+                                            @endforeach
+                                            @foreach($interfaces as $iface)
+                                                @php $ifId = $iface['id'] ?? $iface['if']; $ifDescr = $iface['descr'] ?? strtoupper($ifId); @endphp
+                                                <option value="{{ $ifId }}">{{ $ifDescr }} subnets</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="flex-1">
@@ -508,12 +568,20 @@
                                         <select name="dst_type" x-model="form.dst_type"
                                             class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 sm:text-sm">
                                             <option value="any">Any</option>
+                                            <option value="(self)">This Firewall (WAN IP)</option>
                                             <option value="address">Host / Alias</option>
-                                            <option value="network">Network</option>
-                                            <option value="wan:ip">WAN address</option>
-                                            <option value="lan:ip">LAN address</option>
-                                            <option value="wan">WAN net</option>
-                                            <option value="lan">LAN net</option>
+                                            <option value="network">Network / CIDR</option>
+                                            <option value="pptp">PPTP clients</option>
+                                            <option value="pppoe">PPPoE clients</option>
+                                            <option value="l2tp">L2TP clients</option>
+                                            @foreach($interfaces as $iface)
+                                                @php $ifId = $iface['id'] ?? $iface['if']; $ifDescr = $iface['descr'] ?? strtoupper($ifId); @endphp
+                                                <option value="{{ $ifId }}:ip">{{ $ifDescr }} address</option>
+                                            @endforeach
+                                            @foreach($interfaces as $iface)
+                                                @php $ifId = $iface['id'] ?? $iface['if']; $ifDescr = $iface['descr'] ?? strtoupper($ifId); @endphp
+                                                <option value="{{ $ifId }}">{{ $ifDescr }} subnets</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="flex-1">
@@ -596,13 +664,17 @@
 
                         {{-- Modal Footer --}}
                         <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end space-x-3 border-t border-gray-200 dark:border-gray-700">
-                            <button type="button" @click="showModal = false"
-                                class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                            <button type="button" :disabled="saving" @click="resetForm(); showModal = false"
+                                class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition disabled:opacity-60 disabled:cursor-not-allowed">
                                 Cancel
                             </button>
-                            <button type="submit"
-                                class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                                Save Rule
+                            <button type="submit" :disabled="saving"
+                                class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition inline-flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                                <svg x-show="saving" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                </svg>
+                                <span x-text="saving ? 'Saving...' : 'Save Rule'"></span>
                             </button>
                         </div>
                     </form>
