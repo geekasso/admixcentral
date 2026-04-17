@@ -320,6 +320,28 @@
 
             @php
                 $uniqueCustomers = $firewalls->pluck('company.name')->unique()->sort()->values();
+
+                // Pre-load all firewall status caches in one batch so the firewalls array
+                // renders with last-known values instead of '-' placeholders.
+                // Prevents sysVersion/apiVersion/status flash on page load.
+                $firewallCaches = [];
+                foreach ($firewalls as $fw) {
+                    $cached = \Illuminate\Support\Facades\Cache::get('firewall_status_' . $fw->id);
+                    if ($cached) {
+                        // refreshSystemStatus() flattens everything into cache['data'] directly.
+                        // product_version, api_version, gateways etc. are all at cache['data'][key].
+                        $flat = is_array($cached['data'] ?? null) ? $cached['data'] : [];
+                        $firewallCaches[$fw->id] = [
+                            'online'               => $cached['online']           ?? null,
+                            'api_version'          => $cached['api_version'] ?? $flat['api_version'] ?? null,
+                            'product_version'      => $flat['product_version']   ?? $flat['version'] ?? null,
+                            'update_available'     => $flat['update_available']   ?? false,
+                            'api_update_available' => $flat['api_update_available'] ?? false,
+                        ];
+                    } else {
+                        $firewallCaches[$fw->id] = null;
+                    }
+                }
             @endphp
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg" x-data="{
                 search: '',
@@ -336,42 +358,40 @@
                 
                 init() {
                     this.firewalls = {{ json_encode($firewalls->map(fn($f) => [
-    'id' => $f->id,
-    'name' => $f->name,
-    'status' => $f->is_online === true ? 'online' : ($f->is_online === false ? 'offline' : 'unknown'),
-    'isOnline' => $f->is_online,
-    'url' => $f->url,
-    'displayUrl' => preg_replace('#^https?://#', '', $f->url),
-    'linkUrl' => \Illuminate\Support\Str::startsWith($f->url, ['http://', 'https://']) ? $f->url : 'https://' . $f->url,
-    'address' => $f->address,
-    'sysVersion' => '-',
-    'sysUpdateAvailable' => false,
-    'apiVersion' => '-',
-    'apiUpdateAvailable' => false,
-    'company_name' => $f->company->name,
-    'company_url' => route('companies.show', $f->company),
-    'dashboard_url' => route('firewall.dashboard', $f),
-    'edit_url' => route('firewalls.edit', $f),
-    'delete_url' => route('firewalls.destroy', $f),
-    'check_status_url' => route('firewall.check-status', $f),
-    'searchData' => strtolower($f->name . ' ' . $f->company->name . ' ' . $f->url . ' ' . $f->hostname)
+    'id'                 => $f->id,
+    'name'               => $f->name,
+    'status'             => ($firewallCaches[$f->id]['online'] ?? $f->is_online) === true ? 'online'
+                            : (($firewallCaches[$f->id]['online'] ?? $f->is_online) === false ? 'offline' : 'unknown'),
+    'isOnline'           => $firewallCaches[$f->id]['online'] ?? $f->is_online,
+    'url'                => $f->url,
+    'displayUrl'         => preg_replace('#^https?://#', '', $f->url),
+    'linkUrl'            => \Illuminate\Support\Str::startsWith($f->url, ['http://', 'https://']) ? $f->url : 'https://' . $f->url,
+    'address'            => $f->address,
+    'sysVersion'         => $firewallCaches[$f->id]['product_version']      ?? '-',
+    'sysUpdateAvailable' => $firewallCaches[$f->id]['update_available']      ?? false,
+    'apiVersion'         => $firewallCaches[$f->id]['api_version']           ?? '-',
+    'apiUpdateAvailable' => $firewallCaches[$f->id]['api_update_available']  ?? false,
+    'company_name'       => $f->company->name,
+    'company_url'        => route('companies.show', $f->company),
+    'dashboard_url'      => route('firewall.dashboard', $f),
+    'edit_url'           => route('firewalls.edit', $f),
+    'delete_url'         => route('firewalls.destroy', $f),
+    'check_status_url'   => route('firewall.check-status', $f),
+    'searchData'         => strtolower($f->name . ' ' . $f->company->name . ' ' . $f->url . ' ' . $f->hostname)
 ])) }};
 
-                    // Listen for updates
+                    // Listen for updates dispatched by the per-firewall WS listener below
                     window.addEventListener('firewall-updated', (e) => {
                         const idx = this.firewalls.findIndex(f => f.id === e.detail.id);
                         if (idx !== -1) {
                             const f = this.firewalls[idx];
-                            f.isOnline = e.detail.online;
+                            f.isOnline           = e.detail.online;
                             f.sysUpdateAvailable = e.detail.sys;
                             f.apiUpdateAvailable = e.detail.api;
-                            
-                            let serviceData = e.detail.data || {};
-                            let realData = (serviceData.data && typeof serviceData.data === 'object') ? serviceData.data : serviceData;
-                            f.sysVersion = realData.product_version || realData.version || '-'
+                            // e.detail.data is the flat e.status object — no .data nesting.
+                            const s = e.detail.data || {};
+                            f.sysVersion = s.product_version || '-';
                             f.apiVersion = e.detail.apiVersion || '-';
-                            
-                            // Trigger reactivity if needed (Vue/Alpine 3 usually handles deep watch if array mutated, but specific property updates work)
                         }
                     });
 
@@ -573,11 +593,11 @@
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700">
                                     <tr>
+                                        @if(!auth()->user()->isReadOnly())
                                         <th class="px-6 py-3 text-left">
-                                            @if(!auth()->user()->isReadOnly())
                                             <input type="checkbox" id="selectAll" onclick="toggleSelectAll()">
-                                            @endif
                                         </th>
+                                        @endif
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer select-none group"
                                             @click="sortBy = 'name'; sortAsc = !sortAsc">
@@ -673,21 +693,23 @@
                                             </div>
                                         </th>
 
+                                        @if(!auth()->user()->isReadOnly())
                                         <th scope="col"
                                             class="px-6 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                             Actions
                                         </th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                     <template x-for="firewall in filteredRows" :key="firewall.id">
                                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                            @if(!auth()->user()->isReadOnly())
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                @if(!auth()->user()->isReadOnly())
                                                 <input type="checkbox" name="firewall_ids[]" :value="firewall.id"
                                                     form="bulkForm" class="firewall-checkbox">
-                                                @endif
                                             </td>
+                                            @endif
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <a :href="firewall.dashboard_url"
                                                     class="font-medium text-indigo-600 hover:text-indigo-900 hover:underline dark:text-indigo-400 dark:hover:text-indigo-300"
@@ -826,8 +848,8 @@
                                                 </div>
                                             </td>
 
+                                            @if(!auth()->user()->isReadOnly())
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                @if(!auth()->user()->isReadOnly())
                                                 <div class="flex items-center justify-end space-x-3">
                                                     <a :href="firewall.edit_url"
                                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
@@ -839,12 +861,12 @@
                                                         Delete
                                                     </button>
                                                 </div>
-                                                @endif
                                             </td>
+                                            @endif
                                         </tr>
                                     </template>
                                     <tr x-show="filteredRows.length === 0">
-                                        <td colspan="{{ auth()->user()->isGlobalAdmin() ? '9' : '8' }}"
+                                        <td colspan="{{ (auth()->user()->isGlobalAdmin() ? 9 : 8) - (auth()->user()->isReadOnly() ? 2 : 0) }}"
                                             class="px-6 py-4 text-center text-gray-500">
                                             No firewalls found. <a href="{{ route('firewalls.create') }}"
                                                 class="text-blue-600 hover:underline">Add one now</a>.
@@ -991,36 +1013,17 @@
                         startIntervalManager() {
                             if (this.timer) clearTimeout(this.timer);
 
-                            const getDelay = () => {
-                                // Default to fast (Real-time) unless explicitly disconnected
-                                const state = window.Echo?.connector?.pusher?.connection?.state;
-                                const isExplicitlyDisconnected = (state === 'disconnected' || state === 'failed' || state === 'unavailable');
-
-                                // Debug log to verify state if needed
-                                // console.log('WS State:', state, 'Using:', isExplicitlyDisconnected ? 'Fallback' : 'Realtime');
-
-                                if (isExplicitlyDisconnected) {
-                                    return this.fallbackMs;
-                                }
-                                return this.realtimeMs;
-                            };
-
-                            let lastState = (window.Echo?.connector?.pusher?.connection?.state === 'connected');
-
                             const run = () => {
+                                // triggerUpdate() dispatches CheckFirewallStatusJob per firewall.
+                                // It is currently the only mechanism keeping the pfSense cache fresh.
+                                // Must always run regardless of WS state until Phase 1.5 adds a
+                                // true backend scheduler. Step 4 deduplication prevents WS floods.
                                 this.triggerUpdate();
-
-                                const delay = getDelay();
-                                this.timer = setTimeout(run, delay);
-
-                                let currentState = (delay === this.realtimeMs);
-                                if (currentState !== lastState) {
-                                    // console.log(`Switching firewalls refresh speed: ${currentState ? 'Real-time' : 'Fallback'} (${delay/1000}s)`);
-                                    lastState = currentState;
-                                }
+                                this.timer = setTimeout(run, this.fallbackMs);
                             };
 
-                            this.timer = setTimeout(run, getDelay());
+                            // Always schedule at fallbackMs — realtimeMs is retired for this loop.
+                            this.timer = setTimeout(run, this.fallbackMs);
                         },
 
                         async triggerUpdate() {
@@ -1122,17 +1125,14 @@
                             window.addEventListener('firewall-updated', (e) => {
                                 if (e.detail.id === this.id) {
                                     this.isOnline = e.detail.online;
-                                    this.loading = false;
+                                    this.loading  = false;
 
-                                    // Extract data for versions
-                                    let serviceData = e.detail.data || {};
-                                    let realData = (serviceData.data && typeof serviceData.data === 'object') ? serviceData.data : serviceData;
-
-                                    this.sysVersion = realData.product_version || realData.version || '-';
-                                    this.apiVersion = e.detail.apiVersion || '-';
-
-                                    this.sysUpdateAvailable = e.detail.sys;
-                                    this.apiUpdateAvailable = e.detail.api;
+                                    // e.detail.data is the flat e.status object — no .data nesting.
+                                    const s = e.detail.data || {};
+                                    this.sysVersion         = s.product_version || '-';
+                                    this.apiVersion         = e.detail.apiVersion || '-';
+                                    this.sysUpdateAvailable = e.detail.sys  === true;
+                                    this.apiUpdateAvailable = e.detail.api  === true;
                                 }
                             });
 
@@ -1140,27 +1140,23 @@
                             if (window.Echo) {
                                 window.Echo.private('firewall.' + this.id)
                                     .listen('.firewall.status.update', (e) => {
-                                        // e.status is the Wrapper
-                                        this.isOnline = (e.status && e.status.online !== undefined) ? e.status.online : true;
-                                        this.loading = false;
+                                        // Flat payload — access e.status.* directly, no .data nesting.
+                                        const s = e.status || {};
+                                        this.isOnline           = s.online ?? true;
+                                        this.loading            = false;
+                                        this.sysVersion         = s.product_version || '-';
+                                        this.apiVersion         = s.api_version || '-';
+                                        this.sysUpdateAvailable = s.update_available     === true;
+                                        this.apiUpdateAvailable = s.api_update_available === true;
 
-                                        let s = e.status || {};
-                                        let d = s.data || {};
-                                        let rd = (d.data && typeof d.data === 'object') ? d.data : d;
-
-                                        this.sysVersion = rd.product_version || rd.version || '-';
-                                        this.apiVersion = s.api_version || rd.api_version || '-';
-                                        this.sysUpdateAvailable = (rd.update_available === true);
-                                        this.apiUpdateAvailable = (rd.api_update_available === true);
-
-                                        // 3. Dispatch to Parent (firewallStats)
+                                        // Dispatch to parent (firewallStats) and main Alpine component
                                         window.dispatchEvent(new CustomEvent('firewall-updated', {
                                             detail: {
-                                                id: this.id,
-                                                online: this.isOnline,
-                                                sys: this.sysUpdateAvailable,
-                                                api: this.apiUpdateAvailable,
-                                                data: s,
+                                                id:         this.id,
+                                                online:     this.isOnline,
+                                                sys:        this.sysUpdateAvailable,
+                                                api:        this.apiUpdateAvailable,
+                                                data:       s,          // flat — callers read s.product_version etc.
                                                 apiVersion: this.apiVersion
                                             }
                                         }));
